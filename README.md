@@ -1,3 +1,5 @@
+# klijentske-veb-tehnologije-2024-2024-0075-prijava-kolokvijuma-i-ispita
+
 # Run Locally
 
 **Prerequisites:**  Node.js
@@ -7,4 +9,3 @@
    `npm install`
 2. Run the app:
    `npm run dev`
-# klijentske-veb-tehnologije-2024-2024-0075-prijava-kolokvijuma-i-ispita
