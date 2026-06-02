@@ -16,6 +16,7 @@ import { PrijavaIspitaView } from "./PrijavaIspitaView";
 import { PrijavljeniIspitiView, RegisteredExamRow } from "./PrijavljeniIspitiView";
 import { PrikazPredmetaView } from "./PrikazPredmetaView";
 import { PolozeniIspitiView } from "./PolozeniIspitiView";
+import { ProfilStudentaView } from "./ProfilStudentaView";
 
 const bannerPaths = [
   "/banner.png",
@@ -37,7 +38,7 @@ interface StudentPortalProps {
 
 export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "2023/3858", onLogout }: StudentPortalProps) {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<"home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni">("home");
+  const [activeTab, setActiveTab] = useState<"home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil">("home");
   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
   const [accountBalance, setAccountBalance] = useState<number>(4200.00); // Students have 4.200 RSD to try registering exams immediately!
   const [registeredExamsKeys, setRegisteredExamsKeys] = useState<Record<string, boolean>>({});
@@ -118,18 +119,29 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
             </div>
 
             {/* Right student profile card */}
-            <div className="flex items-center gap-3 bg-black/35 hover:bg-black/45 hover:border-slate-500/50 transition-all border border-slate-700/50 p-2.5 px-4 rounded-xl self-end align-middle">
-              <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-[#1E4C9A] font-bold shadow-lg shadow-black/20 overflow-hidden shrink-0">
+            <div 
+              onClick={() => setActiveTab("profil")}
+              className={`flex items-center gap-3 bg-black/35 hover:bg-black/50 transition-all border p-2.5 px-4 rounded-xl self-end align-middle cursor-pointer active:scale-95 group ${
+                activeTab === "profil" 
+                  ? "border-amber-400/85 ring-2 ring-amber-400/20 bg-amber-400/10" 
+                  : "border-slate-700/50 hover:border-slate-400/50"
+              }`}
+              title="Pregled profila studenta"
+            >
+              <div className="w-10 h-10 rounded-full bg-slate-200 group-hover:bg-white flex items-center justify-center text-[#1E4C9A] font-bold shadow-lg shadow-black/20 overflow-hidden shrink-0 transition-colors">
                 <User size={22} className="stroke-[2.5]" />
               </div>
               <div className="text-right select-none">
-                <h3 className="text-sm font-semibold text-white leading-normal pr-0.5">{studentName}</h3>
-                <p className="text-xs font-mono text-slate-400 leading-none mt-0.5 pr-0.5">{studentIndex}</p>
+                <h3 className="text-sm font-semibold text-white leading-normal pr-0.5 group-hover:text-amber-200 transition-colors">{studentName}</h3>
+                <p className="text-xs font-mono text-slate-400 leading-none mt-0.5 pr-0.5 group-hover:text-slate-300 transition-colors">{studentIndex}</p>
               </div>
               <button 
-                onClick={onLogout}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onLogout();
+                }}
                 title="Odjavi se sa portala"
-                className="ml-2 p-1.5 rounded-lg bg-red-600/10 text-red-400 hover:bg-red-600 hover:text-white transition-all cursor-pointer"
+                className="ml-2 p-1.5 rounded-lg bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white transition-all cursor-pointer"
               >
                 <LogOut size={15} />
               </button>
@@ -301,7 +313,7 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
                 >
                   <PrikazPredmetaView />
                 </motion.div>
-              ) : (
+              ) : activeTab === "polozeni" ? (
                 <motion.div
                   key="polozeni-tab"
                   initial={{ opacity: 0 }}
@@ -310,6 +322,16 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
                   transition={{ duration: 0.15 }}
                 >
                   <PolozeniIspitiView />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="profil-tab"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <ProfilStudentaView studentName={studentName} studentIndex={studentIndex} />
                 </motion.div>
               )}
             </AnimatePresence>
