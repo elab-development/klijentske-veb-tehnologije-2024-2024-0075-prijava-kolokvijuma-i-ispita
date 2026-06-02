@@ -6,12 +6,14 @@ import {
   Home,
   CreditCard,
   ClipboardCheck,
-  CheckSquare
+  CheckSquare,
+  BookOpen
 } from "lucide-react";
 import { HomeView } from "./HomeView";
 import { AccountBalanceView, PaymentRecord, initialPayments } from "./AccountBalanceView";
 import { PrijavaIspitaView } from "./PrijavaIspitaView";
 import { PrijavljeniIspitiView, RegisteredExamRow } from "./PrijavljeniIspitiView";
+import { PrikazPredmetaView } from "./PrikazPredmetaView";
 
 const bannerPaths = [
   "/banner.png",
@@ -33,7 +35,7 @@ interface StudentPortalProps {
 
 export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "2023/3858", onLogout }: StudentPortalProps) {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<"home" | "stanje" | "prijava" | "prijavljeni">("home");
+  const [activeTab, setActiveTab] = useState<"home" | "stanje" | "prijava" | "prijavljeni" | "predmeti">("home");
   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
   const [accountBalance, setAccountBalance] = useState<number>(4200.00); // Students have 4.200 RSD to try registering exams immediately!
   const [registeredExamsKeys, setRegisteredExamsKeys] = useState<Record<string, boolean>>({});
@@ -189,6 +191,19 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
               <CheckSquare size={15} />
               <span>Prijavljeni ispiti</span>
             </button>
+
+            <button
+              id="tab-prikaz-predmeta"
+              onClick={() => setActiveTab("predmeti")}
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all ${
+                activeTab === "predmeti"
+                  ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
+                  : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
+              } cursor-pointer focus:outline-none`}
+            >
+              <BookOpen size={15} />
+              <span>Prikaz predmeta</span>
+            </button>
           </div>
 
           {/* Main Workspace Canvas */}
@@ -241,7 +256,7 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
                     onRegisterExam={handleRegisterExam}
                   />
                 </motion.div>
-              ) : (
+              ) : activeTab === "prijavljeni" ? (
                 <motion.div
                   key="prijavljeni-tab"
                   initial={{ opacity: 0, x: -10 }}
@@ -260,6 +275,16 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
                     customRegisteredExams={customRegisteredExams}
                     setCustomRegisteredExams={setCustomRegisteredExams}
                   />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="predmeti-tab"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <PrikazPredmetaView />
                 </motion.div>
               )}
             </AnimatePresence>
