@@ -7,13 +7,15 @@ import {
   CreditCard,
   ClipboardCheck,
   CheckSquare,
-  BookOpen
+  BookOpen,
+  Award
 } from "lucide-react";
 import { HomeView } from "./HomeView";
 import { AccountBalanceView, PaymentRecord, initialPayments } from "./AccountBalanceView";
 import { PrijavaIspitaView } from "./PrijavaIspitaView";
 import { PrijavljeniIspitiView, RegisteredExamRow } from "./PrijavljeniIspitiView";
 import { PrikazPredmetaView } from "./PrikazPredmetaView";
+import { PolozeniIspitiView } from "./PolozeniIspitiView";
 
 const bannerPaths = [
   "/banner.png",
@@ -35,7 +37,7 @@ interface StudentPortalProps {
 
 export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "2023/3858", onLogout }: StudentPortalProps) {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<"home" | "stanje" | "prijava" | "prijavljeni" | "predmeti">("home");
+  const [activeTab, setActiveTab] = useState<"home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni">("home");
   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
   const [accountBalance, setAccountBalance] = useState<number>(4200.00); // Students have 4.200 RSD to try registering exams immediately!
   const [registeredExamsKeys, setRegisteredExamsKeys] = useState<Record<string, boolean>>({});
@@ -204,6 +206,19 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
               <BookOpen size={15} />
               <span>Prikaz predmeta</span>
             </button>
+
+            <button
+              id="tab-polozeni-ispiti"
+              onClick={() => setActiveTab("polozeni")}
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all ${
+                activeTab === "polozeni"
+                  ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
+                  : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
+              } cursor-pointer focus:outline-none`}
+            >
+              <Award size={15} />
+              <span>Položeni ispiti</span>
+            </button>
           </div>
 
           {/* Main Workspace Canvas */}
@@ -213,20 +228,20 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
               {activeTab === "home" ? (
                 <motion.div
                   key="pocetna-tab"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <HomeView />
                 </motion.div>
               ) : activeTab === "stanje" ? (
                 <motion.div
                   key="stanje-tab"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <AccountBalanceView 
                     studentName={studentName} 
@@ -240,10 +255,10 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
               ) : activeTab === "prijava" ? (
                 <motion.div
                   key="prijava-tab"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <PrijavaIspitaView 
                     studentName={studentName}
@@ -259,10 +274,10 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
               ) : activeTab === "prijavljeni" ? (
                 <motion.div
                   key="prijavljeni-tab"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <PrijavljeniIspitiView 
                     studentName={studentName}
@@ -276,15 +291,25 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
                     setCustomRegisteredExams={setCustomRegisteredExams}
                   />
                 </motion.div>
-              ) : (
+              ) : activeTab === "predmeti" ? (
                 <motion.div
                   key="predmeti-tab"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <PrikazPredmetaView />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="polozeni-tab"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <PolozeniIspitiView />
                 </motion.div>
               )}
             </AnimatePresence>
