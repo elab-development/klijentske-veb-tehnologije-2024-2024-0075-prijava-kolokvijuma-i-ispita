@@ -30,23 +30,83 @@ const newsItems = [
   }
 ];
 
+
+const kolokvijumiPaths = [
+  "/kolokvijumi.png",
+  "/kolokvijumi.PNG",
+  "/kolokvijumi.jpg",
+  "/kolokvijumi.JPG",
+  "/obavestenje1.png",
+  "/obavestenje1.PNG",
+  "/obavestenje1.jpg",
+  "/obavestenje1.JPG"
+];
+
+const hakatonPaths = [
+  "/hakaton.png",
+  "/hakaton.PNG",
+  "/hakaton.jpg",
+  "/hakaton.JPG",
+  "/obavestenje2.png",
+  "/obavestenje2.PNG",
+  "/obavestenje2.jpg",
+  "/obavestenje2.JPG"
+];
+
 function NewsCardImage({ category, isModal = false }: { category: string; isModal?: boolean }) {
-  if (category === "KOLOKVIJUMI") {
+
+    const [currentPathIndex, setCurrentPathIndex] = useState(0);
+  const paths = category === "KOLOKVIJUMI" ? kolokvijumiPaths : hakatonPaths;
+
+  if (currentPathIndex < paths.length) {
     return (
-      <div className={`w-full ${isModal ? "h-[180px]" : "h-[150px]"} relative bg-[#f1efe6] overflow-hidden flex flex-col items-center justify-center select-none`}>
+      <div className={`w-full ${isModal ? "h-[180px]" : "h-[150px]"} relative bg-slate-100 overflow-hidden flex items-center justify-center`}>
+        <img
+          src={paths[currentPathIndex]}
+          alt={category}
+          referrerPolicy="no-referrer"
+          className="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-110"
+          onError={() => {
+            // Move to the next potential custom path or finally fallback to pre-designed vector
+            setCurrentPathIndex(prev => prev + 1);
+          }}
+        />
+        {!isModal && (
+          <div className="absolute top-2 left-2 text-[8px] mt-0.5 text-white font-mono select-none pointer-events-none uppercase tracking-wider bg-[#101827]/75 backdrop-blur-sm px-1.5 py-0.5 rounded shadow">
+            Slika
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  
+  if (category === "KOLOKVIJUMI") {
+     const bgClass = isModal ? "bg-gradient-to-br from-[#1b345c] via-[#1E4C9A] to-[#0f2142]" : "bg-[#f1efe6]";
+    const textColor = isModal ? "text-white" : "text-[#1e293b]";
+    const textNColor = isModal ? "text-amber-400" : "text-[#101827]";
+    const subTitleColor = isModal ? "text-slate-200" : "text-[#101827]";
+    const strokeColor = isModal ? "#ffffff" : "#101827";
+    const opacityClass = isModal ? "opacity-10" : "opacity-15";
+    return (
+       <div className={`w-full ${isModal ? "h-[180px]" : "h-[150px]"} relative ${bgClass} overflow-hidden flex flex-col items-center justify-center select-none`}>
         {/* Atrium light building interior background shadow */}
         <div 
-          className="absolute inset-0 bg-cover bg-center object-cover opacity-15 transition-transform duration-500 ease-out group-hover:scale-110"
+           className={`absolute inset-0 bg-cover bg-center object-cover ${opacityClass} transition-transform duration-500 ease-out group-hover:scale-110`}
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=600')" }}
         />
         
         {/* Custom design vector of the FON circular emblem */}
         <div className="relative z-10 flex flex-col items-center justify-center scale-90 sm:scale-100 transition-transform duration-500 ease-out group-hover:scale-95 sm:group-hover:scale-105">
           <div className="flex items-center justify-center h-[52px] gap-2.5">
-            <span className="text-[36px] font-bold text-[#1e293b] leading-none tracking-tight">Ф</span>
+               <span className={`text-[36px] font-bold ${textColor} leading-none tracking-tight`}>Ф</span>
             
             <div className="relative w-[40px] h-[40px] flex items-center justify-center">
               <svg className="w-full h-full" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+               {/* 3 Concentric circles matching user's custom screenshot */}
+                <circle cx="17" cy="17" r="14" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" strokeDasharray="64 16" transform="rotate(-30 17 17)" />
+                <circle cx="17" cy="17" r="9.5" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" strokeDasharray="36 12" transform="rotate(120 17 17)" />
+                <circle cx="17" cy="17" r="5" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" strokeDasharray="18 6" transform="rotate(-60 17 17)" />
                 {/* 3 Dark Slate Concentric circles matching user's custom screenshot */}
                 <circle cx="17" cy="17" r="14" stroke="#101827" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="64 16" transform="rotate(-30 17 17)" />
                 <circle cx="17" cy="17" r="9.5" stroke="#101827" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="36 12" transform="rotate(120 17 17)" />
@@ -54,10 +114,10 @@ function NewsCardImage({ category, isModal = false }: { category: string; isModa
               </svg>
             </div>
             
-            <span className="text-[36px] font-bold text-[#101827] leading-none tracking-tight">Н</span>
+             <span className={`text-[36px] font-bold ${textNColor} leading-none tracking-tight`}>Н</span>
           </div>
 
-          <div className="mt-3 text-[10px] font-extrabold tracking-[0.24em] text-[#101827] uppercase leading-none opacity-90 text-center">
+            <div className={`mt-3 text-[10px] font-extrabold tracking-[0.24em] ${subTitleColor} uppercase leading-none opacity-90 text-center`}>
             OSNOVNE AKADEMSKE STUDIJE
           </div>
         </div>
@@ -166,7 +226,7 @@ export function HomeView({}: HomeViewProps) {
                   <span className="text-[10px] text-white/60 font-mono">{newsItems[0].date}</span>
                   <button 
                     onClick={() => openNewsDetail(newsItems[0])}
-                    className="text-xs font-bold text-amber-300 hover:text-white transition-colors cursor-pointer"
+                    className="px-3 py-1 bg-white/15 hover:bg-white/25 active:scale-95 text-white border border-white/10 rounded-lg text-xs font-semibold tracking-wide transition-all cursor-pointer shadow-sm"
                   >
                     Saznaj više →
                   </button>
@@ -195,7 +255,7 @@ export function HomeView({}: HomeViewProps) {
                   <span className="text-[10px] text-white/80 font-mono">{newsItems[1].date}</span>
                   <button 
                     onClick={() => openNewsDetail(newsItems[1])}
-                    className="text-xs font-bold text-white hover:text-amber-100 transition-colors cursor-pointer"
+                    className="px-3 py-1 bg-white/15 hover:bg-white/25 active:scale-95 text-white border border-white/10 rounded-lg text-xs font-semibold tracking-wide transition-all cursor-pointer shadow-sm"
                   >
                     Saznaj više →
                   </button>

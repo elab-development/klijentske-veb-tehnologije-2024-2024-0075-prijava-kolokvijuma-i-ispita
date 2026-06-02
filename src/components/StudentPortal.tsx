@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { LogOut, User, Compass } from "lucide-react";
+import { LogOut, User, Home } from "lucide-react";
 import { HomeView } from "./HomeView";
 
 interface StudentPortalProps {
@@ -73,7 +73,7 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
         <div className="w-full flex flex-col md:flex-row items-stretch">
           <div className="w-full md:w-[180px] bg-[#1E4C9A] flex flex-row md:flex-col gap-1.5 p-3 shrink-0">
             <div className="flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10">
-              <Compass size={15} />
+              <Home size={15} />
               <span>Početna</span>
             </div>
           </div>
