@@ -341,78 +341,14 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                 {/* Embedded Map mockup container */}
                 <div className="relative w-full aspect-[4/3] sm:aspect-video lg:aspect-[4/3] rounded-lg overflow-hidden border border-slate-300 shadow bg-white flex flex-col">
                   
-                  {/* Real-world maps integration placeholder/wrapper.
-                      To plug in a real-world Google Maps API:
-                      Simply replace the mock HTML structure below with:
-                      <iframe 
-                        className="w-full h-full border-0"
-                        src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=Fakultet+organizacionih+nauka,Beograd" 
-                        allowFullScreen>
-                      </iframe>
-                  */}
-
-                  {/* Aesthetic satellite background lines simulation simulating Google Maps */}
-                  <div className="absolute inset-0 bg-[#E5E9F0] pointer-events-none select-none">
-                    {/* Simulated map roads and grids */}
-                    <div className="absolute w-[2px] h-full left-1/3 bg-white" />
-                    <div className="absolute w-[2px] h-full left-2/3 bg-white" />
-                    <div className="absolute h-[2px] w-full top-1/4 bg-white" />
-                    <div className="absolute h-[2px] w-full top-3/4 bg-white" />
-                    <div className="absolute w-28 h-28 rounded-full bg-[#D1D9E6]/30 blur-md left-[15%] top-[10%]" />
-                    <div className="absolute w-24 h-24 rounded-full bg-green-100/40 left-[40%] top-[45%]" />
-                    
-                    {/* Tiny visual parks / river indicators */}
-                    <div className="absolute left-[8%] top-[55%] w-16 h-12 rounded-lg bg-[#C1D7AE]/40 rotate-12" />
-                    <div className="absolute right-[10%] top-[15%] w-24 h-16 bg-[#C1D7AE]/40 -skew-x-12" />
-
-                    {/* Fictional local text landmarks to resemble genuine maps */}
-                    <span className="absolute text-[8px] font-semibold text-zinc-400 left-[5%] top-[35%] tracking-wide uppercase select-none">
-                      VOŽDOVAC
-                    </span>
-                    <span className="absolute text-[8px] font-semibold text-zinc-400 right-[8%] bottom-[20%] tracking-wide uppercase select-none">
-                      BANJICA
-                    </span>
-                    <span className="absolute text-[8px] font-semibold text-zinc-400 left-[40%] top-[5%] tracking-wide uppercase select-none">
-                      AUTOKOMANDA
-                    </span>
-                  </div>
-
-                  {/* Mock Marker representing FON */}
-                  <div className="absolute top-[48%] left-[48%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-                    <div className="relative flex items-center justify-center">
-                      {/* Pulse ring indicating location focus */}
-                      <span className="absolute inline-flex h-10 w-10 rounded-full bg-red-400 opacity-40 animate-ping" />
-                      <div className="bg-red-600 p-2 rounded-full shadow-lg relative z-10 text-white">
-                        <MapPin size={18} />
-                      </div>
-                    </div>
-                    <div className="mt-1 bg-white/95 border border-zinc-200/80 px-2 py-0.5 rounded shadow text-[10px] font-bold text-gray-800 uppercase tracking-tight relative max-w-[120px] text-center whitespace-normal select-none">
-                      Fakultet organizacionih nauka
-                    </div>
-                  </div>
-
-                  {/* Overlaid location info badge exactly as rendered in standard Google Maps widgets */}
-                  <div className="absolute top-3 left-3 bg-white p-3 rounded shadow-md border border-zinc-200/60 text-left max-w-[240px] z-10 flex gap-2 select-none">
-                    <div className="flex-1">
-                      <h4 className="text-[12px] font-bold text-gray-900 leading-tight">
-                        Jove Ilića 154
-                      </h4>
-                      <p className="text-[10px] text-gray-500 leading-snug mt-0.5">
-                        Jove Ilića 154, Beograd 11000, Serbia
-                      </p>
-                      <span className="text-[9px] font-bold text-blue-600 hover:underline mt-1 inline-block">
-                        Vidi veću mapu
-                      </span>
-                    </div>
-                    <div className="text-blue-600 p-1 hover:bg-slate-100 rounded self-start">
-                      <Maximize2 size={13} />
-                    </div>
-                  </div>
-
-                  {/* Maps logo bottom alignment for aesthetic precision */}
-                  <div className="absolute bottom-1 right-2 pointer-events-none select-none text-[10px] font-semibold text-slate-400 tracking-tight">
-                    Google
-                  </div>
+                   <iframe
+                    title="Lokacija Fakulteta organizacionih nauka"
+                    className="w-full h-full min-h-[250px] border-0"
+                    src="https://maps.google.com/maps?q=Fakultet%20organizacionih%20nauka%20Beograd%20Jove%20Ilica%20154&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
                 </div>
 
                 {/* PLACEHOLDER: Communication channels - dynamic links and FON Logo aligned horizontally in a single row (no wrap) */}
