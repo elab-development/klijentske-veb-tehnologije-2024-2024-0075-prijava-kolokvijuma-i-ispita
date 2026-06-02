@@ -3,8 +3,6 @@ import React, { useState } from "react";
 export function FonLogo() {
   const [imageError, setImageError] = useState(false);
 
-  // Users can upload their FON logo image to public/fon_logo.png or public/logo.png
-  // If the image is successfully present, it will load; otherwise it fails over to the vector logo beautifully.
   if (!imageError) {
     return (
       <div className="flex items-center justify-center p-1">
@@ -14,7 +12,6 @@ export function FonLogo() {
           referrerPolicy="no-referrer"
           className="h-[52px] w-auto object-contain select-none"
           onError={() => {
-            // If main URL fails, let's keep a fallback state to render the custom vector
             setImageError(true);
           }}
         />
@@ -24,14 +21,11 @@ export function FonLogo() {
 
   return (
     <div className="flex flex-col items-center justify-center p-3 text-center">
-      {/* Emblem section */}
       <div className="flex items-center justify-center h-[42px] gap-2">
-        {/* Letter Ф */}
         <span className="text-[28px] font-semibold text-[#163E75] tracking-tight select-none">
           Ф
         </span>
 
-        {/* Colorful concentric circle graphic */}
         <div className="relative w-[34px] h-[34px] flex items-center justify-center">
           <svg
             className="w-full h-full"
@@ -55,7 +49,6 @@ export function FonLogo() {
                 <stop offset="100%" stopColor="#3B82F6" />
               </linearGradient>
             </defs>
-            {/* Outer ring */}
             <circle
               cx="17"
               cy="17"
@@ -66,7 +59,6 @@ export function FonLogo() {
               strokeDasharray="72 15"
               transform="rotate(-40 17 17)"
             />
-            {/* Middle ring */}
             <circle
               cx="17"
               cy="17"
@@ -77,7 +69,6 @@ export function FonLogo() {
               strokeDasharray="45 12"
               transform="rotate(110 17 17)"
             />
-            {/* Inner ring */}
             <circle
               cx="17"
               cy="17"
@@ -91,13 +82,11 @@ export function FonLogo() {
           </svg>
         </div>
 
-        {/* Letter Н */}
         <span className="text-[28px] font-semibold text-[#163E75] tracking-tight select-none">
           Н
         </span>
       </div>
 
-      {/* Cyrillic Text Credentials */}
       <div className="mt-1.5 flex flex-col items-center justify-center">
         <span className="text-[8.5px] font-medium tracking-[0.18em] text-[#163E75]/80 uppercase leading-none select-none">
           УНИВЕРЗИТЕТ У БЕОГРАДУ
