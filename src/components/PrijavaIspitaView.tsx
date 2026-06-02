@@ -195,26 +195,23 @@ export function PrijavaIspitaView({
             </div>
 
             {/* Grid of the three options requested by the user */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               
               {/* Option 1: Druga kolokvijumska nedelja */}
               <div 
                 onClick={() => setSelectedPeriod("druga-kolokvijumska")}
-                className="bg-white border-2 border-transparent hover:border-blue-500/50 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group"
+                className="bg-white border-2 border-transparent hover:border-blue-500/50 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group text-center"
               >
-                <div>
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-2.5 bg-sky-50 text-sky-600 rounded-xl group-hover:bg-blue-500 group-hover:text-white transition-all">
-                      <Layers size={22} />
-                    </div>
+                <div className="flex flex-col items-center">
+                  <div className="flex justify-center items-center mb-4 w-full">
                     <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">OTVORENO</span>
                   </div>
                   <h3 className="font-extrabold text-slate-900 text-sm group-hover:text-[#1E4C9A] transition-colors">Druga kolokvijumska nedelja</h3>
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                  <p className="text-xs text-slate-500 mt-2 leading-relaxed text-center">
                     Prijava predispitnih obaveza i drugih kolokvijuma. Položite predmete preko kolokvijuma pre zvaničnih rokova.
                   </p>
                 </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-700">
+                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-center gap-2.5 text-xs font-bold text-slate-700 w-full">
                   <span>Cena prijave:</span>
                   <span className="text-emerald-600">0 RSD (Besplatno)</span>
                 </div>
@@ -223,21 +220,18 @@ export function PrijavaIspitaView({
               {/* Option 2: Junski ispitni rok */}
               <div 
                 onClick={() => setSelectedPeriod("junski-rok")}
-                className="bg-white border-2 border-transparent hover:border-blue-500/50 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group"
+                className="bg-white border-2 border-transparent hover:border-blue-500/50 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group text-center"
               >
-                <div>
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-blue-500 group-hover:text-white transition-all">
-                      <BookOpen size={22} />
-                    </div>
+                <div className="flex flex-col items-center">
+                  <div className="flex justify-center items-center mb-4 w-full">
                     <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">OTVORENO</span>
                   </div>
                   <h3 className="font-extrabold text-slate-900 text-sm group-hover:text-[#1E4C9A] transition-colors">Junski ispitni rok</h3>
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                  <p className="text-xs text-slate-500 mt-2 leading-relaxed text-center">
                     Prvi redovni letnji ispitni rok. Obavezna prijava svih ispita za junsku seriju polaganja.
                   </p>
                 </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-700">
+                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-center gap-2.5 text-xs font-bold text-slate-700 w-full">
                   <span>Cena prijave:</span>
                   <span className="text-slate-900">1.000 RSD / ispit</span>
                 </div>
@@ -245,24 +239,20 @@ export function PrijavaIspitaView({
 
               {/* Option 3: Julski ispitni rok */}
               <div 
-                onClick={() => setSelectedPeriod("julski-rok")}
-                className="bg-white border-2 border-transparent hover:border-blue-500/50 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group"
+                className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-5 shadow-sm opacity-60 flex flex-col justify-between text-center select-none cursor-not-allowed relative"
               >
-                <div>
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-2.5 bg-purple-50 text-purple-600 rounded-xl group-hover:bg-blue-500 group-hover:text-white transition-all">
-                      <Award size={22} />
-                    </div>
-                    <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">OTVORENO</span>
+                <div className="flex flex-col items-center">
+                  <div className="flex justify-center items-center mb-4 w-full">
+                    <span className="px-2.5 py-0.5 bg-red-100 text-red-800 text-[10px] font-bold rounded-full">ZATVORENO</span>
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-sm group-hover:text-[#1E4C9A] transition-colors">Julski ispitni rok</h3>
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                  <h3 className="font-extrabold text-slate-500 text-sm">Julski ispitni rok</h3>
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed text-center">
                     Drugi redovni letnji ispitni rok. Idealna šansa za polaganje pre polaska na letnji raspust.
                   </p>
                 </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-700">
+                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-center gap-2.5 text-xs font-bold text-slate-400 w-full">
                   <span>Cena prijave:</span>
-                  <span className="text-slate-900">1.000 RSD / ispit</span>
+                  <span className="font-mono">1.000 RSD / ispit</span>
                 </div>
               </div>
 
