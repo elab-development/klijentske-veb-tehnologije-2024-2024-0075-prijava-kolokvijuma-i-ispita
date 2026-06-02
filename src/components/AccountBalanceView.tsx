@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CreditCard, Printer, CheckCircle, RefreshCw, FileText, Info } from "lucide-react";
 
-interface PaymentRecord {
+export interface PaymentRecord {
   id: string;
   type: string;
   amount: string;
@@ -12,7 +12,7 @@ interface PaymentRecord {
   paymentCode: string;
 }
 
-const initialPayments: PaymentRecord[] = [
+export const initialPayments: PaymentRecord[] = [
   { id: "1", type: "Školarina", amount: "31.000", installments: "4", date: "05.08.2025.", yearOfStudy: "prva", status: "samofinansiranje", paymentCode: "189" },
   { id: "2", type: "Školarina", amount: "31.000", installments: "4", date: "04.08.2025.", yearOfStudy: "prva", status: "samofinansiranje", paymentCode: "189" },
   { id: "3", type: "Prijava ispita", amount: "2.000", installments: "1", date: "03.08.2025.", yearOfStudy: "prva", status: "samofinansiranje", paymentCode: "189" },
@@ -23,11 +23,20 @@ const initialPayments: PaymentRecord[] = [
 interface AccountBalanceViewProps {
   studentName?: string;
   studentIndex?: string;
+  payments: PaymentRecord[];
+  setPayments: React.Dispatch<React.SetStateAction<PaymentRecord[]>>;
+  accountBalance: number;
+  setAccountBalance: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export function AccountBalanceView({ studentName = "Ime Prezime", studentIndex = "2025/0001" }: AccountBalanceViewProps) {
-   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
-  const [accountBalance, setAccountBalance] = useState<number>(1.00);
+export function AccountBalanceView({ 
+  studentName = "Ime Prezime", 
+  studentIndex = "2025/0001",
+  payments,
+  setPayments,
+  accountBalance,
+  setAccountBalance
+}: AccountBalanceViewProps) {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const formatSerbianCurrency = (val: number) => {
