@@ -34,10 +34,11 @@ interface PrijavaIspitaViewProps {
   registeredExamsKeys: Record<string, boolean>;
   setRegisteredExamsKeys: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   addPaymentRecord: (type: string, amount: string) => void;
+  onRegisterExam?: (exam: any) => void;
 }
 
 // Fixed rosters for each period
-const ROSTERS: Record<PeriodType, Exam[]> = {
+export const ROSTERS: Record<PeriodType, Exam[]> = {
   "druga-kolokvijumska": [
     { id: "mat1", name: "Matematika 1", code: "322001", espb: 6, date: "12.06.2026.", baseRegistrations: 1, price: 0 },
     { id: "prog1", name: "Programiranje 1", code: "220031", espb: 6, date: "15.06.2026.", baseRegistrations: 1, price: 0 },
@@ -68,7 +69,8 @@ export function PrijavaIspitaView({
   setAccountBalance,
   registeredExamsKeys,
   setRegisteredExamsKeys,
-  addPaymentRecord
+  addPaymentRecord,
+  onRegisterExam
 }: PrijavaIspitaViewProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<PeriodType | null>(null);
   
@@ -112,6 +114,19 @@ export function PrijavaIspitaView({
       ...prev,
       [key]: true
     }));
+
+    if (onRegisterExam) {
+      onRegisterExam({
+        id: key,
+        name: confirmExam.name,
+        espb: confirmExam.espb,
+        time: `${confirmExam.date} 9h`,
+        location: confirmExam.price > 0 ? "Amfiteatar 1" : "Kabinet 52",
+        isInitial: false,
+        periodLabel: getPeriodLabel(selectedPeriod),
+        price: confirmExam.price
+      });
+    }
 
     if (price > 0) {
       setAccountBalance(prev => Math.max(0, prev - price));

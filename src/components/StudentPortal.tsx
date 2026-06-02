@@ -5,11 +5,13 @@ import {
   User, 
   Home,
   CreditCard,
-  ClipboardCheck
+  ClipboardCheck,
+  CheckSquare
 } from "lucide-react";
 import { HomeView } from "./HomeView";
 import { AccountBalanceView, PaymentRecord, initialPayments } from "./AccountBalanceView";
 import { PrijavaIspitaView } from "./PrijavaIspitaView";
+import { PrijavljeniIspitiView, RegisteredExamRow } from "./PrijavljeniIspitiView";
 
 const bannerPaths = [
   "/banner.png",
@@ -31,10 +33,15 @@ interface StudentPortalProps {
 
 export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "2023/3858", onLogout }: StudentPortalProps) {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<"home" | "stanje" | "prijava">("home");
+  const [activeTab, setActiveTab] = useState<"home" | "stanje" | "prijava" | "prijavljeni">("home");
   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
   const [accountBalance, setAccountBalance] = useState<number>(4200.00); // Students have 4.200 RSD to try registering exams immediately!
   const [registeredExamsKeys, setRegisteredExamsKeys] = useState<Record<string, boolean>>({});
+  const [customRegisteredExams, setCustomRegisteredExams] = useState<RegisteredExamRow[]>([]);
+
+  const handleRegisterExam = (examRow: RegisteredExamRow) => {
+    setCustomRegisteredExams(prev => [...prev, examRow]);
+  };
 
   const addPaymentRecord = (type: string, amountStr: string) => {
     const amountVal = Math.abs(parseInt(amountStr) || 0);
@@ -169,6 +176,19 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
               <ClipboardCheck size={15} />
               <span>Prijava ispita</span>
             </button>
+
+            <button
+              id="tab-prijavljeni-ispiti"
+              onClick={() => setActiveTab("prijavljeni")}
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all ${
+                activeTab === "prijavljeni"
+                  ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
+                  : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
+              } cursor-pointer focus:outline-none`}
+            >
+              <CheckSquare size={15} />
+              <span>Prijavljeni ispiti</span>
+            </button>
           </div>
 
           {/* Main Workspace Canvas */}
@@ -202,7 +222,7 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
                     setAccountBalance={setAccountBalance}
                   />
                 </motion.div>
-              ) : (
+              ) : activeTab === "prijava" ? (
                 <motion.div
                   key="prijava-tab"
                   initial={{ opacity: 0, x: -10 }}
@@ -218,6 +238,27 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
                     registeredExamsKeys={registeredExamsKeys}
                     setRegisteredExamsKeys={setRegisteredExamsKeys}
                     addPaymentRecord={addPaymentRecord}
+                    onRegisterExam={handleRegisterExam}
+                  />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="prijavljeni-tab"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <PrijavljeniIspitiView 
+                    studentName={studentName}
+                    studentIndex={studentIndex}
+                    accountBalance={accountBalance}
+                    setAccountBalance={setAccountBalance}
+                    registeredExamsKeys={registeredExamsKeys}
+                    setRegisteredExamsKeys={setRegisteredExamsKeys}
+                    addPaymentRecord={addPaymentRecord}
+                    customRegisteredExams={customRegisteredExams}
+                    setCustomRegisteredExams={setCustomRegisteredExams}
                   />
                 </motion.div>
               )}
