@@ -13,6 +13,7 @@ import {
 import { Calendar } from "./Calendar";
 import { FonLogo } from "./FonLogo";
 import { RegisteredExamRow } from "../models/RegisteredExamRow";
+import { useTheme } from "../context/ThemeContext";
 
 interface PrijavljeniIspitiViewProps {
   studentName: string;
@@ -24,7 +25,7 @@ interface PrijavljeniIspitiViewProps {
   addPaymentRecord: (type: string, amount: string) => void;
   // Shared state of dynamically registered exams in PrijavaIspitaView
   customRegisteredExams: RegisteredExamRow[];
-  setCustomRegisteredExams: React.Dispatch<React.SetStateAction<RegisteredExamRow[]>>;
+  setCustomRegisteredExams: React.Dispatch<React.SetStateAction<React.SetStateAction<RegisteredExamRow[]>>>;
 }
 
 export function PrijavljeniIspitiView({
@@ -38,6 +39,7 @@ export function PrijavljeniIspitiView({
   customRegisteredExams,
   setCustomRegisteredExams
 }: PrijavljeniIspitiViewProps) {
+  const { isDarkMode } = useTheme();
   // Initial rows from user's screenshot
   const [initialExams, setInitialExams] = useState<RegisteredExamRow[]>([
     { id: "init-1", name: "Cloud infrastruktura i servisi", espb: 6, time: "11.5.2026. 8h", location: "Kabinet 51", isInitial: true },
@@ -98,14 +100,16 @@ export function PrijavljeniIspitiView({
       
       {/* Toast Alert Success Display */}
       {successMsg && (
-        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 text-red-800 text-xs font-semibold flex items-center gap-3 animate-fadeIn text-left shadow-sm">
-          <div className="p-2 bg-red-500 text-white rounded-xl shrink-0">
+        <div className={`border rounded-2xl p-4 text-xs font-semibold flex items-center gap-3 animate-fadeIn text-left shadow-sm ${
+          isDarkMode ? "bg-red-950/40 border-red-900/40 text-red-400" : "bg-red-50 border-red-200 text-red-800"
+        }`}>
+          <div className="p-2 bg-red-550 bg-red-500 text-white rounded-xl shrink-0">
             <Trash2 size={16} />
           </div>
           <div className="flex-1">
             <p className="font-bold">Ispit uspešno odjavljen</p>
-            <p className="font-normal text-red-700 mt-0.5">
-              {successMsg.split("**").map((part, i) => i % 2 === 1 ? <strong key={i} className="font-bold text-red-950">{part}</strong> : part)}
+            <p className={`font-normal mt-0.5 ${isDarkMode ? "text-red-300" : "text-red-700"}`}>
+              {successMsg.split("**").map((part, i) => i % 2 === 1 ? <strong key={i} className={isDarkMode ? "font-bold text-white shadow-sm":"font-bold text-red-950"}>{part}</strong> : part)}
             </p>
           </div>
         </div>
@@ -115,60 +119,73 @@ export function PrijavljeniIspitiView({
         
         {/* Main interactive list (8 column spans) */}
         <div className="lg:col-span-8 flex flex-col justify-between">
-          <div className="bg-white rounded-2xl p-6 shadow border border-slate-200">
+          <div className={`rounded-2xl p-6 shadow border transition-all duration-300 ${
+            isDarkMode ? "bg-[#1E293B]/80 text-white border-slate-750/30 shadow-black/35" : "bg-white border-slate-200"
+          }`}>
             
             {/* Subject Period Badge Header */}
             <div className="mb-4 text-left">
-              <h2 className="text-lg font-black text-slate-900 border-b pb-2 mb-4 tracking-tight">
+              <h2 className={`text-lg font-black border-b pb-2 mb-4 tracking-tight ${
+                isDarkMode ? "text-white border-slate-800" : "text-slate-900 border-slate-100"
+              }`}>
                 Prva letnja kolokvijumska nedelja
               </h2>
             </div>
 
             {allAvailableExams.length === 0 ? (
-              <div className="py-12 px-4 text-center border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center gap-3">
-                <AlertCircle size={32} className="text-slate-400" />
-                <p className="text-slate-800 text-sm font-bold">Nemate trenutno prijavljenih ispita ni kolokvijuma.</p>
+              <div className={`py-12 px-4 text-center border-2 border-dashed rounded-2xl flex flex-col items-center gap-3 ${
+                isDarkMode ? "border-slate-850 bg-slate-900/10 text-slate-400" : "border-slate-200 bg-slate-50 text-slate-800"
+              }`}>
+                <AlertCircle size={32} className="text-slate-404" />
+                <p className={`text-sm font-bold ${isDarkMode ? "text-slate-350" : "text-slate-800"}`}>Nemate trenutno prijavljenih ispita ni kolokvijuma.</p>
                 <p className="text-slate-400 text-xs max-w-sm">Idite u sekciju "Prijava ispita" kako biste izabrali rok i prijavili predmete za polaganje.</p>
               </div>
             ) : (
-              <div className="w-full overflow-x-auto rounded border border-black/80">
-                <table className="w-full min-w-[580px] border-collapse border border-black text-xs text-slate-900 bg-white">
+              <div className="w-full overflow-x-auto rounded border border-black/30">
+                <table className={`w-full min-w-[580px] border-collapse text-xs ${
+                  isDarkMode ? "bg-[#141c2c] text-slate-100" : "bg-white text-slate-900"
+                }`}>
                   <thead>
-                    <tr className="bg-slate-50 border-b border-black">
-                      <th className="border border-black font-extrabold text-[#111827] text-left py-3 px-4 uppercase tracking-wider bg-slate-50/50 text-[11px]">Naziv predmeta</th>
-                      <th className="border border-black font-extrabold text-[#111827] text-center py-3 px-3 uppercase tracking-wider bg-slate-50/50 text-[11px] w-[60px]">ESPB</th>
-                      <th className="border border-black font-extrabold text-[#111827] text-center py-3 px-4 uppercase tracking-wider bg-slate-50/50 text-[11px]">Termin polaganja</th>
-                      <th className="border border-black font-extrabold text-[#111827] text-center py-3 px-4 uppercase tracking-wider bg-slate-50/50 text-[11px]">Mesto polaganja</th>
+                    <tr className={`border-b ${
+                      isDarkMode ? "bg-[#162135] border-slate-800 text-slate-200" : "bg-slate-50 border-black"
+                    }`}>
+                      <th className={`border font-extrabold text-left py-3 px-4 uppercase tracking-wider text-[11px] ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50/50"}`}>Naziv predmeta</th>
+                      <th className={`border font-extrabold text-center py-3 px-3 uppercase tracking-wider text-[11px] w-[60px] ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50/50"}`}>ESPB</th>
+                      <th className={`border font-extrabold text-center py-3 px-4 uppercase tracking-wider text-[11px] ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50/50"}`}>Termin polaganja</th>
+                      <th className={`border font-extrabold text-center py-3 px-4 uppercase tracking-wider text-[11px] ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50/50"}`}>Mesto polaganja</th>
                     </tr>
                   </thead>
                   <tbody>
                     {allAvailableExams.map((exam) => (
-                      <tr key={exam.id} className="hover:bg-slate-50/40 border-b border-black/50 transition-all">
-                        <td className="border border-black py-3.5 px-4 text-left font-bold text-slate-800 text-[12.5px]">
+                      <tr key={exam.id} className={`border-b transition-all ${
+                        isDarkMode 
+                          ? "hover:bg-[#1f2c41] bg-slate-900/15 border-slate-800" 
+                          : "hover:bg-slate-50/40 border-b border-black/50"
+                      }`}>
+                        <td className={`border py-3.5 px-4 text-left font-bold text-[12.5px] ${isDarkMode ? "border-slate-800 text-slate-200" : "border-black text-slate-800"}`}>
                           <div className="flex flex-col">
                             <span>{exam.name}</span>
                             {!exam.isInitial && (
-                              <span className="text-[9px] text-[#1E4C9A] uppercase tracking-wide font-extrabold mt-0.5">
+                              <span className={`text-[9px] uppercase tracking-wide font-extrabold mt-0.5 ${isDarkMode ? "text-[#5E97F6]":"text-[#1E4C9A]"}`}>
                                 {exam.periodLabel || "Ostali rokovi"}
                               </span>
                             )}
                           </div>
                         </td>
-                        <td className="border border-black py-3.5 px-3 text-center font-mono font-bold text-slate-705 text-xs">
+                        <td className={`border py-3.5 px-3 text-center font-mono font-bold text-xs ${isDarkMode ? "border-slate-800 text-slate-350" : "border-black text-slate-705"}`}>
                           {exam.espb}
                         </td>
-                        <td className="border border-black py-3.5 px-4 text-center font-mono text-slate-700 text-xs">
+                        <td className={`border py-3.5 px-4 text-center font-mono text-xs ${isDarkMode ? "border-slate-800 text-slate-300" : "border-black text-slate-700"}`}>
                           {exam.time}
                         </td>
-                        <td className="border border-black py-3.5 px-4 text-center font-semibold text-slate-800 text-xs">
+                        <td className={`border py-3.5 px-4 text-center font-semibold text-xs ${isDarkMode ? "border-slate-800 text-slate-200" : "border-black text-slate-805"}`}>
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-center w-full">{exam.location}</span>
                             <button
                               onClick={() => handleCancelClick(exam)}
-                              className="px-3 py-1 bg-red-650 hover:bg-red-700 text-white rounded font-bold text-[11px] transition-colors cursor-pointer border border-red-800 ml-2"
-                              style={{ backgroundColor: "#EF4444" }}
+                              className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded font-bold text-[11px] transition-colors cursor-pointer border border-red-800 ml-2"
                             >
-                              Odjavi
+                              Odjavu
                             </button>
                           </div>
                         </td>
@@ -179,10 +196,14 @@ export function PrijavljeniIspitiView({
               </div>
             )}
 
-            <div className="mt-4 flex gap-2 items-start text-left text-[11px] text-gray-500 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-              <Info size={15} className="mt-0.5 text-[#1E4C9A] shrink-0" />
+            <div className={`mt-4 flex gap-2 items-start text-left text-[11px] border rounded-xl p-3.5 ${
+              isDarkMode 
+                ? "bg-[#111a30] border-slate-800/85 text-slate-450" 
+                : "bg-slate-50 border-slate-150 text-gray-500"
+            }`}>
+              <Info size={15} className={`mt-0.5 shrink-0 ${isDarkMode ? "text-amber-400" : "text-[#1E4C9A]"}`} />
               <div>
-                <p className="font-bold text-slate-800 mb-0.5">Automatsko usaglašavanje:</p>
+                <p className={`font-bold mb-0.5 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}>Automatsko usaglašavanje:</p>
                 <p className="leading-relaxed">
                   Podaci o prijavljenim rokovima su sinhronizovani sa centralnim FON e-student servisom. Ukoliko uočite bilo kakve greške u terminima polaganja ili dodeljenim kabinetima/amfiteatrima, kontaktirajte Studentsku službu.
                 </p>
@@ -193,10 +214,12 @@ export function PrijavljeniIspitiView({
         </div>
 
         {/* Calendar and FON emblem side column */}
-        <div className="lg:col-span-4 flex flex-col gap-6 self-stretch">
+        <div className="lg:col-span-4 flex flex-col gap-6 self-stretch animate-fadeIn">
           <Calendar />
           
-          <div className="flex-1 flex flex-col gap-1 items-center justify-center bg-white rounded-2xl shadow border border-slate-200 p-6 min-h-[140px]">
+          <div className={`flex-1 flex items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 ${
+            isDarkMode ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/20" : "bg-white border-slate-200 text-slate-800"
+          }`}>
             <div className="max-w-[140px] w-full flex items-center justify-center opacity-90">
               <FonLogo />
             </div>
@@ -208,27 +231,35 @@ export function PrijavljeniIspitiView({
       {/* Cancel Confirmation Dialog */}
       <AnimatePresence>
         {toCancel && (
-          <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-200 text-left"
+              className={`rounded-2xl max-w-sm w-full p-6 shadow-2xl relative border text-left flex flex-col transition-all duration-300 ${
+                isDarkMode 
+                  ? "bg-[#1E293B] border-slate-750/60 text-white shadow-black/45" 
+                  : "bg-white border-slate-200 text-slate-810"
+              }`}
             >
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-red-50 text-red-600 rounded-2xl shrink-0">
+                <div className="p-3 bg-red-500/10 text-red-500 rounded-2xl shrink-0">
                   <Trash2 size={22} />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-[15px] leading-snug">Potvrda odjave ispita</h3>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <h3 className={`font-extrabold text-[15px] leading-snug ${isDarkMode ? "text-white" : "text-slate-900"}`}>Potvrda odjave ispita</h3>
+                  <p className={`text-xs mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
                     Da li ste sigurni da želite da odjavite polaganje ovog predmeta?
                   </p>
-                  <p className="text-sm font-extrabold text-red-600 mt-2 border-l-4 border-red-500 pl-3">
+                  <p className="text-sm font-extrabold text-red-500 mt-2 border-l-4 border-red-500 pl-3 font-semibold">
                     {toCancel.name}
                   </p>
                   {toCancel.price && toCancel.price > 0 ? (
-                    <p className="text-[11px] text-emerald-600 font-bold mt-3 leading-relaxed bg-emerald-50 p-2 rounded-lg border border-emerald-100">
+                    <p className={`text-[11px] font-bold mt-3 leading-relaxed border p-2 rounded-lg ${
+                      isDarkMode 
+                        ? "bg-emerald-950/40 text-emerald-450 border-emerald-900/50" 
+                        : "bg-emerald-50 text-emerald-600 border-emerald-100"
+                    }`}>
                       * Sredstva u iznosu od {toCancel.price.toLocaleString("sr-RS")} RSD biće vraćena na Vašu studentsku karticu odmah.
                     </p>
                   ) : null}
@@ -238,7 +269,11 @@ export function PrijavljeniIspitiView({
               <div className="mt-6 flex gap-3">
                 <button
                   onClick={() => setToCancel(null)}
-                  className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all cursor-pointer border border-slate-200 text-center"
+                  className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer border text-center ${
+                    isDarkMode 
+                      ? "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white" 
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200"
+                  }`}
                 >
                   Odustani
                 </button>

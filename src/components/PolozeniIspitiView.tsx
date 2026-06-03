@@ -4,6 +4,7 @@ import { Calendar } from "./Calendar";
 import { FonLogo } from "./FonLogo";
 import { AcademicRegistry } from "../class/AcademicStats";
 import { PassedExam } from "../models/PassedExam";
+import { useTheme } from "../context/ThemeContext";
 
 const passedExamsData: PassedExam[] = [
   { id: "1", name: "Principi programiranja", espb: 5, grade: 9, date: "05.08.2025." },
@@ -21,6 +22,7 @@ const passedExamsData: PassedExam[] = [
 
 export function PolozeniIspitiView() {
   const [searchQuery, setSearchQuery] = useState("");
+  const { isDarkMode } = useTheme();
 
   const registry = useMemo(() => new AcademicRegistry(passedExamsData), []);
 
@@ -36,21 +38,30 @@ export function PolozeniIspitiView() {
   }, [registry, filteredExams]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-sans">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-sans select-none animate-fadeIn">
       
       {/* Left Column: Passed Exams Table */}
       <div className="lg:col-span-8 flex flex-col gap-4">
         
         {/* Header & Filter Card */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 select-none pb-3 border-b border-slate-100">
-            <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-              <Award size={20} className="text-[#1E4C9A]" />
+        <div className={`rounded-2xl p-5 border shadow-sm transition-all duration-300 ${
+          isDarkMode ? "bg-[#1E293B]/85 text-white border-slate-800 shadow-black/25" : "bg-white border-slate-200 text-slate-800"
+        }`}>
+          <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-3 border-b ${
+            isDarkMode ? "border-slate-800" : "border-slate-100"
+          }`}>
+            <h2 className="text-lg font-bold flex items-center gap-2">
+              <Award size={20} className={isDarkMode ? "text-amber-400 animate-pulse" : "text-[#1E4C9A]"} />
               Položeni ispiti
             </h2>
             <div className="flex items-center gap-2">
-              <span className="text-xs bg-emerald-50 text-emerald-700 font-extrabold px-2.5 py-1 rounded-lg border border-emerald-100">
-                Godišnji prosek: 9.91
+              <span className={`inline-flex items-center gap-1.5 text-xs font-black px-3.5 py-1.5 rounded-xl border shadow-sm transition-all ${
+                isDarkMode 
+                  ? "bg-gradient-to-r from-amber-500/10 to-amber-400/5 text-amber-300 border-amber-500/30 shadow-amber-950/10" 
+                  : "bg-amber-50 text-amber-850 border-amber-200"
+              }`}>
+                <Award size={14} className="text-amber-400 font-bold" />
+                Godišnji prosek: <span className="font-mono text-sm font-black">9.91</span>
               </span>
             </div>
           </div>
@@ -64,13 +75,21 @@ export function PolozeniIspitiView() {
                 placeholder="Pretraži položene ispite..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-50 text-slate-800 font-medium text-xs rounded-xl py-2.5 pl-9 pr-4 border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white placeholder-slate-400 transition-all"
+                className={`w-full font-medium text-xs rounded-xl py-2.5 pl-9 pr-4 border focus:outline-none transition-all ${
+                  isDarkMode 
+                    ? "bg-[#121927] border-slate-800 text-white placeholder-slate-500 focus:ring-1 focus:ring-amber-500 focus:bg-[#121927]" 
+                    : "bg-slate-50 border-slate-200 text-slate-808 focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white placeholder-slate-400"
+                }`}
               />
             </div>
             {searchQuery && (
               <button 
                 onClick={() => setSearchQuery("")}
-                className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-500 font-semibold text-xs rounded-lg transition-colors border border-slate-200 flex items-center gap-1"
+                className={`px-3 py-1.5 font-semibold text-xs rounded-lg transition-colors border flex items-center gap-1 cursor-pointer ${
+                  isDarkMode 
+                    ? "bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700" 
+                    : "bg-slate-50 hover:bg-slate-100 text-slate-505 border-slate-202"
+                }`}
               >
                 <RefreshCw size={12} />
                 Poništi
@@ -80,72 +99,118 @@ export function PolozeniIspitiView() {
         </div>
 
         {/* Table layout exactly as modeled in the physical screenshot */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className={`rounded-2xl shadow-xl border overflow-hidden transition-all duration-300 ${
+          isDarkMode ? "bg-[#1E293B]/85 text-white border-slate-800 shadow-black/35" : "bg-white border-slate-200"
+        }`}>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 select-none">
-                  <th className="py-3 px-5 text-xs font-extrabold text-[#111827] uppercase tracking-wider w-[55%] border-r border-slate-200">
+                <tr className={`border-b select-none ${
+                  isDarkMode ? "bg-[#131d30] border-slate-800 text-slate-200" : "bg-slate-50 border-slate-202"
+                }`}>
+                  <th className={`py-3 px-5 text-xs font-extrabold uppercase tracking-wider w-[55%] border-r ${
+                    isDarkMode ? "text-slate-300 border-slate-800" : "text-[#111827] border-slate-202"
+                  }`}>
                     Naziv predmeta
                   </th>
-                  <th className="py-3 px-5 text-xs font-extrabold text-[#111827] uppercase tracking-wider text-center w-[15%] border-r border-slate-200">
+                  <th className={`py-3 px-5 text-xs font-extrabold uppercase tracking-wider text-center w-[15%] border-r ${
+                    isDarkMode ? "text-slate-300 border-slate-800 text-center" : "text-[#111827] border-slate-202"
+                  }`}>
                     ESPB
                   </th>
-                  <th className="py-3 px-5 text-xs font-extrabold text-[#111827] uppercase tracking-wider text-center w-[15%] border-r border-slate-200">
+                  <th className={`py-3 px-5 text-xs font-extrabold uppercase tracking-wider text-center w-[15%] border-r ${
+                    isDarkMode ? "text-slate-300 border-slate-800 text-center" : "text-[#111827] border-slate-202"
+                  }`}>
                     Ocena
                   </th>
-                  <th className="py-3 px-5 text-xs font-extrabold text-[#111827] uppercase tracking-wider text-center w-[15%]">
+                  <th className={`py-3 px-5 text-xs font-extrabold uppercase tracking-wider text-center w-[15%] ${
+                    isDarkMode ? "text-slate-200" : "text-[#111827]"
+                  }`}>
                     Datum polaganja
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+              <tbody className={`font-medium ${isDarkMode ? "text-slate-200 divide-y divide-slate-800/60" : "text-slate-700 divide-y divide-slate-100"}`}>
                 {filteredExams.length > 0 ? (
                   filteredExams.map((exam) => (
-                    <tr key={exam.id} className="hover:bg-slate-50/50 transition-colors">
+                    <tr key={exam.id} className={`transition-colors duration-150 ${
+                      isDarkMode ? "hover:bg-[#1c273c]/50 bg-[#141d30]/20" : "hover:bg-slate-50/50"
+                    }`}>
                       {/* Name Column */}
-                      <td className="py-3 px-5 text-xs sm:text-[13px] font-semibold text-slate-800 border-r border-slate-100">
+                      <td className={`py-3 px-5 text-xs sm:text-[13px] font-semibold border-r ${
+                        isDarkMode ? "text-slate-200 border-slate-800/80" : "text-slate-800 border-slate-100"
+                      }`}>
                         {exam.name}
                       </td>
 
                       {/* ESPB Column */}
-                      <td className="py-3 px-5 text-xs font-semibold text-slate-600 text-center border-r border-slate-100">
-                        {exam.espb}
-                      </td>
-
-                      {/* Grade Column */}
-                      <td className="py-3 px-5 text-sm font-bold text-[#1E4C9A] text-center border-r border-slate-100">
-                        <span className="inline-block bg-blue-50 px-2 py-0.5 rounded-md min-w-[24px]">
-                          {exam.grade}
+                      <td className={`py-3 px-5 text-xs font-semibold text-center border-r ${
+                        isDarkMode ? "text-slate-300 border-slate-800/80" : "text-slate-600 border-slate-100"
+                      }`}>
+                        <span className={`inline-block px-2 py-0.5 rounded font-mono ${
+                          isDarkMode ? "bg-slate-800/40 text-slate-300" : "bg-transparent text-slate-500"
+                        }`}>
+                          {exam.espb}
                         </span>
                       </td>
 
+                      {/* Grade Column */}
+                      <td className={`py-3 px-5 text-sm font-bold text-center border-r ${
+                        isDarkMode ? "border-slate-800/80" : "border-slate-100"
+                      }`}>
+                        {exam.grade === 10 ? (
+                          <span className={`inline-flex items-center justify-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black font-mono shadow-sm ${
+                            isDarkMode 
+                              ? "bg-amber-400/15 text-amber-300 border border-amber-500/20 shadow-amber-950/20" 
+                              : "bg-blue-50 text-[#1E4C9A]"
+                          }`}>
+                            ★ 10
+                          </span>
+                        ) : (
+                          <span className={`inline-flex items-center justify-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono shadow-sm ${
+                            isDarkMode 
+                              ? "bg-slate-800 text-slate-200 border border-slate-700" 
+                              : "bg-slate-50 text-slate-700 border border-slate-200"
+                          }`}>
+                            {exam.grade}
+                          </span>
+                        )}
+                      </td>
+
                       {/* Date Column */}
-                      <td className="py-3 px-5 text-xs text-slate-500 font-mono text-center">
+                      <td className={`py-3 px-5 text-xs font-mono text-center ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
                         {exam.date}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={4} className="py-12 text-center text-slate-400 font-medium text-xs">
+                    <td colSpan={4} className={`py-12 text-center font-medium text-xs ${isDarkMode ? "text-slate-500" : "text-slate-450"}`}>
                       Nema pronađenih položenih ispita za unetu pretragu.
                     </td>
                   </tr>
                 )}
                 
                 {/* Total Stats Row - exact footer structure like the screenshot */}
-                <tr className="bg-slate-50 border-t-2 border-slate-200 select-none font-bold text-slate-800 text-sm">
-                  <td className="py-3.5 px-5 text-right uppercase tracking-wider border-r border-slate-200">
+                <tr className={`border-t border-t-slate-800 select-none font-bold text-sm ${
+                  isDarkMode ? "bg-[#131c30] text-slate-100" : "bg-slate-50 border-slate-202 text-slate-800"
+                }`}>
+                  <td className={`py-3.5 px-5 text-right uppercase tracking-wider border-r ${
+                    isDarkMode ? "border-slate-800 text-slate-400 font-extrabold text-xs" : "border-slate-202"
+                  }`}>
                     Ukupno:
                   </td>
-                  <td className="py-3.5 px-5 text-center font-mono border-r border-slate-200 text-[#1E4C9A] text-base">
+                  <td className={`py-3.5 px-5 text-center font-mono border-r text-base ${
+                    isDarkMode ? "text-amber-400 border-slate-800 font-extrabold" : "text-[#1E4C9A] border-slate-202"
+                  }`}>
                     {totals.totalEspb}
                   </td>
-                  <td className="py-3.5 px-5 text-center font-mono border-r border-slate-200 text-[#1E4C9A] text-base">
+                  <td className={`py-3.5 px-5 text-center font-mono border-r text-base ${
+                    isDarkMode ? "text-amber-400 border-slate-800 font-extrabold" : "text-[#1E4C9A] border-slate-202"
+                  }`}>
                     {totals.averageGrade}
                   </td>
-                  <td className="py-3.5 px-5 bg-slate-50">
+                  <td className={isDarkMode ? "bg-[#131c30]" : "bg-slate-50"}>
                     {/* Empty block to fill fourth column spacing layout */}
                   </td>
                 </tr>
@@ -159,7 +224,9 @@ export function PolozeniIspitiView() {
       <div className="lg:col-span-4 flex flex-col gap-5 self-stretch">
         <Calendar />
         
-        <div className="flex-1 flex items-center justify-center bg-white rounded-2xl shadow border border-slate-200 p-6 min-h-[140px]">
+        <div className={`flex-1 flex items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 ${
+          isDarkMode ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/25" : "bg-white border hover:border-slate-200 border-slate-202 text-slate-800 shadow"
+        }`}>
           <div className="max-w-[145px] w-full flex items-center justify-center opacity-90">
             <FonLogo />
           </div>

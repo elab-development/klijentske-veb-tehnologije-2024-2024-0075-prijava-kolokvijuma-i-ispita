@@ -1,10 +1,4 @@
-export interface PassedExam {
-  id: string;
-  name: string;
-  espb: number;
-  grade: number;
-  date: string;
-}
+import { PassedExam } from "../models/PassedExam";
 
 export class AcademicRegistry {
   private exams: PassedExam[];

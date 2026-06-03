@@ -14,6 +14,7 @@ import {
 import { Calendar } from "./Calendar";
 import { FonLogo } from "./FonLogo";
 import { Exam } from "../models/Exam";
+import { useTheme } from "../context/ThemeContext";
 
 export type PeriodType = "druga-kolokvijumska" | "junski-rok" | "julski-rok";
 
@@ -64,6 +65,7 @@ export function PrijavaIspitaView({
   onRegisterExam
 }: PrijavaIspitaViewProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<PeriodType | null>(null);
+  const { isDarkMode } = useTheme();
   
   // Dialog / Modal alerts
   const [confirmExam, setConfirmExam] = useState<Exam | null>(null);
@@ -145,14 +147,16 @@ export function PrijavaIspitaView({
       
       {/* Visual Success Announcement */}
       {successInfo && (
-        <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-4 text-emerald-800 text-xs font-semibold flex items-center gap-3 animate-fadeIn text-left shadow-sm">
+        <div className={`border rounded-2xl p-4 text-xs font-semibold flex items-center gap-3 animate-fadeIn text-left shadow-sm ${
+          isDarkMode ? "bg-emerald-950/40 border-emerald-800 text-emerald-300" : "bg-emerald-50 border-emerald-300 text-emerald-800"
+        }`}>
           <div className="p-2 bg-emerald-500 text-white rounded-xl shrink-0">
             <CheckCircle size={16} />
           </div>
           <div className="flex-1">
             <p className="font-bold">Prijava potvrđena</p>
-            <p className="font-normal text-emerald-700/95 mt-0.5">
-              {successInfo.split("**").map((part, i) => i % 2 === 1 ? <strong key={i} className="font-bold text-emerald-950">{part}</strong> : part)}
+            <p className={`font-normal mt-0.5 ${isDarkMode ? "text-emerald-400" : "text-emerald-750/95"}`}>
+              {successInfo.split("**").map((part, i) => i % 2 === 1 ? <strong key={i} className={isDarkMode ? "font-bold text-white shadow-sm":"font-bold text-emerald-950"}>{part}</strong> : part)}
             </p>
           </div>
         </div>
@@ -167,21 +171,29 @@ export function PrijavaIspitaView({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col gap-6 w-full text-center"
+            className="flex flex-col gap-6 w-full text-center animate-fadeIn"
           >
             {/* Header info selection card */}
-            <div className="bg-white rounded-2xl shadow border border-slate-200 p-6 flex flex-col items-center gap-2 text-center">
-              <div className="p-3 bg-blue-50 text-[#1E4C9A] rounded-2xl mb-1">
+            <div className={`rounded-2xl shadow p-6 flex flex-col items-center gap-2 text-center border transition-all duration-300 ${
+              isDarkMode 
+                ? "bg-[#1E293B]/80 text-white border-slate-705/30 shadow-black/25" 
+                : "bg-white border-slate-200 text-slate-800"
+            }`}>
+              <div className={`p-3 rounded-2xl mb-1 ${
+                isDarkMode ? "bg-blue-950/50 text-[#5E97F6]" : "bg-blue-50 text-[#1E4C9A]"
+              }`}>
                 <ClipboardCheck size={32} />
               </div>
-              <h2 className="text-xl font-extrabold text-slate-900">Prijava ispitnih rokova i kolokvijuma</h2>
-              <p className="text-xs text-slate-500 max-w-xl leading-relaxed">
+              <h2 className={`text-xl font-extrabold ${isDarkMode ? "text-white" : "text-slate-900"}`}>Prijava ispitnih rokova i kolokvijuma</h2>
+              <p className={`text-xs max-w-xl leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
                 Dobrodošli u modul za prijavu ispita. Pre pristupa listi predmeta, molimo odaberite aktivan rok u kom želite da polažete predispitne obaveze ili ispite:
               </p>
               
-              <div className="mt-2 bg-slate-50 px-4 py-2 border border-slate-100 rounded-xl flex items-center gap-2 text-xs font-bold text-slate-700">
+              <div className={`mt-2 px-4 py-2 border rounded-xl flex items-center gap-2 text-xs font-bold ${
+                isDarkMode ? "bg-[#121927]/60 border-slate-800 text-slate-300" : "bg-slate-50 border-slate-100 text-slate-700"
+              }`}>
                 <span>Tekuće stanje na Vašem računu:</span>
-                <span className="text-[#1E4C9A] text-sm">{formatBalance(accountBalance)}</span>
+                <span className={`text-sm font-bold ${isDarkMode ? "text-amber-400" : "text-[#1E4C9A]"}`}>{formatBalance(accountBalance)}</span>
               </div>
             </div>
 
@@ -191,57 +203,79 @@ export function PrijavaIspitaView({
               {/* Option 1: Druga kolokvijumska nedelja */}
               <div 
                 onClick={() => setSelectedPeriod("druga-kolokvijumska")}
-                className="bg-white border-2 border-transparent hover:border-blue-500/50 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group text-center"
+                className={`border-2 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group text-center ${
+                  isDarkMode 
+                    ? "bg-[#1E293B]/85 border-transparent hover:border-amber-400/50 text-white" 
+                    : "bg-white border-transparent hover:border-blue-500/50 text-slate-900"
+                }`}
               >
                 <div className="flex flex-col items-center">
                   <div className="flex justify-center items-center mb-4 w-full">
-                    <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">OTVORENO</span>
+                    <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 text-[10px] font-extrabold tracking-wider rounded-full uppercase">OTVORENO</span>
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-sm group-hover:text-[#1E4C9A] transition-colors">Druga kolokvijumska nedelja</h3>
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed text-center">
+                  <h3 className={`font-extrabold text-sm group-hover:text-amber-400 transition-colors ${
+                    isDarkMode ? "text-white group-hover:text-amber-400" : "text-slate-900 group-hover:text-[#1E4C9A]"
+                  }`}>Druga kolokvijumska nedelja</h3>
+                  <p className={`text-xs mt-2 leading-relaxed text-center ${isDarkMode ? "text-slate-400/90" : "text-slate-500"}`}>
                     Prijava predispitnih obaveza i drugih kolokvijuma. Položite predmete preko kolokvijuma pre zvaničnih rokova.
                   </p>
                 </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-center gap-2.5 text-xs font-bold text-slate-700 w-full">
+                <div className={`mt-6 pt-3 border-t flex items-center justify-center gap-2.5 text-xs font-bold w-full ${
+                  isDarkMode ? "border-slate-800 text-slate-300" : "border-slate-100 text-slate-700"
+                }`}>
                   <span>Cena prijave:</span>
-                  <span className="text-emerald-600">0 RSD (Besplatno)</span>
+                  <span className="text-emerald-400 font-extrabold font-mono">0 RSD (Besplatno)</span>
                 </div>
               </div>
 
               {/* Option 2: Junski ispitni rok */}
               <div 
                 onClick={() => setSelectedPeriod("junski-rok")}
-                className="bg-white border-2 border-transparent hover:border-blue-500/50 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group text-center"
+                className={`border-2 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group text-center ${
+                  isDarkMode 
+                    ? "bg-[#1E293B]/85 border-transparent hover:border-amber-400/50 text-white" 
+                    : "bg-white border-transparent hover:border-blue-500/50 text-slate-900"
+                }`}
               >
                 <div className="flex flex-col items-center">
                   <div className="flex justify-center items-center mb-4 w-full">
-                    <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">OTVORENO</span>
+                    <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 text-[10px] font-extrabold tracking-wider rounded-full uppercase">OTVORENO</span>
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-sm group-hover:text-[#1E4C9A] transition-colors">Junski ispitni rok</h3>
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed text-center">
+                  <h3 className={`font-extrabold text-sm group-hover:text-amber-400 transition-colors ${
+                    isDarkMode ? "text-white group-hover:text-amber-400" : "text-slate-900 group-hover:text-[#1E4C9A]"
+                  }`}>Junski ispitni rok</h3>
+                  <p className={`text-xs mt-2 leading-relaxed text-center ${isDarkMode ? "text-slate-400/90" : "text-slate-500"}`}>
                     Prvi redovni letnji ispitni rok. Obavezna prijava svih ispita za junsku seriju polaganja.
                   </p>
                 </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-center gap-2.5 text-xs font-bold text-slate-700 w-full">
+                <div className={`mt-6 pt-3 border-t flex items-center justify-center gap-2.5 text-xs font-bold w-full ${
+                  isDarkMode ? "border-slate-800 text-slate-300" : "border-slate-100 text-slate-700"
+                }`}>
                   <span>Cena prijave:</span>
-                  <span className="text-slate-900">1.000 RSD / ispit</span>
+                  <span className={isDarkMode ? "text-amber-200 font-bold":"text-slate-900"}>1.000 RSD / ispit</span>
                 </div>
               </div>
 
               {/* Option 3: Julski ispitni rok */}
               <div 
-                className="bg-slate-50 border-2 border-slate-200 rounded-2xl p-5 shadow-sm opacity-60 flex flex-col justify-between text-center select-none cursor-not-allowed relative"
+                className={`border-2 rounded-2xl p-5 shadow-sm opacity-60 flex flex-col justify-between text-center select-none cursor-not-allowed relative ${
+                  isDarkMode 
+                    ? "bg-slate-900/60 border-slate-800/80 text-slate-500" 
+                    : "bg-slate-50 border-slate-200 text-slate-500"
+                }`}
               >
                 <div className="flex flex-col items-center">
                   <div className="flex justify-center items-center mb-4 w-full">
-                    <span className="px-2.5 py-0.5 bg-red-100 text-red-800 text-[10px] font-bold rounded-full">ZATVORENO</span>
+                    <span className="px-2.5 py-0.5 bg-red-500/10 text-red-400 text-[10px] font-extrabold tracking-wider rounded-full uppercase">ZATVORENO</span>
                   </div>
-                  <h3 className="font-extrabold text-slate-500 text-sm">Julski ispitni rok</h3>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed text-center">
+                  <h3 className={`font-extrabold text-sm ${isDarkMode ? "text-slate-500" : "text-slate-500"}`}>Julski ispitni rok</h3>
+                  <p className={`text-xs mt-2 leading-relaxed text-center ${isDarkMode ? "text-slate-600" : "text-slate-400"}`}>
                     Drugi redovni letnji ispitni rok. Idealna šansa za polaganje pre polaska na letnji raspust.
                   </p>
                 </div>
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-center gap-2.5 text-xs font-bold text-slate-400 w-full">
+                <div className={`mt-6 pt-3 border-t flex items-center justify-center gap-2.5 text-xs font-bold w-full ${
+                  isDarkMode ? "border-slate-800 text-slate-600" : "border-slate-100 text-slate-400"
+                }`}>
                   <span>Cena prijave:</span>
                   <span className="font-mono">1.000 RSD / ispit</span>
                 </div>
@@ -249,11 +283,15 @@ export function PrijavaIspitaView({
 
             </div>
 
-            <div className="bg-blue-50 rounded-2xl border border-blue-200/50 p-4 font-medium text-xs text-left text-slate-600 flex gap-2.5 items-start">
-              <Info size={16} className="text-[#1E4C9A] shrink-0 mt-0.5" />
+            <div className={`rounded-xl border p-4 font-medium text-xs text-left flex gap-2.5 items-start ${
+              isDarkMode 
+                ? "bg-[#111a30] border-slate-800/85 text-slate-400" 
+                : "bg-blue-50 border-blue-200/50 text-slate-600"
+            }`}>
+              <Info size={16} className={`shrink-0 mt-0.5 ${isDarkMode ? "text-[#5E97F6]" : "text-[#1E4C9A]"}`} />
               <div>
-                <p className="font-bold text-slate-800 mb-0.5">Savet za finansije:</p>
-                Za ispite koji imaju naknadu (Junski i Julski), sredstva će automatski biti skinuta sa Vašeg unetog stanja na finansijskoj kartici. Ukoliko nemate dovoljno novca, nalog možete doplatiti u svakom momentu na kartici <strong className="text-[#1E4C9A]">Stanje na računu</strong>.
+                <p className={`font-bold mb-0.5 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}>Savet za finansije:</p>
+                Za ispite koji imaju naknadu (Junski i Julski), sredstva će automatski biti skinuta sa Vašeg unetog stanja na finansijskoj kartici. Ukoliko nemate dovoljno novca, nalog možete doplatiti u svakom momentu na kartici <strong className={isDarkMode ? "text-[#5E97F6]" : "text-[#1E4C9A]"}>Stanje na računu</strong>.
               </div>
             </div>
 
@@ -269,29 +307,39 @@ export function PrijavaIspitaView({
             className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch"
           >
             {/* Top Back Action Bar */}
-            <div className="col-span-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow border border-slate-200">
+            <div className={`col-span-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl shadow border transition-all duration-300 ${
+              isDarkMode 
+                ? "bg-[#1E293B]/80 border-slate-705/30 text-white shadow-black/25" 
+                : "bg-white border-slate-200 text-slate-800"
+            }`}>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setSelectedPeriod(null)}
-                  className="p-2 hover:bg-slate-100 text-slate-500 hover:text-black rounded-xl transition-colors cursor-pointer border border-slate-200"
+                  className={`p-2 rounded-xl transition-colors cursor-pointer border ${
+                    isDarkMode 
+                      ? "bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700" 
+                      : "bg-white hover:bg-slate-100 text-slate-500 hover:text-black border-slate-200"
+                  }`}
                   title="Izaberi drugi rok"
                 >
                   <ArrowLeft size={16} />
                 </button>
                 <div className="text-left">
                   <span className="text-[10px] text-amber-500 font-extrabold uppercase tracking-wider">ODABRANI ISPITNI ROK</span>
-                  <h2 className="text-md font-extrabold text-slate-900 leading-none mt-1">{getPeriodLabel(selectedPeriod)}</h2>
+                  <h2 className={`text-md font-extrabold leading-none mt-1 ${isDarkMode ? "text-white" : "text-slate-900"}`}>{getPeriodLabel(selectedPeriod)}</h2>
                 </div>
               </div>
 
               <div className="flex gap-4 items-center">
                 <div className="text-right text-xs">
-                  <span className="text-slate-400 font-normal">Stanje računa: </span>
-                  <span className="font-bold text-slate-800 font-mono text-xs">{formatBalance(accountBalance)}</span>
+                  <span className={isDarkMode ? "text-slate-400" : "text-slate-400"}>Stanje računa: </span>
+                  <span className={`font-bold font-mono text-xs ${isDarkMode ? "text-amber-400" : "text-[#1E4C9A]"}`}>{formatBalance(accountBalance)}</span>
                 </div>
                 <button
                   onClick={() => setSelectedPeriod(null)}
-                  className="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-bold transition-all cursor-pointer"
+                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    isDarkMode ? "bg-slate-800 hover:bg-slate-750 text-white" : "bg-slate-100 hover:bg-slate-200 text-slate-800"
+                  }`}
                 >
                   Promeni rok
                 </button>
@@ -300,23 +348,29 @@ export function PrijavaIspitaView({
 
             {/* Table Area (8 spans) */}
             <div className="lg:col-span-8 flex flex-col justify-between">
-              <div className="bg-white rounded-2xl p-6 shadow border border-slate-200">
-                <h3 className="font-bold text-sm text-slate-900 tracking-tight flex items-center gap-2 mb-4">
-                  <ClipboardCheck size={16} className="text-[#1E4C9A]" />
+              <div className={`rounded-2xl p-6 shadow border transition-all duration-300 ${
+                isDarkMode ? "bg-[#1E293B]/80 text-white border-slate-705/30 shadow-black/35" : "bg-white border-slate-200"
+              }`}>
+                <h3 className="font-bold text-sm tracking-tight flex items-center gap-2 mb-4">
+                  <ClipboardCheck size={16} className={isDarkMode ? "text-[#5E97F6]" : "text-[#1E4C9A]"} />
                   Lista raspoloživih predmeta za prijavu
                 </h3>
 
                 {/* Main Table Styled exactly as the requested image layout */}
-                <div className="w-full overflow-x-auto select-none rounded border border-black/80">
-                  <table className="w-full min-w-[580px] border-collapse border border-black/85 text-xs text-slate-900 bg-white">
+                <div className="w-full overflow-x-auto select-none rounded border border-black/30">
+                  <table className={`w-full min-w-[580px] border-collapse text-xs ${
+                    isDarkMode ? "bg-[#141c2c] text-slate-100" : "bg-white text-slate-900"
+                  }`}>
                     <thead>
-                      <tr className="bg-[#f8fafc] border-b border-black">
-                        <th className="border border-black font-extrabold text-[#111827] text-center py-3.5 px-4 uppercase tracking-wider bg-slate-50 text-xs">Predmet</th>
-                        <th className="border border-black font-extrabold text-[#111827] text-center py-3.5 px-3 uppercase tracking-wider bg-slate-50 text-xs">Šifra</th>
-                        <th className="border border-black font-extrabold text-[#111827] text-center py-3.5 px-3 uppercase tracking-wider bg-slate-50 text-xs text-center">ESPB</th>
-                        <th className="border border-black font-extrabold text-[#111827] text-center py-3.5 px-4 uppercase tracking-wider bg-slate-50 text-xs">Datum polaganja</th>
-                        <th className="border border-black font-extrabold text-[#111827] text-center py-3.5 px-3 uppercase tracking-wider bg-slate-50 text-xs">Broj prijava</th>
-                        <th className="border border-black font-extrabold text-[#111827] text-center py-3.5 px-4 uppercase tracking-wider bg-slate-50 text-xs">Prijavite ispit</th>
+                      <tr className={`border-b ${
+                        isDarkMode ? "bg-[#162135] border-slate-800 text-slate-200" : "bg-[#f8fafc] border-black"
+                      }`}>
+                        <th className={`border font-extrabold text-center py-3.5 px-4 uppercase tracking-wider text-xs ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50"}`}>Predmet</th>
+                        <th className={`border font-extrabold text-center py-3.5 px-3 uppercase tracking-wider text-xs ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50"}`}>Šifra</th>
+                        <th className={`border font-extrabold text-center py-3.5 px-3 uppercase tracking-wider text-xs text-center ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50"}`}>ESPB</th>
+                        <th className={`border font-extrabold text-center py-3.5 px-4 uppercase tracking-wider text-xs ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50"}`}>Datum polaganja</th>
+                        <th className={`border font-extrabold text-center py-3.5 px-3 uppercase tracking-wider text-xs ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50"}`}>Broj prijava</th>
+                        <th className={`border font-extrabold text-center py-3.5 px-4 uppercase tracking-wider text-xs ${isDarkMode ? "border-slate-800 bg-[#162135]" : "border-black bg-slate-50"}`}>Prijavite ispit</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -325,33 +379,45 @@ export function PrijavaIspitaView({
                         return (
                           <tr 
                             key={exam.id}
-                            className={`hover:bg-slate-50/60 transition-colors duration-150 border-b border-black/50 ${isRegistered ? "bg-emerald-50/35" : ""}`}
+                            className={`transition-colors duration-150 border-b ${
+                              isRegistered 
+                                ? (isDarkMode ? "bg-emerald-950/20 hover:bg-emerald-950/30 border-slate-800/80" : "bg-emerald-50/35 hover:bg-emerald-50/50 border-[#000]/40") 
+                                : (isDarkMode ? "hover:bg-[#1f2c41] border-slate-800/85 bg-slate-900/10" : "hover:bg-slate-50/60 border-black/50")
+                            }`}
                           >
-                            <td className="border border-black py-4 px-4 text-left font-bold text-slate-800 text-[12.5px]">
+                            <td className={`border py-4 px-4 text-left font-bold text-[12.5px] ${isDarkMode ? "border-slate-800 text-slate-200" : "border-black text-slate-800"}`}>
                               {exam.name}
                             </td>
-                            <td className="border border-black py-4 px-3 text-center font-mono font-medium text-slate-600 text-xs">
+                            <td className={`border py-4 px-3 text-center font-mono font-medium text-xs ${isDarkMode ? "border-slate-800 text-slate-400" : "border-black text-slate-600"}`}>
                               {exam.code}
                             </td>
-                            <td className="border border-black py-4 px-3 text-center font-mono text-slate-700 text-xs font-semibold">
+                            <td className={`border py-4 px-3 text-center font-mono text-xs font-semibold ${isDarkMode ? "border-slate-800 text-slate-300" : "border-black text-slate-700"}`}>
                               {exam.espb}
                             </td>
-                            <td className="border border-black py-4 px-4 text-center font-mono text-slate-700 text-xs">
+                            <td className={`border py-4 px-4 text-center font-mono text-xs ${isDarkMode ? "border-slate-800 text-slate-300" : "border-black text-slate-700"}`}>
                               {exam.date}
                             </td>
-                            <td className="border border-black py-4 px-3 text-center font-mono text-slate-800 text-xs font-semibold">
+                            <td className={`border py-4 px-3 text-center font-mono text-xs font-semibold ${isDarkMode ? "border-slate-800 text-slate-250" : "border-black text-slate-850"}`}>
                               {exam.baseRegistrations + (isRegistered ? 1 : 0)}
                             </td>
-                            <td className="border border-black py-4 px-4 text-center">
+                            <td className={`border py-4 px-4 text-center ${isDarkMode ? "border-slate-800" : "border-black"}`}>
                               {isRegistered ? (
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-lg border border-emerald-300">
+                                <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold rounded-lg border ${
+                                  isDarkMode 
+                                    ? "bg-emerald-950/40 text-emerald-400 border-emerald-900/40" 
+                                    : "bg-emerald-100 text-emerald-800 border-emerald-300"
+                                }`}>
                                   <CheckCircle size={11} className="stroke-[2.5]" />
                                   Prijavljen
                                 </span>
                               ) : (
                                 <button
                                   onClick={() => handlePrijaviClick(exam)}
-                                  className="px-4 py-1.5 bg-slate-100 border border-slate-400 hover:bg-[#1E4C9A] hover:text-white hover:border-[#1E4C9A] active:scale-95 text-slate-800 rounded text-xs font-bold font-sans tracking-wide transition-all cursor-pointer shadow-sm"
+                                  className={`px-4 py-1.5 border hover:active:scale-95 text-xs font-bold font-sans tracking-wide transition-all cursor-pointer shadow-sm rounded ${
+                                    isDarkMode 
+                                      ? "bg-slate-800 border-slate-700 text-slate-200 hover:bg-amber-400 hover:text-slate-900 hover:border-amber-400" 
+                                      : "bg-slate-100 border-slate-400 text-slate-800 hover:bg-[#1E4C9A] hover:text-white hover:border-[#1E4C9A]"
+                                  }`}
                                 >
                                   Prijavi
                                 </button>
@@ -364,10 +430,14 @@ export function PrijavaIspitaView({
                   </table>
                 </div>
 
-                <div className="mt-4 flex gap-2 items-start text-left text-[11px] text-gray-500 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                  <Info size={15} className="mt-0.5 text-[#1E4C9A] shrink-0" />
+                <div className={`mt-4 flex gap-2 items-start text-left text-[11px] border rounded-xl p-3.5 ${
+                  isDarkMode 
+                    ? "bg-[#111a30] border-slate-800/85 text-slate-450" 
+                    : "bg-slate-50 border-slate-150 text-gray-500"
+                }`}>
+                  <Info size={15} className={`mt-0.5 shrink-0 ${isDarkMode ? "text-amber-400" : "text-[#1E4C9A]"}`} />
                   <div>
-                    <p className="font-bold text-slate-800 mb-0.5">Napomene o proceduri prijave:</p>
+                    <p className={`font-bold mb-0.5 ${isDarkMode ? "text-slate-200" : "text-slate-850"}`}>Napomene o proceduri prijave:</p>
                     <p className="leading-relaxed">
                       Sve prijave se odmah evidentiraju u bazi Fakulteta Organizacionih Nauka. Ispiti se u roku mogu odjaviti najkasnije 2 radna dana pre polaganja, nakon čega se sredstva vraćaju na studentovu karticu.
                     </p>
@@ -381,7 +451,9 @@ export function PrijavaIspitaView({
             <div className="lg:col-span-4 flex flex-col gap-6 self-stretch">
               <Calendar />
               
-              <div className="flex-1 flex flex-col gap-1 items-center justify-center bg-white rounded-2xl shadow border border-slate-200 p-6 min-h-[140px]">
+              <div className={`flex-1 flex flex-col gap-1 items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 ${
+                isDarkMode ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/25" : "bg-white border text-slate-800 border-slate-200"
+              }`}>
                 <div className="max-w-[140px] w-full flex items-center justify-center opacity-90">
                   <FonLogo />
                 </div>
@@ -395,46 +467,64 @@ export function PrijavaIspitaView({
       {/* Confirmation Dialog Modal */}
       <AnimatePresence>
         {confirmExam && (
-          <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-200 text-left"
+              className={`rounded-2xl max-w-sm w-full p-6 shadow-2xl relative border text-left flex flex-col transition-all duration-300 ${
+                isDarkMode 
+                  ? "bg-[#1E293B] border-slate-705/30 text-white shadow-black/45" 
+                  : "bg-white border-slate-200 text-slate-800"
+              }`}
             >
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-blue-50 text-[#1E4C9A] rounded-2xl shrink-0">
+                <div className={`p-3 rounded-2xl shrink-0 ${
+                  isDarkMode ? "bg-blue-950/60 text-[#5E97F6]" : "bg-blue-50 text-[#1E4C9A]"
+                }`}>
                   <HelpCircle size={22} />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-[15px] leading-snug">Potvrda prijave ispita</h3>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <h3 className={`font-extrabold text-[15px] leading-snug ${isDarkMode ? "text-white" : "text-slate-900"}`}>Potvrda prijave ispita</h3>
+                  <p className={`text-xs mt-1 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
                     Da li ste sigurni da želite da prijavite polaganje predmeta:
                   </p>
-                  <p className="text-sm font-extrabold text-[#1E4C9A] mt-2 border-l-4 border-[#1E4C9A] pl-3">
+                  <p className={`text-sm font-extrabold mt-2 border-l-4 pl-3 ${
+                    isDarkMode ? "text-amber-400 border-amber-400" : "text-[#1E4C9A] border-[#1E4C9A]"
+                  }`}>
                     {confirmExam.name} ({confirmExam.code})
                   </p>
-                  <p className="text-xs text-slate-500 mt-3 leading-relaxed">
-                    Za rok: <strong className="text-slate-800 font-bold">{selectedPeriod && getPeriodLabel(selectedPeriod)}</strong>
+                  <p className={`text-xs mt-3 leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
+                    Za rok: <strong className={isDarkMode ? "text-slate-200 font-bold":"text-slate-800 font-bold"}>{selectedPeriod && getPeriodLabel(selectedPeriod)}</strong>
                   </p>
                 </div>
               </div>
 
-              <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-800">
+              <div className={`mt-5 pt-3.5 border-t flex items-center justify-between text-xs font-bold ${
+                isDarkMode ? "border-slate-800 text-slate-300" : "border-slate-100 text-slate-800"
+              }`}>
                 <span>Cena prijave ispita:</span>
-                <span className="text-[#1E4C9A] font-mono text-sm">{confirmExam.price === 0 ? "Bez naknade (0 RSD)" : `${confirmExam.price.toLocaleString("sr-RS")} RSD`}</span>
+                <span className={`font-mono text-sm ${isDarkMode ? "text-amber-400 font-extrabold":"text-[#1E4C9A]"}`}>{confirmExam.price === 0 ? "Bez naknade (0 RSD)" : `${confirmExam.price.toLocaleString("sr-RS")} RSD`}</span>
               </div>
 
               <div className="mt-6 flex gap-3">
                 <button
                   onClick={() => setConfirmExam(null)}
-                  className="flex-1 py-2 bg-slate-100 hover:bg-slate-250 hover:text-black hover:border-slate-350 text-slate-700 text-xs font-bold rounded-xl transition-all cursor-pointer border border-slate-200"
+                  className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border ${
+                    isDarkMode 
+                      ? "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white" 
+                      : "bg-slate-100 hover:bg-slate-250 text-slate-700 border-slate-200"
+                  }`}
                 >
                   Odustani
                 </button>
                 <button
                   onClick={handleConfirmRegistration}
-                  className="flex-1 py-2 bg-[#1E4C9A] hover:bg-blue-800 text-white text-xs font-bold rounded-xl shadow-md transition-all cursor-pointer"
+                  className={`flex-1 py-2 text-xs font-bold rounded-xl shadow-md transition-all cursor-pointer ${
+                    isDarkMode 
+                      ? "bg-amber-400 hover:bg-amber-500 text-slate-950" 
+                      : "bg-[#1E4C9A] hover:bg-blue-800 text-white"
+                  }`}
                 >
                   Potvrdi prijavu
                 </button>
@@ -447,44 +537,54 @@ export function PrijavaIspitaView({
       {/* Account Balance Error Dialog Modal */}
       <AnimatePresence>
         {balanceErrorExam && (
-          <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-200 text-left"
+              className={`rounded-2xl max-w-sm w-full p-6 shadow-2xl relative border text-left flex flex-col transition-all duration-300 ${
+                isDarkMode 
+                  ? "bg-[#1E293B] border-slate-705/30 text-white shadow-black/45" 
+                  : "bg-white border-slate-200 text-slate-800"
+              }`}
             >
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-red-50 text-red-600 rounded-2xl shrink-0">
+                <div className="p-3 bg-red-500/10 text-red-500 rounded-2xl shrink-0">
                   <AlertTriangle size={22} className="stroke-[2.5]" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-[15px] leading-snug">Nedovoljno sredstava na računu</h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    Nažalost, nemate dovoljno raspoloživog salda za prijavu ispita <strong className="text-slate-800">{balanceErrorExam.name}</strong>.
+                  <h3 className={`font-extrabold text-[15px] leading-snug ${isDarkMode ? "text-white" : "text-slate-900"}`}>Nedovoljno sredstava na računu</h3>
+                  <p className={`text-xs mt-1 leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
+                    Nažalost, nemate dovoljno raspoloživog salda za prijavu ispita <strong className={isDarkMode ? "text-white":"text-slate-800"}>{balanceErrorExam.name}</strong>.
                   </p>
                 </div>
               </div>
 
-              <div className="mt-4 bg-slate-50 border border-slate-100 rounded-xl p-3.5 space-y-2 text-xs">
-                <div className="flex justify-between text-slate-500">
+              <div className={`mt-4 border rounded-xl p-3.5 space-y-2 text-xs ${
+                isDarkMode ? "bg-[#111a2f] border-slate-800" : "bg-slate-50 border-slate-100"
+              }`}>
+                <div className={`flex justify-between ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
                   <span>Cena prijave ispita:</span>
-                  <span className="font-bold text-slate-800 font-mono">{balanceErrorExam.price.toLocaleString("sr-RS")} RSD</span>
+                  <span className={`font-bold font-mono ${isDarkMode ? "text-slate-250" : "text-slate-800"}`}>{balanceErrorExam.price.toLocaleString("sr-RS")} RSD</span>
                 </div>
-                <div className="flex justify-between text-[#1E4C9A] font-bold">
+                <div className={`flex justify-between font-bold ${isDarkMode ? "text-amber-400" : "text-[#1E4C9A]"}`}>
                   <span>Vaš trenutni saldo:</span>
                   <span className="font-mono">{formatBalance(accountBalance)}</span>
                 </div>
               </div>
 
-              <p className="text-[10px] text-slate-400 mt-3 leading-relaxed">
+              <p className={`text-[10px] mt-3 leading-relaxed ${isDarkMode ? "text-slate-500" : "text-slate-400"}`}>
                 *Izvršite uplatu ili proknjižite sredstva popunjavanjem virmana u sekciji "Stanje na računu" kako biste dopunili Vašu finansijsku karticu.
               </p>
 
               <div className="mt-5 flex gap-3">
                 <button
                   onClick={() => setBalanceErrorExam(null)}
-                  className="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all cursor-pointer text-center"
+                  className={`w-full py-2.5 text-xs font-bold rounded-xl transition-all cursor-pointer text-center ${
+                    isDarkMode 
+                      ? "bg-amber-405 bg-slate-800 hover:bg-slate-700 text-white" 
+                      : "bg-slate-800 hover:bg-slate-900 text-white"
+                  }`}
                 >
                   U redu, zatvori
                 </button>

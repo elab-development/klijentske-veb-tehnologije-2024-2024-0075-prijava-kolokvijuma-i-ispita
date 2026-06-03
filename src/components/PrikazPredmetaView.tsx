@@ -3,6 +3,7 @@ import { Search, Filter, BookOpen, ChevronLeft, ChevronRight, RefreshCw } from "
 import { Calendar } from "./Calendar";
 import { FonLogo } from "./FonLogo";
 import { Subject } from "../models/Subject";
+import { useTheme } from "../context/ThemeContext";
 
 const subjectsData: Subject[] = [
   // Prva godina (iz screenshot-a i PDF-a)
@@ -83,6 +84,7 @@ export function PrikazPredmetaView() {
   const [selectedType, setSelectedType] = useState<string>("svi");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const { isDarkMode } = useTheme();
 
   // Filter and search logic
   const filteredSubjects = useMemo(() => {
@@ -111,22 +113,32 @@ export function PrikazPredmetaView() {
     setSelectedType("svi");
   };
 
+  const arrowColorHex = isDarkMode ? "%2394A3B8" : "%23475569";
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-sans">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-sans select-none animate-fadeIn">
       
       {/* Left Column: Subject Table and Filters */}
       <div className="lg:col-span-8 flex flex-col gap-4">
         
         {/* Card Header & Filter section */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 select-none pb-3 border-b border-slate-100">
-            <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-              <BookOpen size={20} className="text-[#1E4C9A]" />
+        <div className={`rounded-2xl p-5 border shadow-sm transition-all duration-300 ${
+          isDarkMode ? "bg-[#1E293B]/80 text-white border-slate-705/30 shadow-black/25" : "bg-white border-slate-200"
+        }`}>
+          <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-3 border-b ${
+            isDarkMode ? "border-slate-800" : "border-slate-100"
+          }`}>
+            <h2 className="text-lg font-bold flex items-center gap-2">
+              <BookOpen size={20} className={isDarkMode ? "text-amber-400" : "text-[#1E4C9A]"} />
               Prikaz predmeta u trenutnoj godini
             </h2>
             <button 
               onClick={resetFilters}
-              className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-500 font-semibold text-xs rounded-lg transition-colors border border-slate-200 flex items-center gap-1.5 self-start sm:self-auto"
+              className={`px-3 py-1.5 font-semibold text-xs rounded-lg transition-colors border flex items-center gap-1.5 self-start sm:self-auto cursor-pointer ${
+                isDarkMode 
+                  ? "bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700" 
+                  : "bg-slate-50 hover:bg-slate-100 text-slate-500 border-slate-200"
+              }`}
             >
               <RefreshCw size={12} />
               Resetuj filtere
@@ -142,7 +154,11 @@ export function PrikazPredmetaView() {
                 placeholder="Pretraži predmete..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-50 text-slate-800 font-medium text-xs rounded-xl py-2.5 pl-9 pr-4 border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white placeholder-slate-400 transition-all"
+                className={`w-full font-medium text-xs rounded-xl py-2.5 pl-9 pr-4 border focus:outline-none transition-all ${
+                  isDarkMode 
+                    ? "bg-[#121927] border-slate-800 text-white placeholder-slate-500 focus:ring-1 focus:ring-amber-400 focus:bg-[#121927]" 
+                    : "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white"
+                }`}
               />
             </div>
 
@@ -151,8 +167,12 @@ export function PrikazPredmetaView() {
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                className="w-full bg-slate-50 text-slate-800 font-bold text-xs rounded-xl py-2.5 px-3 border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white transition-all cursor-pointer appearance-none"
-                style={{ backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>")`, backgroundPosition: 'right 10px center', backgroundSize: '14px', backgroundRepeat: 'no-repeat' }}
+                className={`w-full font-bold text-xs rounded-xl py-2.5 px-3 border focus:outline-none transition-all cursor-pointer appearance-none ${
+                  isDarkMode 
+                    ? "bg-[#121927] border-slate-800 text-slate-200 focus:ring-1 focus:ring-amber-400 focus:bg-[#121927]" 
+                    : "bg-slate-50 border-slate-200 text-slate-805 focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white"
+                }`}
+                style={{ backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${arrowColorHex}' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>")`, backgroundPosition: 'right 10px center', backgroundSize: '14px', backgroundRepeat: 'no-repeat' }}
               >
                 <option value="sve">Sve godine studija</option>
                 <option value="1">Prva godina</option>
@@ -167,8 +187,12 @@ export function PrikazPredmetaView() {
               <select
                 value={selectedSemester}
                 onChange={(e) => setSelectedSemester(e.target.value)}
-                className="w-full bg-slate-50 text-slate-800 font-bold text-xs rounded-xl py-2.5 px-3 border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white transition-all cursor-pointer appearance-none"
-                style={{ backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>")`, backgroundPosition: 'right 10px center', backgroundSize: '14px', backgroundRepeat: 'no-repeat' }}
+                className={`w-full font-bold text-xs rounded-xl py-2.5 px-3 border focus:outline-none transition-all cursor-pointer appearance-none ${
+                  isDarkMode 
+                    ? "bg-[#121927] border-slate-800 text-slate-200 focus:ring-1 focus:ring-amber-400 focus:bg-[#121927]" 
+                    : "bg-slate-50 border-slate-200 text-slate-805 focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white"
+                }`}
+                style={{ backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${arrowColorHex}' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>")`, backgroundPosition: 'right 10px center', backgroundSize: '14px', backgroundRepeat: 'no-repeat' }}
               >
                 <option value="svi">Svi semestri</option>
                 <option value="prvi">prvi semestar</option>
@@ -176,7 +200,7 @@ export function PrikazPredmetaView() {
                 <option value="treći">treći semestar</option>
                 <option value="četvrti">četvrti semestar</option>
                 <option value="peti">peti semestar</option>
-                <option value="šesti">šesti semestar</option>
+                <option value="šesti font-bold">šesti semestar</option>
                 <option value="sedmi">sedmi semestar</option>
                 <option value="osmi">osmi semestar</option>
               </select>
@@ -187,8 +211,12 @@ export function PrikazPredmetaView() {
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="w-full bg-slate-50 text-slate-800 font-bold text-xs rounded-xl py-2.5 px-3 border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white transition-all cursor-pointer appearance-none"
-                style={{ backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>")`, backgroundPosition: 'right 10px center', backgroundSize: '14px', backgroundRepeat: 'no-repeat' }}
+                className={`w-full font-bold text-xs rounded-xl py-2.5 px-3 border focus:outline-none transition-all cursor-pointer appearance-none ${
+                  isDarkMode 
+                    ? "bg-[#121927] border-slate-800 text-slate-200 focus:ring-1 focus:ring-amber-400 focus:bg-[#121927]" 
+                    : "bg-slate-50 border-slate-200 text-slate-805 focus:ring-1 focus:ring-[#1E4C9A] focus:bg-white"
+                }`}
+                style={{ backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='${arrowColorHex}' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>")`, backgroundPosition: 'right 10px center', backgroundSize: '14px', backgroundRepeat: 'no-repeat' }}
               >
                 <option value="svi">Sva predavanja</option>
                 <option value="obavezan">Obavezni predmeti</option>
@@ -199,43 +227,61 @@ export function PrikazPredmetaView() {
         </div>
 
         {/* Subjects Table Grid */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col justify-between min-h-[480px]">
+        <div className={`rounded-2xl shadow-sm border overflow-hidden flex flex-col justify-between min-h-[480px] transition-all duration-300 ${
+          isDarkMode ? "bg-[#1E293B]/80 text-white border-slate-705/30 shadow-black/35 shadow-lg" : "bg-white border-slate-200"
+        }`}>
           
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 select-none">
-                  <th className="py-3 px-5 text-xs font-extrabold text-[#111827] uppercase tracking-wider w-[65%] border-r border-slate-200">
+                <tr className={`border-b select-none ${
+                  isDarkMode ? "bg-[#162135] border-slate-800 text-slate-200" : "bg-slate-50 border-slate-200"
+                }`}>
+                  <th className={`py-3 px-5 text-xs font-extrabold uppercase tracking-wider w-[65%] border-r ${
+                    isDarkMode ? "text-slate-200 border-slate-800" : "text-[#111827] border-slate-200"
+                  }`}>
                     Naziv predmeta
                   </th>
-                  <th className="py-3 px-5 text-xs font-extrabold text-[#111827] uppercase tracking-wider text-center w-[20%] border-r border-slate-200">
+                  <th className={`py-3 px-5 text-xs font-extrabold uppercase tracking-wider text-center w-[20%] border-r ${
+                    isDarkMode ? "text-slate-200 border-slate-800" : "text-[#111827] border-slate-200"
+                  }`}>
                     Semestar
                   </th>
-                  <th className="py-3 px-5 text-xs font-extrabold text-[#111827] uppercase tracking-wider text-center w-[15%]">
+                  <th className={`py-3 px-5 text-xs font-extrabold uppercase tracking-wider text-center w-[15%] ${
+                    isDarkMode ? "text-slate-200" : "text-[#111827]"
+                  }`}>
                     ESPB
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className={isDarkMode ? "divide-y divide-slate-800" : "divide-y divide-slate-100"}>
                 {paginatedSubjects.length > 0 ? (
                   paginatedSubjects.map((sub) => (
                     <tr
                       key={sub.id}
-                      className="hover:bg-slate-50/50 transition-colors"
+                      className={`transition-colors ${
+                        isDarkMode ? "hover:bg-slate-800/40 bg-[#121c2c]/10" : "hover:bg-slate-50/50"
+                      }`}
                     >
                       {/* Name Column */}
-                      <td className="py-3 px-5 font-semibold text-xs sm:text-[13px] text-slate-800 border-r border-slate-100">
+                      <td className={`py-3 px-5 font-semibold text-xs sm:text-[13px] border-r ${
+                        isDarkMode ? "text-slate-200 border-slate-800/80" : "text-slate-800 border-slate-100"
+                      }`}>
                         <div className="flex flex-col gap-0.5">
                           <span>{sub.name}</span>
                           <div className="flex items-center gap-1.5 mt-0.5 select-none">
-                            <span className={`text-[9px] px-1.5 py-0.5 font-bold rounded uppercase ${
+                            <span className={`text-[9px] px-1.5 py-0.5 font-extrabold rounded uppercase border ${
                               sub.type === "obavezan" 
-                                ? "bg-blue-50 text-blue-600 border border-blue-100" 
-                                : "bg-amber-50 text-amber-600 border border-amber-100"
+                                ? (isDarkMode ? "bg-blue-950/45 text-blue-400 border-blue-900/30" : "bg-blue-50 text-blue-600 border border-blue-100")
+                                : (isDarkMode ? "bg-amber-955/45 bg-amber-950/40 text-amber-400 border-amber-900/30" : "bg-amber-50 text-amber-600 border border-amber-100")
                             }`}>
                               {sub.type}
                             </span>
-                            <span className="text-[9px] px-1.5 py-0.5 font-bold rounded bg-slate-100 text-slate-500 border border-slate-200 uppercase">
+                            <span className={`text-[9px] px-1.5 py-0.5 font-bold rounded uppercase border ${
+                              isDarkMode 
+                                ? "bg-slate-800/50 text-slate-350 border-slate-700/60" 
+                                : "bg-slate-100 text-slate-500 border border-slate-200"
+                            }`}>
                               {sub.year}. godina
                             </span>
                           </div>
@@ -243,13 +289,19 @@ export function PrikazPredmetaView() {
                       </td>
 
                       {/* Semester Column */}
-                      <td className="py-3 px-5 text-xs font-semibold text-slate-600 text-center border-r border-slate-100">
+                      <td className={`py-3 px-5 text-xs font-semibold text-center border-r ${
+                        isDarkMode ? "text-slate-400 border-slate-800/80" : "text-slate-600 border-slate-100"
+                      }`}>
                         {sub.semester}
                       </td>
 
                       {/* ESPB Column */}
-                      <td className="py-3 px-5 font-bold text-xs sm:text-sm text-slate-700 text-center">
-                        <span className="inline-block bg-[#1E4C9A]/5 text-[#1E4C9A] px-2.5 py-0.5 rounded-md min-w-[32px] font-mono">
+                      <td className={`py-3 px-5 font-bold text-xs sm:text-sm text-center ${isDarkMode ? "text-slate-350" : "text-slate-700"}`}>
+                        <span className={`inline-block px-2.5 py-0.5 rounded-md min-w-[32px] font-mono ${
+                          isDarkMode 
+                            ? "bg-amber-450 bg-amber-400/10 text-amber-400" 
+                            : "bg-[#1E4C9A]/5 text-[#1E4C9A]"
+                        }`}>
                           {sub.espb}
                         </span>
                       </td>
@@ -257,7 +309,7 @@ export function PrikazPredmetaView() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={3} className="py-16 text-center text-slate-400 font-medium text-xs">
+                    <td colSpan={3} className={`py-16 text-center font-medium text-xs ${isDarkMode ? "text-slate-500" : "text-slate-400"}`}>
                       Nema pronađenih predmeta za odabrane kriterijume pretrage.
                     </td>
                   </tr>
@@ -268,11 +320,13 @@ export function PrikazPredmetaView() {
 
           {/* Pagination Controls */}
           {filteredSubjects.length > 0 && (
-            <div className="p-4 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 select-none">
-              <span className="text-xs text-slate-500 font-semibold text-center sm:text-left">
-                Prikazano <strong className="text-slate-700">{Math.min(filteredSubjects.length, startIndex + 1)}</strong>-
-                <strong className="text-slate-700">{Math.min(filteredSubjects.length, startIndex + itemsPerPage)}</strong> od 
-                <strong className="text-slate-700"> {filteredSubjects.length}</strong> predmeta
+            <div className={`p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 select-none border-t ${
+              isDarkMode ? "bg-[#121926]/80 border-slate-800" : "bg-slate-50 border-slate-100"
+            }`}>
+              <span className={`text-xs font-semibold text-center sm:text-left ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
+                Prikazano <strong className={isDarkMode ? "text-slate-250":"text-slate-705"}>{Math.min(filteredSubjects.length, startIndex + 1)}</strong>-
+                <strong className={isDarkMode ? "text-slate-250":"text-slate-705"}>{Math.min(filteredSubjects.length, startIndex + itemsPerPage)}</strong> od 
+                <strong className={isDarkMode ? "text-slate-250":"text-slate-705"}> {filteredSubjects.length}</strong> predmeta
               </span>
 
               <div className="flex items-center justify-center gap-1.5">
@@ -280,7 +334,9 @@ export function PrikazPredmetaView() {
                 <button
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  className="p-1 px-2 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:hover:text-slate-500 rounded-lg hover:bg-slate-200/50 transition-colors disabled:pointer-events-none cursor-pointer"
+                  className={`p-1 px-2 disabled:opacity-30 rounded-lg transition-colors disabled:pointer-events-none cursor-pointer ${
+                    isDarkMode ? "text-slate-400 hover:text-white hover:bg-slate-800" : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
+                  }`}
                 >
                   <ChevronLeft size={16} />
                 </button>
@@ -290,7 +346,7 @@ export function PrikazPredmetaView() {
                   // Only show surrounding pages if total is high
                   if (totalPages > 5 && Math.abs(page - currentPage) > 1 && page !== 1 && page !== totalPages) {
                     if (page === 2 || page === totalPages - 1) {
-                      return <span key={page} className="text-slate-400 text-xs px-1">...</span>;
+                      return <span key={page} className="text-slate-450 text-xs px-1">...</span>;
                     }
                     return null;
                   }
@@ -301,8 +357,8 @@ export function PrikazPredmetaView() {
                       onClick={() => setCurrentPage(page)}
                       className={`w-7 h-7 text-xs font-bold rounded-lg cursor-pointer transition-all ${
                         currentPage === page
-                          ? "bg-[#1E4C9A] text-white shadow shadow-[#1E4C9A]/30"
-                          : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-800"
+                          ? (isDarkMode ? "bg-amber-400 text-slate-950 shadow shadow-amber-400/20" : "bg-[#1E4C9A] text-white shadow shadow-[#1E4C9A]/30")
+                          : (isDarkMode ? "text-slate-400 hover:bg-slate-800 hover:text-white" : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-800")
                       }`}
                     >
                       {page}
@@ -314,7 +370,9 @@ export function PrikazPredmetaView() {
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  className="p-1 px-2 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:hover:text-slate-500 rounded-lg hover:bg-slate-200/50 transition-colors disabled:pointer-events-none cursor-pointer"
+                  className={`p-1 px-2 disabled:opacity-30 rounded-lg transition-colors disabled:pointer-events-none cursor-pointer ${
+                    isDarkMode ? "text-slate-400 hover:text-white hover:bg-slate-800" : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/50"
+                  }`}
                 >
                   <ChevronRight size={16} />
                 </button>
@@ -328,7 +386,9 @@ export function PrikazPredmetaView() {
       <div className="lg:col-span-4 flex flex-col gap-5 self-stretch">
         <Calendar />
         
-        <div className="flex-1 flex items-center justify-center bg-white rounded-2xl shadow border border-slate-200 p-6 min-h-[140px]">
+        <div className={`flex-1 flex items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 ${
+          isDarkMode ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/25" : "bg-white border hover:border-slate-200 border-slate-200"
+        }`}>
           <div className="max-w-[145px] w-full flex items-center justify-center opacity-90">
             <FonLogo />
           </div>

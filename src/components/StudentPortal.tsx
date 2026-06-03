@@ -33,6 +33,8 @@ const bannerPaths = [
   "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop"
 ];
 
+import { ThemeProvider, useTheme } from "../context/ThemeContext";
+
 interface StudentPortalProps {
   studentName?: string;
   studentIndex?: string;
@@ -40,8 +42,21 @@ interface StudentPortalProps {
 }
 
 export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "2023/3858", onLogout }: StudentPortalProps) {
+  return (
+    <ThemeProvider>
+      <StudentPortalContent 
+        studentName={studentName} 
+        studentIndex={studentIndex} 
+        onLogout={onLogout} 
+      />
+    </ThemeProvider>
+  );
+}
+
+function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "2023/3858", onLogout }: StudentPortalProps) {
   const { tab } = useParams<{ tab: string }>();
   const navigate = useNavigate();
+  const { isDarkMode, toggleDarkMode } = useTheme();
 
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   
@@ -78,11 +93,17 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#121824] flex items-center justify-center p-4 md:p-8 relative overflow-hidden font-sans select-none selection:bg-blue-600/30">
+    <div className={`min-h-screen w-full flex items-center justify-center p-4 md:p-8 relative overflow-hidden font-sans select-none selection:bg-blue-600/30 transition-colors duration-300 ${
+      isDarkMode ? "bg-[#0b0f19]" : "bg-[#121824]"
+    }`}>
       
       {/* Decorative Blueprint/Wireframe lines matching layout */}
-      <div className="absolute inset-x-0 h-px bg-slate-800/60 top-1/2 -translate-y-1/2 pointer-events-none" />
-      <div className="absolute inset-y-0 w-px bg-slate-800/60 left-1/2 -translate-x-1/2 pointer-events-none" />
+      <div className={`absolute inset-x-0 h-px top-1/2 -translate-y-1/2 pointer-events-none transition-colors duration-300 ${
+        isDarkMode ? "bg-slate-900/40" : "bg-slate-800/60"
+      }`} />
+      <div className={`absolute inset-y-0 w-px left-1/2 -translate-x-1/2 pointer-events-none transition-colors duration-300 ${
+        isDarkMode ? "bg-slate-900/40" : "bg-slate-800/60"
+      }`} />
       <div className="absolute -top-12 -left-12 w-32 h-32 border border-slate-800 rounded-full pointer-events-none opacity-30" />
       <div className="absolute -bottom-12 -right-12 w-32 h-32 border border-slate-800 rounded-full pointer-events-none opacity-30" />
       <div className="absolute top-[10%] right-[15%] w-px h-24 bg-gradient-to-down from-blue-500/10 to-transparent pointer-events-none" />
@@ -98,10 +119,16 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
       </div>
 
       {/* Main Container Container (fits 1280px aspect ratio nicely) */}
-      <div className="w-full max-w-6xl bg-[#1c2331]/90 rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 relative flex flex-col backdrop-blur-md">
+      <div className={`w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl relative flex flex-col backdrop-blur-md transition-all duration-300 border ${
+        isDarkMode 
+          ? "bg-[#111622]/95 border-slate-800/90 shadow-black/80" 
+          : "bg-[#1c2331]/90 border-slate-700/60"
+      }`}>
         
         {/* Top Header/Banner Display Panel with Student Background */}
-        <div className="relative w-full h-[150px] flex items-end p-6 border-b border-slate-700/75 overflow-hidden">
+        <div className={`relative w-full h-[150px] flex items-end p-6 overflow-hidden border-b transition-colors duration-300 ${
+          isDarkMode ? "border-slate-800/90" : "border-slate-700/75"
+        }`}>
           
           {/* Active Banner Image with fallbacks */}
           <img 
@@ -122,13 +149,36 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
 
           <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             {/* Left Header Corner Info */}
-            <div className="text-left">
-              <h1 className="text-2xl font-bold tracking-tight text-white mb-0 px-1 select-none">
-                Studentski servis
-              </h1>
-              <p className="text-amber-400 font-bold text-xs uppercase tracking-widest leading-none mt-1 pl-1 select-none">
-                FAKULTET ORGANIZACIONIH NAUKA
-              </p>
+            <div className="text-left flex flex-col gap-2.5 items-start">
+              {/* Theme Toggle Button placed above "Studentski servis" */}
+              <div 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleDarkMode();
+                }}
+                className="flex items-center gap-1.5 bg-black/40 hover:bg-black/60 border border-slate-700/50 p-2 py-2.5 px-3 rounded-xl cursor-pointer select-none active:scale-95 transition-all text-left"
+                title="Promeni temu (Svetla / Tamna)"
+              >
+                <div className={`relative inline-flex h-4 w-7.5 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out ${
+                  isDarkMode ? "bg-amber-400" : "bg-slate-500"
+                }`}>
+                  <span className={`pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    isDarkMode ? "translate-x-3.5" : "translate-x-0"
+                  }`} />
+                </div>
+                <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest leading-none">
+                  {isDarkMode ? "TAMNA" : "SVETLA"}
+                </span>
+              </div>
+
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-white mb-0 px-1 select-none">
+                  Studentski servis
+                </h1>
+                <p className="text-amber-400 font-bold text-xs uppercase tracking-widest leading-none mt-1 pl-1 select-none">
+                  FAKULTET ORGANIZACIONIH NAUKA
+                </p>
+              </div>
             </div>
 
             {/* Right student profile card */}
@@ -144,7 +194,7 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
               <div className="w-10 h-10 rounded-full bg-slate-200 group-hover:bg-white flex items-center justify-center text-[#1E4C9A] font-bold shadow-lg shadow-black/20 overflow-hidden shrink-0 transition-colors">
                 <User size={22} className="stroke-[2.5]" />
               </div>
-              <div className="text-right select-none">
+              <div className="text-right select-none flex flex-col justify-center">
                 <h3 className="text-sm font-semibold text-white leading-normal pr-0.5 group-hover:text-amber-200 transition-colors">{studentName}</h3>
                 <p className="text-xs font-mono text-slate-400 leading-none mt-0.5 pr-0.5 group-hover:text-slate-300 transition-colors">{studentIndex}</p>
               </div>
@@ -244,10 +294,16 @@ export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "202
               <Award size={15} />
               <span>Položeni ispiti</span>
             </button>
+
+            {/* Sidebar bottom Contact option removed to satisfy request */}
           </div>
 
           {/* Main Workspace Canvas */}
-          <div className="flex-1 bg-[#F1F5F9] p-5 text-slate-800 text-left min-h-[460px] relative overflow-hidden">
+          <div className={`flex-1 p-5 text-left min-h-[460px] relative overflow-hidden transition-all duration-300 ${
+            isDarkMode 
+              ? "bg-[#131f36] text-slate-100 border-l border-slate-800/50" 
+              : "bg-[#F1F5F9] text-slate-800"
+          }`}>
             
             <AnimatePresence mode="wait">
               {activeTab === "home" ? (

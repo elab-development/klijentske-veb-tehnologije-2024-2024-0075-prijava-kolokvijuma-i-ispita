@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Bell, X } from "lucide-react";
 import { FonLogo } from "./FonLogo";
 import { Calendar } from "./Calendar";
+import { useTheme } from "../context/ThemeContext";
 
 interface HomeViewProps {
   // Any global event/handlers if needed
@@ -187,6 +188,7 @@ function NewsCardImage({ category, isModal = false }: { category: string; isModa
 export function HomeView({}: HomeViewProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedNews, setSelectedNews] = useState<typeof newsItems[0] | null>(null);
+  const { isDarkMode } = useTheme();
 
   const openNewsDetail = (item: typeof newsItems[0]) => {
     setSelectedNews(item);
@@ -199,15 +201,19 @@ export function HomeView({}: HomeViewProps) {
       {/* Left block: Obaveštenja */}
       <div className="lg:col-span-8 flex flex-col gap-4 justify-between">
         <div>
-          <h2 className="text-xl font-bold text-[#1e293b] flex items-center gap-2 select-none border-b border-dashed border-slate-300 pb-2 mb-1">
-            <Bell size={18} className="text-[#1E4C9A]" />
+          <h2 className={`text-xl font-bold flex items-center gap-2 select-none border-b border-dashed pb-2 mb-1 transition-colors duration-300 ${
+            isDarkMode ? "text-slate-100 border-slate-700/60" : "text-[#1e293b] border-slate-300"
+          }`}>
+            <Bell size={18} className={isDarkMode ? "text-[#5E97F6]" : "text-[#1E4C9A]"} />
             Obaveštenja
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-3">
             
             {/* Card 1: Otvorena prijava za kolokvijumsku nedelju */}
-            <div className="flex flex-col bg-white rounded-xl shadow border border-slate-200 overflow-hidden group hover:shadow-lg transition-shadow">
+            <div className={`flex flex-col rounded-xl shadow overflow-hidden group hover:shadow-lg transition-all border ${
+              isDarkMode ? "bg-[#1E293B]/80 border-slate-705/30 text-slate-100 shadow-black/30" : "bg-white border-slate-200"
+            }`}>
               <NewsCardImage category="KOLOKVIJUMI" />
               
               <div className="bg-gradient-to-b from-[#406499] via-[#21437a] to-[#12366b] p-4 text-white flex-1 flex flex-col justify-between">
@@ -236,7 +242,9 @@ export function HomeView({}: HomeViewProps) {
 
             {" "}
             {/* Card 2: Informacije o održavanju Hakatona */}
-            <div className="flex flex-col bg-white rounded-xl shadow border border-slate-200 overflow-hidden group hover:shadow-lg transition-shadow">
+            <div className={`flex flex-col rounded-xl shadow overflow-hidden group hover:shadow-lg transition-all border ${
+              isDarkMode ? "bg-[#1E293B]/80 border-slate-705/30 text-slate-100 shadow-black/30" : "bg-white border-slate-200"
+            }`}>
               <NewsCardImage category="VANNASTAVNA AKTIVNOST" />
               
               <div className="bg-gradient-to-b from-[#7d5c18] via-[#bf801d] to-[#e69b12] p-4 text-white flex-1 flex flex-col justify-between">
@@ -271,7 +279,9 @@ export function HomeView({}: HomeViewProps) {
       <div className="lg:col-span-4 flex flex-col gap-5 self-stretch">
         <Calendar />
         
-        <div className="flex-1 flex items-center justify-center bg-white rounded-2xl shadow border border-slate-200 p-6 min-h-[140px]">
+        <div className={`flex-1 flex items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 ${
+          isDarkMode ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/20" : "bg-white border-slate-200"
+        }`}>
           <div className="max-w-[140px] w-full flex items-center justify-center opacity-90">
             <FonLogo />
           </div>
@@ -286,7 +296,9 @@ export function HomeView({}: HomeViewProps) {
               initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.96, opacity: 0 }}
-              className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl relative border border-slate-200 flex flex-col text-left"
+              className={`rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl relative border flex flex-col text-left transition-colors duration-300 ${
+                isDarkMode ? "bg-[#1E293B] border-slate-700/50 text-slate-100" : "bg-white border-slate-200 text-slate-800"
+              }`}
             >
               <div className="w-full relative">
                 <NewsCardImage category={selectedNews.category} isModal={true} />
@@ -306,23 +318,37 @@ export function HomeView({}: HomeViewProps) {
                 </button>
               </div>
 
-              <div className="p-6 text-slate-700 space-y-4">
-                <div className="flex justify-between items-center text-xs text-slate-400 border-b border-slate-100 pb-2.5">
+              <div className="p-6 space-y-4">
+                <div className={`flex justify-between items-center text-xs pb-2.5 border-b ${
+                  isDarkMode ? "text-slate-400 border-slate-800" : "text-slate-400 border-slate-100"
+                }`}>
                   <span className="font-semibold">Fakultet organizacionih nauka</span>
                   <span className="font-mono">{selectedNews.date}</span>
                 </div>
-                <p className="text-sm leading-relaxed text-slate-600 font-medium">
+                <p className={`text-sm leading-relaxed font-medium ${
+                  isDarkMode ? "text-slate-300" : "text-slate-600"
+                }`}>
                   {selectedNews.text}
                 </p>
-                <p className="text-xs text-slate-400 leading-normal bg-slate-50 p-3 rounded-lg border border-dashed border-slate-200 italic">
+                <p className={`text-xs leading-normal p-3 rounded-lg border border-dashed italic ${
+                  isDarkMode 
+                    ? "bg-[#141b2c] border-slate-700/60 text-slate-400" 
+                    : "bg-slate-50 border-slate-200 text-slate-400"
+                }`}>
                   *Ovo obaveštenje je oglašeno direktno na zvaničnom portalu fakulteta. Za sva dodatna pitanja obratite se studentskoj službi FON-a putem emaila.
                 </p>
               </div>
 
-              <div className="bg-slate-50 border-t border-slate-100 p-4 flex justify-end">
+              <div className={`p-4 border-t flex justify-end ${
+                isDarkMode ? "bg-[#141b2c]/40 border-slate-800" : "bg-slate-50 border-slate-100"
+              }`}>
                 <button 
                   onClick={() => setShowModal(false)}
-                  className="px-5 py-2.5 bg-[#1E4C9A] hover:bg-[#122A5E] text-white text-xs font-bold rounded-lg cursor-pointer transition-colors"
+                  className={`px-5 py-2.5 text-xs font-bold rounded-lg cursor-pointer transition-colors ${
+                    isDarkMode 
+                      ? "bg-amber-400 hover:bg-amber-500 text-slate-900" 
+                      : "bg-[#1E4C9A] hover:bg-[#122A5E] text-white"
+                  }`}
                 >
                   U redu, zatvori
                 </button>
