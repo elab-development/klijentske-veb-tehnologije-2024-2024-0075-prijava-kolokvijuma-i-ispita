@@ -26,6 +26,7 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
   
   // Feedback states
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // NOVO: Stanje za indikaciju slanja
 
   // Sync with props if they change
   useEffect(() => {
@@ -39,23 +40,57 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
     }
   }, [studentName]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // async funkcija koja šalje podatke na MockAPI
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!ime.trim() || !prezime.trim() || !poruka.trim()) {
       alert("Molimo Vas da popunite sva obavezna polja.");
       return;
     }
 
-    // Trigger success notification
-    setShowSuccess(true);
+    setIsLoading(true); 
+
+    // Pakovanje podataka
+    const noviTiket = {
+      ime,
+      prezime,
+      studijskiProgram,
+      problem,
+      poruka,
+      studentIndex, 
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      
+      const response = await fetch("https://6a204707e96c1d13b5874797.mockapi.io/api/v1/poruke", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(noviTiket),
+      });
+
+      if (response.ok) {
+        
+        setShowSuccess(true);
+        
+        
+        setPoruka("");
+        
     
-    // Clear message
-    setPoruka("");
-    
-    // Auto hide success after 4 seconds
-    setTimeout(() => {
-      setShowSuccess(false);
-    }, 4000);
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 4000);
+      } else {
+        alert("Greška na serveru. Poruka nije sačuvana.");
+      }
+    } catch (error) {
+      console.error("Greška prilikom slanja poruke:", error);
+      alert("Došlo je do greške sa mrežom. Proverite internet vezu.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -250,12 +285,17 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
           <div className="mt-8 flex justify-end">
             <button
               type="submit"
-              className="px-8 py-3 bg-[#FFA41D] hover:bg-[#E08A00] text-slate-900 font-extrabold text-sm tracking-wide rounded-xl shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-2 cursor-pointer transition-all border border-amber-500/10"
+              disabled={isLoading} // Blokiramo dugme dok slanje traje
+              className={`px-8 py-3 bg-[#FFA41D] hover:bg-[#E08A00] text-slate-900 font-extrabold text-sm tracking-wide rounded-xl shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-2 cursor-pointer transition-all border border-amber-500/10 ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
-              <span>Pošalji</span>
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-              </svg>
+              <span>{isLoading ? "Slanje..." : "Pošalji"}</span>
+              {!isLoading && (
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+              )}
             </button>
           </div>
 
