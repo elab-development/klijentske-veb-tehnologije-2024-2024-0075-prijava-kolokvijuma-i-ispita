@@ -6,7 +6,7 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Custom fade effects and smooth layouts */
+/* Effects */
 html, body, #root {
   margin: 0;
   padding: 0;
@@ -15,3 +15,43 @@ html, body, #root {
   font-family: var(--font-sans);
   overflow-x: hidden;
 }
+
+@media print {
+  
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* sakrij ceo layout tokom printa */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* target */
+  .uplatnica-print-target, 
+  .uplatnica-print-target * {
+    visibility: visible !important;
+  }
+
+  /* uplatnica */
+  .uplatnica-print-target {
+    position: absolute !important;
+    left: 50% !important;
+    top: 20px !important;
+    transform: translateX(-50%) !important;
+    width: 680px !important;
+    max-width: 100% !important;
+    border: 2px solid #b45309 !important;
+    border-radius: 4px !important;
+    background-color: #FFFDEF !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+    margin: 0 !important;
+  }
+}
+

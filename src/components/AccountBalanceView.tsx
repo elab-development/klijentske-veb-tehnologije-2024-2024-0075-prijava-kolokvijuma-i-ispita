@@ -383,7 +383,7 @@ export function AccountBalanceView({
           <div className={`p-4 sm:p-5 rounded-2xl shadow border select-none overflow-x-auto print:shadow-none print:border-none print:p-0 transition-all duration-300 ${
             isDarkMode ? "bg-[#1E293B]/80 border-slate-705/30 shadow-black/35" : "bg-white border-slate-200"
           }`}>
-            <div className="min-w-[480px] max-w-full text-left font-serif text-[#0b0c10] bg-[#FFFDEF] border-2 border-[#b45309] rounded p-4 relative overflow-hidden leading-snug">
+            <div className="uplatnica-print-target min-w-[480px] max-w-full text-left font-serif text-[#0b0c10] bg-[#FFFDEF] border-2 border-[#b45309] rounded p-4 relative overflow-hidden leading-snug">
               
               {/* Slip Header watermark */}
               <div className="flex justify-between items-center pb-2.5 border-b-2 border-[#b45309]">
