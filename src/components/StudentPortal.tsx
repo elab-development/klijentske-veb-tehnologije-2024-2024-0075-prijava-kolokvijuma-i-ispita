@@ -9,7 +9,8 @@ import {
   ClipboardCheck,
   CheckSquare,
   BookOpen,
-  Award
+  Award,
+  Mail
 } from "lucide-react";
 import { HomeView } from "./HomeView";
 import { AccountBalanceView, initialPayments } from "./AccountBalanceView";
@@ -18,6 +19,7 @@ import { PrijavljeniIspitiView } from "./PrijavljeniIspitiView";
 import { PrikazPredmetaView } from "./PrikazPredmetaView";
 import { PolozeniIspitiView } from "./PolozeniIspitiView";
 import { ProfilStudentaView } from "./ProfilStudentaView";
+import { KontaktView } from "./KontaktView";
 import { PaymentRecord } from "../models/PaymentRecord";
 import { RegisteredExamRow } from "../models/RegisteredExamRow";
 
@@ -60,11 +62,11 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
 
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   
-  const activeTab = (tab && ["home", "stanje", "prijava", "prijavljeni", "predmeti", "polozeni", "profil"].includes(tab))
-    ? (tab as "home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil")
+  const activeTab = (tab && ["home", "stanje", "prijava", "prijavljeni", "predmeti", "polozeni", "profil", "kontakt"].includes(tab))
+    ? (tab as "home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil" | "kontakt")
     : "home";
 
-  const setActiveTab = (newTab: "home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil") => {
+  const setActiveTab = (newTab: "home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil" | "kontakt") => {
     navigate(`/portal/${newTab}`);
   };
   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
@@ -206,11 +208,11 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
         <div className="w-full flex flex-col md:flex-row items-stretch">
           
           {/* Royal Blue Sidebar (Sidemenu tabs) */}
-          <div className="w-full md:w-[180px] bg-[#1E4C9A] flex flex-row md:flex-col gap-1.5 p-3 shrink-0">
+          <div className="w-full md:w-[190px] bg-[#1E4C9A] flex flex-row md:flex-col gap-1.5 p-3 shrink-0">
             {/* Side Tabs navigation buttons */}
             <button
               onClick={() => setActiveTab("home")}
-              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all ${
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
                 activeTab === "home"
                   ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
                   : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
@@ -223,7 +225,7 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
             <button
               id="tab-stanje-na-racunu"
               onClick={() => setActiveTab("stanje")}
-              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all ${
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
                 activeTab === "stanje"
                   ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
                   : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
@@ -236,7 +238,7 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
             <button
               id="tab-prijava-ispita"
               onClick={() => setActiveTab("prijava")}
-              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all ${
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
                 activeTab === "prijava"
                   ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
                   : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
@@ -249,7 +251,7 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
             <button
               id="tab-prijavljeni-ispiti"
               onClick={() => setActiveTab("prijavljeni")}
-              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all ${
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
                 activeTab === "prijavljeni"
                   ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
                   : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
@@ -262,7 +264,7 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
             <button
               id="tab-prikaz-predmeta"
               onClick={() => setActiveTab("predmeti")}
-              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all ${
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
                 activeTab === "predmeti"
                   ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
                   : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
@@ -275,7 +277,7 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
             <button
               id="tab-polozeni-ispiti"
               onClick={() => setActiveTab("polozeni")}
-              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all ${
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
                 activeTab === "polozeni"
                   ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
                   : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
@@ -283,6 +285,22 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
             >
               <Award size={15} />
               <span>Položeni ispiti</span>
+            </button>
+
+            {/* Spacer za guranje Kontakt dugmeta na dno na desktopu */}
+            <div className="hidden md:block md:flex-1" />
+
+            <button
+              id="tab-kontakt"
+              onClick={() => setActiveTab("kontakt")}
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
+                activeTab === "kontakt"
+                  ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
+                  : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
+              } cursor-pointer focus:outline-none`}
+            >
+              <Mail size={15} />
+              <span>Kontakt</span>
             </button>
 
             {/* Sidebar bottom Contact option removed to satisfy request */}
@@ -381,6 +399,16 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
                   transition={{ duration: 0.15 }}
                 >
                   <PolozeniIspitiView />
+                </motion.div>
+              ) : activeTab === "kontakt" ? (
+                <motion.div
+                  key="kontakt-tab"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <KontaktView studentName={studentName} studentIndex={studentIndex} />
                 </motion.div>
               ) : (
                 <motion.div

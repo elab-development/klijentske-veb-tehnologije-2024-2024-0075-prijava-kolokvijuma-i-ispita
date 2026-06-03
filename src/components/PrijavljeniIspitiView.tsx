@@ -185,7 +185,7 @@ export function PrijavljeniIspitiView({
                               onClick={() => handleCancelClick(exam)}
                               className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded font-bold text-[11px] transition-colors cursor-pointer border border-red-800 ml-2"
                             >
-                              Odjavu
+                              Odjavi
                             </button>
                           </div>
                         </td>
