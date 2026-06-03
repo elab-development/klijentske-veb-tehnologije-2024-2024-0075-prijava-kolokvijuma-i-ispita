@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   LogOut, 
@@ -37,8 +38,18 @@ interface StudentPortalProps {
 }
 
 export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "2023/3858", onLogout }: StudentPortalProps) {
+  const { tab } = useParams<{ tab: string }>();
+  const navigate = useNavigate();
+
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<"home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil">("home");
+  
+  const activeTab = (tab && ["home", "stanje", "prijava", "prijavljeni", "predmeti", "polozeni", "profil"].includes(tab))
+    ? (tab as "home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil")
+    : "home";
+
+  const setActiveTab = (newTab: "home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil") => {
+    navigate(`/portal/${newTab}`);
+  };
   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
   const [accountBalance, setAccountBalance] = useState<number>(4200.00); // Students have 4.200 RSD to try registering exams immediately!
   const [registeredExamsKeys, setRegisteredExamsKeys] = useState<Record<string, boolean>>({});
