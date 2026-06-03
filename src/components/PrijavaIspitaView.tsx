@@ -13,16 +13,7 @@ import {
 } from "lucide-react";
 import { Calendar } from "./Calendar";
 import { FonLogo } from "./FonLogo";
-
-export interface Exam {
-  id: string;
-  name: string;
-  code: string;
-  espb: number;
-  date: string;
-  baseRegistrations: number;
-  price: number;
-}
+import { Exam } from "../models/Exam";
 
 export type PeriodType = "druga-kolokvijumska" | "junski-rok" | "julski-rok";
 

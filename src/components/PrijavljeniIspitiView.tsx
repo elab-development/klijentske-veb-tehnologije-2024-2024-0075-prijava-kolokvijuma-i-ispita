@@ -12,17 +12,7 @@ import {
 } from "lucide-react";
 import { Calendar } from "./Calendar";
 import { FonLogo } from "./FonLogo";
-
-export interface RegisteredExamRow {
-  id: string;
-  name: string;
-  espb: number;
-  time: string;
-  location: string;
-  isInitial?: boolean; // True for the ones pre-populated on the screenshot
-  periodLabel?: string;
-  price?: number;
-}
+import { RegisteredExamRow } from "../models/RegisteredExamRow";
 
 interface PrijavljeniIspitiViewProps {
   studentName: string;

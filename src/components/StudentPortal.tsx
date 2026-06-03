@@ -12,12 +12,14 @@ import {
   Award
 } from "lucide-react";
 import { HomeView } from "./HomeView";
-import { AccountBalanceView, PaymentRecord, initialPayments } from "./AccountBalanceView";
+import { AccountBalanceView, initialPayments } from "./AccountBalanceView";
 import { PrijavaIspitaView } from "./PrijavaIspitaView";
-import { PrijavljeniIspitiView, RegisteredExamRow } from "./PrijavljeniIspitiView";
+import { PrijavljeniIspitiView } from "./PrijavljeniIspitiView";
 import { PrikazPredmetaView } from "./PrikazPredmetaView";
 import { PolozeniIspitiView } from "./PolozeniIspitiView";
 import { ProfilStudentaView } from "./ProfilStudentaView";
+import { PaymentRecord } from "../models/PaymentRecord";
+import { RegisteredExamRow } from "../models/RegisteredExamRow";
 
 const bannerPaths = [
   "/banner.png",

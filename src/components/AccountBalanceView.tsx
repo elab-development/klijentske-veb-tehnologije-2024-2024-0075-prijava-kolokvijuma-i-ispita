@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import { CreditCard, Printer, CheckCircle, RefreshCw, FileText, Info } from "lucide-react";
-
-export interface PaymentRecord {
-  id: string;
-  type: string;
-  amount: string;
-  installments: string;
-  date: string;
-  yearOfStudy: string;
-  status: string;
-  paymentCode: string;
-}
+import { AcademicRegistry } from "../class/AcademicStats";
+import { PaymentRecord } from "../models/PaymentRecord";
 
 export const initialPayments: PaymentRecord[] = [
   { id: "1", type: "Školarina", amount: "31.000", installments: "4", date: "05.08.2025.", yearOfStudy: "prva", status: "samofinansiranje", paymentCode: "189" },
@@ -40,7 +31,7 @@ export function AccountBalanceView({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const formatSerbianCurrency = (val: number) => {
-    return val.toLocaleString("sr-RS", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " RSD";
+    return AcademicRegistry.formatCurrency(val);
   };
 
   const handleSprovediUplatu = () => {

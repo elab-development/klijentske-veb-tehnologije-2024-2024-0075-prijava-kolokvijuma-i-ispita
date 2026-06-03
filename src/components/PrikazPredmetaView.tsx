@@ -2,15 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Search, Filter, BookOpen, ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
 import { Calendar } from "./Calendar";
 import { FonLogo } from "./FonLogo";
-
-interface Subject {
-  id: string;
-  name: string;
-  semester: string; // "prvi", "drugi", "treći", "četvrti", "peti", "šesti", "sedmi", "osmi"
-  espb: number;
-  type: "obavezan" | "izborni";
-  year: 1 | 2 | 3 | 4;
-}
+import { Subject } from "../models/Subject";
 
 const subjectsData: Subject[] = [
   // Prva godina (iz screenshot-a i PDF-a)

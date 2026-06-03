@@ -2,14 +2,8 @@ import React, { useState, useMemo } from "react";
 import { Search, Award, RefreshCw } from "lucide-react";
 import { Calendar } from "./Calendar";
 import { FonLogo } from "./FonLogo";
-
-interface PassedExam {
-  id: string;
-  name: string;
-  espb: number;
-  grade: number;
-  date: string;
-}
+import { AcademicRegistry } from "../class/AcademicStats";
+import { PassedExam } from "../models/PassedExam";
 
 const passedExamsData: PassedExam[] = [
   { id: "1", name: "Principi programiranja", espb: 5, grade: 9, date: "05.08.2025." },
@@ -28,20 +22,18 @@ const passedExamsData: PassedExam[] = [
 export function PolozeniIspitiView() {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredExams = useMemo(() => {
-    return passedExamsData.filter((exam) =>
-      exam.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery]);
+  const registry = useMemo(() => new AcademicRegistry(passedExamsData), []);
 
-  // Calculate totals for currently shown or all
+  const filteredExams = useMemo(() => {
+    return registry.filterByName(searchQuery);
+  }, [registry, searchQuery]);
+
+  // Calculate totals for currently shown or all using registry class methods
   const totals = useMemo(() => {
-    const list = filteredExams.length > 0 ? filteredExams : [];
-    const totalEspb = list.reduce((sum, item) => sum + item.espb, 0);
-    const sumGrades = list.reduce((sum, item) => sum + item.grade, 0);
-    const averageGrade = list.length > 0 ? (sumGrades / list.length).toFixed(2) : "0.00";
+    const totalEspb = registry.calculateTotalEspb(filteredExams);
+    const averageGrade = registry.calculateAverageGrade(filteredExams);
     return { totalEspb, averageGrade };
-  }, [filteredExams]);
+  }, [registry, filteredExams]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-sans">
