@@ -108,16 +108,6 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
       <div className="absolute -bottom-12 -right-12 w-32 h-32 border border-slate-800 rounded-full pointer-events-none opacity-30" />
       <div className="absolute top-[10%] right-[15%] w-px h-24 bg-gradient-to-down from-blue-500/10 to-transparent pointer-events-none" />
       
-      {/* Absolute "Početna" button exactly as the screenshot */}
-      <div className="absolute top-4 left-4 z-50">
-        <button 
-          onClick={onLogout}
-          className="px-4 py-1.5 bg-white text-gray-800 hover:bg-slate-100 font-semibold text-xs rounded shadow transition-colors cursor-pointer border border-slate-200"
-        >
-          Početna
-        </button>
-      </div>
-
       {/* Main Container Container (fits 1280px aspect ratio nicely) */}
       <div className={`w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl relative flex flex-col backdrop-blur-md transition-all duration-300 border ${
         isDarkMode 
