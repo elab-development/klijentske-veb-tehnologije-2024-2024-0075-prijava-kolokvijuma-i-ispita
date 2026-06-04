@@ -5,12 +5,12 @@ export function FonLogo() {
 
   if (!imageError) {
     return (
-      <div className="flex items-center justify-center p-1">
+      <div className="flex items-center justify-center p-3">
         <img
-          src="/fon_logo.png"
+          src="/logofon.png"
           alt="FON Logo"
           referrerPolicy="no-referrer"
-          className="h-[52px] w-auto object-contain select-none"
+          className="h-[120px] w-auto object-contain select-none"
           onError={() => {
             setImageError(true);
           }}
