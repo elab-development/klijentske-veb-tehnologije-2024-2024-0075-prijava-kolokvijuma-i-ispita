@@ -1,22 +1,24 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { 
-  LogOut, 
-  User, 
+import {
+  LogOut,
+  User,
   Home,
   CreditCard,
   ClipboardCheck,
   CheckSquare,
   BookOpen,
+  CalendarDays,
   Award,
-  Mail
+  Mail,
 } from "lucide-react";
 import { HomeView } from "./HomeView";
 import { AccountBalanceView, initialPayments } from "./AccountBalanceView";
 import { PrijavaIspitaView } from "./PrijavaIspitaView";
 import { PrijavljeniIspitiView } from "./PrijavljeniIspitiView";
 import { PrikazPredmetaView } from "./PrikazPredmetaView";
+import { RasporedNastaveView } from "./RasporedNastaveView";
 import { PolozeniIspitiView } from "./PolozeniIspitiView";
 import { ProfilStudentaView } from "./ProfilStudentaView";
 import { KontaktView } from "./KontaktView";
@@ -32,7 +34,7 @@ const bannerPaths = [
   "/fon_banner.PNG",
   "/background.png",
   "/background.jpg",
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop"
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
 ];
 
 import { ThemeProvider, useTheme } from "../context/ThemeContext";
@@ -43,44 +45,89 @@ interface StudentPortalProps {
   onLogout: () => void;
 }
 
-export function StudentPortal({ studentName = "Ime Prezime", studentIndex = "2023/3858", onLogout }: StudentPortalProps) {
+export function StudentPortal({
+  studentName = "Ime Prezime",
+  studentIndex = "2023/3858",
+  onLogout,
+}: StudentPortalProps) {
   return (
     <ThemeProvider>
-      <StudentPortalContent 
-        studentName={studentName} 
-        studentIndex={studentIndex} 
-        onLogout={onLogout} 
+      <StudentPortalContent
+        studentName={studentName}
+        studentIndex={studentIndex}
+        onLogout={onLogout}
       />
     </ThemeProvider>
   );
 }
 
-function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "2023/3858", onLogout }: StudentPortalProps) {
+function StudentPortalContent({
+  studentName = "Ime Prezime",
+  studentIndex = "2023/3858",
+  onLogout,
+}: StudentPortalProps) {
   const { tab } = useParams<{ tab: string }>();
   const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode } = useTheme();
 
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  
-  const activeTab = (tab && ["home", "stanje", "prijava", "prijavljeni", "predmeti", "polozeni", "profil", "kontakt"].includes(tab))
-    ? (tab as "home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil" | "kontakt")
-    : "home";
 
-  const setActiveTab = (newTab: "home" | "stanje" | "prijava" | "prijavljeni" | "predmeti" | "polozeni" | "profil" | "kontakt") => {
+  const activeTab =
+    tab &&
+    [
+      "home",
+      "stanje",
+      "prijava",
+      "prijavljeni",
+      "predmeti",
+      "raspored",
+      "polozeni",
+      "profil",
+      "kontakt",
+    ].includes(tab)
+      ? (tab as
+          | "home"
+          | "stanje"
+          | "prijava"
+          | "prijavljeni"
+          | "predmeti"
+          | "raspored"
+          | "polozeni"
+          | "profil"
+          | "kontakt")
+      : "home";
+
+  const setActiveTab = (
+    newTab:
+      | "home"
+      | "stanje"
+      | "prijava"
+      | "prijavljeni"
+      | "predmeti"
+      | "raspored"
+      | "polozeni"
+      | "profil"
+      | "kontakt",
+  ) => {
     navigate(`/portal/${newTab}`);
   };
   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
-  const [accountBalance, setAccountBalance] = useState<number>(4200.00); // Students have 4.200 RSD to try registering exams immediately!
-  const [registeredExamsKeys, setRegisteredExamsKeys] = useState<Record<string, boolean>>({});
-  const [customRegisteredExams, setCustomRegisteredExams] = useState<RegisteredExamRow[]>([]);
+  const [accountBalance, setAccountBalance] = useState<number>(4200.0); // Students have 4.200 RSD to try registering exams immediately!
+  const [registeredExamsKeys, setRegisteredExamsKeys] = useState<
+    Record<string, boolean>
+  >({});
+  const [customRegisteredExams, setCustomRegisteredExams] = useState<
+    RegisteredExamRow[]
+  >([]);
 
   const handleRegisterExam = (examRow: RegisteredExamRow) => {
-    setCustomRegisteredExams(prev => [...prev, examRow]);
+    setCustomRegisteredExams((prev) => [...prev, examRow]);
   };
 
   const addPaymentRecord = (type: string, amountStr: string) => {
     const amountVal = Math.abs(parseInt(amountStr) || 0);
-    const displayAmount = amountVal === 0 ? "0" : amountVal.toLocaleString("sr-RS");
+    const displayAmount =
+      amountVal === 0 ? "0" : amountVal.toLocaleString("sr-RS");
     const newRecord: PaymentRecord = {
       id: String(Date.now()),
       type: type,
@@ -89,48 +136,55 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
       date: new Date().toLocaleDateString("sr-RS"),
       yearOfStudy: "prva",
       status: "proknjiženo",
-      paymentCode: "189"
+      paymentCode: "189",
     };
-    setPayments(prev => [newRecord, ...prev]);
+    setPayments((prev) => [newRecord, ...prev]);
   };
 
   return (
-    <div className={`min-h-screen w-full flex items-center justify-center p-4 md:p-8 relative overflow-hidden font-sans select-none selection:bg-blue-600/30 transition-colors duration-300 ${
-      isDarkMode ? "bg-[#0b0f19]" : "bg-[#121824]"
-    }`}>
-      
+    <div
+      className={`min-h-screen w-full flex items-center justify-center p-4 md:p-8 relative overflow-hidden font-sans select-none selection:bg-blue-600/30 transition-colors duration-300 ${
+        isDarkMode ? "bg-[#0b0f19]" : "bg-[#121824]"
+      }`}
+    >
       {/* Decorative Blueprint/Wireframe lines matching layout */}
-      <div className={`absolute inset-x-0 h-px top-1/2 -translate-y-1/2 pointer-events-none transition-colors duration-300 ${
-        isDarkMode ? "bg-slate-900/40" : "bg-slate-800/60"
-      }`} />
-      <div className={`absolute inset-y-0 w-px left-1/2 -translate-x-1/2 pointer-events-none transition-colors duration-300 ${
-        isDarkMode ? "bg-slate-900/40" : "bg-slate-800/60"
-      }`} />
+      <div
+        className={`absolute inset-x-0 h-px top-1/2 -translate-y-1/2 pointer-events-none transition-colors duration-300 ${
+          isDarkMode ? "bg-slate-900/40" : "bg-slate-800/60"
+        }`}
+      />
+      <div
+        className={`absolute inset-y-0 w-px left-1/2 -translate-x-1/2 pointer-events-none transition-colors duration-300 ${
+          isDarkMode ? "bg-slate-900/40" : "bg-slate-800/60"
+        }`}
+      />
       <div className="absolute -top-12 -left-12 w-32 h-32 border border-slate-800 rounded-full pointer-events-none opacity-30" />
       <div className="absolute -bottom-12 -right-12 w-32 h-32 border border-slate-800 rounded-full pointer-events-none opacity-30" />
       <div className="absolute top-[10%] right-[15%] w-px h-24 bg-gradient-to-down from-blue-500/10 to-transparent pointer-events-none" />
-      
+
       {/* Main Container Container (fits 1280px aspect ratio nicely) */}
-      <div className={`w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl relative flex flex-col backdrop-blur-md transition-all duration-300 border ${
-        isDarkMode 
-          ? "bg-[#111622]/95 border-slate-800/90 shadow-black/80" 
-          : "bg-[#1c2331]/90 border-slate-700/60"
-      }`}>
-        
+      <div
+        className={`w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl relative flex flex-col backdrop-blur-md transition-all duration-300 border ${
+          isDarkMode
+            ? "bg-[#111622]/95 border-slate-800/90 shadow-black/80"
+            : "bg-[#1c2331]/90 border-slate-700/60"
+        }`}
+      >
         {/* Top Header/Banner Display Panel with Student Background */}
-        <div className={`relative w-full h-[150px] flex items-end p-6 overflow-hidden border-b transition-colors duration-300 ${
-          isDarkMode ? "border-slate-800/90" : "border-slate-700/75"
-        }`}>
-          
+        <div
+          className={`relative w-full h-[150px] flex items-end p-6 overflow-hidden border-b transition-colors duration-300 ${
+            isDarkMode ? "border-slate-800/90" : "border-slate-700/75"
+          }`}
+        >
           {/* Active Banner Image with fallbacks */}
-          <img 
-            src={bannerPaths[currentBannerIndex]} 
-            alt="Banner background" 
+          <img
+            src={bannerPaths[currentBannerIndex]}
+            alt="Banner background"
             referrerPolicy="no-referrer"
             className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
             onError={() => {
               if (currentBannerIndex < bannerPaths.length - 1) {
-                setCurrentBannerIndex(prev => prev + 1);
+                setCurrentBannerIndex((prev) => prev + 1);
               }
             }}
           />
@@ -143,7 +197,7 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
             {/* Left Header Corner Info */}
             <div className="text-left flex flex-col gap-2.5 items-start">
               {/* Theme Toggle Button placed above "Studentski servis" */}
-              <div 
+              <div
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleDarkMode();
@@ -151,12 +205,16 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
                 className="flex items-center gap-1.5 bg-black/40 hover:bg-black/60 border border-slate-700/50 p-2 py-2.5 px-3 rounded-xl cursor-pointer select-none active:scale-95 transition-all text-left"
                 title="Promeni temu (Svetla / Tamna)"
               >
-                <div className={`relative inline-flex h-4 w-7.5 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out ${
-                  isDarkMode ? "bg-amber-400" : "bg-slate-500"
-                }`}>
-                  <span className={`pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                    isDarkMode ? "translate-x-3.5" : "translate-x-0"
-                  }`} />
+                <div
+                  className={`relative inline-flex h-4 w-7.5 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out ${
+                    isDarkMode ? "bg-amber-400" : "bg-slate-500"
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      isDarkMode ? "translate-x-3.5" : "translate-x-0"
+                    }`}
+                  />
                 </div>
                 <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest leading-none">
                   {isDarkMode ? "TAMNA" : "SVETLA"}
@@ -174,11 +232,11 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
             </div>
 
             {/* Right student profile card */}
-            <div 
+            <div
               onClick={() => setActiveTab("profil")}
               className={`flex items-center gap-3 bg-black/35 hover:bg-black/50 transition-all border p-2.5 px-4 rounded-xl self-end align-middle cursor-pointer active:scale-95 group ${
-                activeTab === "profil" 
-                  ? "border-amber-400/85 ring-2 ring-amber-400/20 bg-amber-400/10" 
+                activeTab === "profil"
+                  ? "border-amber-400/85 ring-2 ring-amber-400/20 bg-amber-400/10"
                   : "border-slate-700/50 hover:border-slate-400/50"
               }`}
               title="Pregled profila studenta"
@@ -187,10 +245,14 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
                 <User size={22} className="stroke-[2.5]" />
               </div>
               <div className="text-right select-none flex flex-col justify-center">
-                <h3 className="text-sm font-semibold text-white leading-normal pr-0.5 group-hover:text-amber-200 transition-colors">{studentName}</h3>
-                <p className="text-xs font-mono text-slate-400 leading-none mt-0.5 pr-0.5 group-hover:text-slate-300 transition-colors">{studentIndex}</p>
+                <h3 className="text-sm font-semibold text-white leading-normal pr-0.5 group-hover:text-amber-200 transition-colors">
+                  {studentName}
+                </h3>
+                <p className="text-xs font-mono text-slate-400 leading-none mt-0.5 pr-0.5 group-hover:text-slate-300 transition-colors">
+                  {studentIndex}
+                </p>
               </div>
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onLogout();
@@ -206,7 +268,6 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
 
         {/* Double Column split: Sidemenu on left, Canvas workspace on right */}
         <div className="w-full flex flex-col md:flex-row items-stretch">
-          
           {/* Royal Blue Sidebar (Sidemenu tabs) */}
           <div className="w-full md:w-[190px] bg-[#1E4C9A] flex flex-row md:flex-col gap-1.5 p-3 shrink-0">
             {/* Side Tabs navigation buttons */}
@@ -275,6 +336,19 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
             </button>
 
             <button
+              id="tab-raspored-nastave"
+              onClick={() => setActiveTab("raspored")}
+              className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
+                activeTab === "raspored"
+                  ? "bg-white text-[#1E4C9A] border border-white shadow-md shadow-black/10"
+                  : "bg-transparent text-white/90 border border-transparent hover:bg-white/10 hover:text-white"
+              } cursor-pointer focus:outline-none`}
+            >
+              <CalendarDays size={15} />
+              <span>Raspored nastave</span>
+            </button>
+
+            <button
               id="tab-polozeni-ispiti"
               onClick={() => setActiveTab("polozeni")}
               className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
@@ -307,12 +381,13 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
           </div>
 
           {/* Main Workspace Canvas */}
-          <div className={`flex-1 p-5 text-left min-h-[460px] relative overflow-hidden transition-all duration-300 ${
-            isDarkMode 
-              ? "bg-[#131f36] text-slate-100 border-l border-slate-800/50" 
-              : "bg-[#F1F5F9] text-slate-800"
-          }`}>
-            
+          <div
+            className={`flex-1 p-5 text-left min-h-[460px] relative overflow-hidden transition-all duration-300 ${
+              isDarkMode
+                ? "bg-[#131f36] text-slate-100 border-l border-slate-800/50"
+                : "bg-[#F1F5F9] text-slate-800"
+            }`}
+          >
             <AnimatePresence mode="wait">
               {activeTab === "home" ? (
                 <motion.div
@@ -332,8 +407,8 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <AccountBalanceView 
-                    studentName={studentName} 
+                  <AccountBalanceView
+                    studentName={studentName}
                     studentIndex={studentIndex}
                     payments={payments}
                     setPayments={setPayments}
@@ -349,7 +424,7 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <PrijavaIspitaView 
+                  <PrijavaIspitaView
                     studentName={studentName}
                     studentIndex={studentIndex}
                     accountBalance={accountBalance}
@@ -368,7 +443,7 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <PrijavljeniIspitiView 
+                  <PrijavljeniIspitiView
                     studentName={studentName}
                     studentIndex={studentIndex}
                     accountBalance={accountBalance}
@@ -390,6 +465,16 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
                 >
                   <PrikazPredmetaView />
                 </motion.div>
+              ) : activeTab === "raspored" ? (
+                <motion.div
+                  key="raspored-tab"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <RasporedNastaveView />
+                </motion.div>
               ) : activeTab === "polozeni" ? (
                 <motion.div
                   key="polozeni-tab"
@@ -408,7 +493,10 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <KontaktView studentName={studentName} studentIndex={studentIndex} />
+                  <KontaktView
+                    studentName={studentName}
+                    studentIndex={studentIndex}
+                  />
                 </motion.div>
               ) : (
                 <motion.div
@@ -418,17 +506,16 @@ function StudentPortalContent({ studentName = "Ime Prezime", studentIndex = "202
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <ProfilStudentaView studentName={studentName} studentIndex={studentIndex} />
+                  <ProfilStudentaView
+                    studentName={studentName}
+                    studentIndex={studentIndex}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
