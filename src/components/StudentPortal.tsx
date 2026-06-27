@@ -22,6 +22,7 @@ import { RasporedNastaveView } from "./RasporedNastaveView";
 import { PolozeniIspitiView } from "./PolozeniIspitiView";
 import { ProfilStudentaView } from "./ProfilStudentaView";
 import { KontaktView } from "./KontaktView";
+import { AiAssistant } from "./AiAssistant";
 import { PaymentRecord } from "../models/PaymentRecord";
 import { RegisteredExamRow } from "../models/RegisteredExamRow";
 
@@ -363,6 +364,14 @@ function StudentPortalContent({
 
             {/* Spacer za guranje Kontakt dugmeta na dno na desktopu */}
             <div className="hidden md:block md:flex-1" />
+
+            {/* AI Assistant Agent above Kontakt */}
+            <AiAssistant
+              studentName={studentName}
+              studentIndex={studentIndex}
+              activeTab={activeTab}
+              isDarkMode={isDarkMode}
+            />
 
             <button
               id="tab-kontakt"
