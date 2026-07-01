@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { FonLogo } from "./FonLogo";
 import { 
@@ -20,27 +20,35 @@ interface RegisterPageProps {
 
 export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: RegisterPageProps) {
   
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [city, setCity] = useState("");
-  const [phone, setPhone] = useState("");
-  const [jmbg, setJmbg] = useState("");
-  const [indexNum, setIndexNum] = useState("");
-  
-  
+  const [firstName, setFirstName] = useState(() => sessionStorage.getItem("reg_firstName") || "");
+  const [lastName, setLastName] = useState(() => sessionStorage.getItem("reg_lastName") || "");
+  const [city, setCity] = useState(() => sessionStorage.getItem("reg_city") || "");
+  const [phone, setPhone] = useState(() => sessionStorage.getItem("reg_phone") || "");
+  const [jmbg, setJmbg] = useState(() => sessionStorage.getItem("reg_jmbg") || "");
+  const [indexNum, setIndexNum] = useState(() => sessionStorage.getItem("reg_indexNum") || "");
+  const [acceptedTerms, setAcceptedTerms] = useState(() => sessionStorage.getItem("reg_acceptedTerms") === "true");
+
+  // File upload state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  
-  const [acceptedTerms, setAcceptedTerms] = useState(false);
-
-  
+  // Loading & Flow control
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [regSuccess, setRegSuccess] = useState(false);
 
-  
+  useEffect(() => {
+    sessionStorage.setItem("reg_firstName", firstName);
+    sessionStorage.setItem("reg_lastName", lastName);
+    sessionStorage.setItem("reg_city", city);
+    sessionStorage.setItem("reg_phone", phone);
+    sessionStorage.setItem("reg_jmbg", jmbg);
+    sessionStorage.setItem("reg_indexNum", indexNum);
+    sessionStorage.setItem("reg_acceptedTerms", String(acceptedTerms));
+  }, [firstName, lastName, city, phone, jmbg, indexNum, acceptedTerms]);
+
+  // Drag and drop event handlers
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -124,6 +132,15 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
     setTimeout(() => {
       setIsLoading(false);
       setRegSuccess(true);
+
+      // Čisti se session storage na kraju uspešne registracije
+      sessionStorage.removeItem("reg_firstName");
+      sessionStorage.removeItem("reg_lastName");
+      sessionStorage.removeItem("reg_city");
+      sessionStorage.removeItem("reg_phone");
+      sessionStorage.removeItem("reg_jmbg");
+      sessionStorage.removeItem("reg_indexNum");
+      sessionStorage.removeItem("reg_acceptedTerms");
     }, 1500);
   };
 
@@ -340,7 +357,6 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                 
                 {}
                 <div className="relative w-full aspect-[4/3] sm:aspect-video lg:aspect-[4/3] rounded-lg overflow-hidden border border-slate-300 shadow bg-white flex flex-col">
-                  
                    <iframe
                     title="Lokacija Fakulteta organizacionih nauka"
                     className="w-full h-full min-h-[250px] border-0"
@@ -351,10 +367,8 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                   />
                 </div>
 
-                {}
+                {/* Communication channels */}
                 <div className="flex flex-row flex-nowrap items-center justify-between gap-2.5 px-0.5 mt-2.5 w-full select-none">
-                  
-                  {}
                   <a 
                     href="tel:+381113950813"
                     className="flex items-center gap-1.5 text-gray-800 hover:text-black transition-colors shrink-0"
@@ -365,7 +379,6 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                     </span>
                   </a>
 
-                  {}
                   <a 
                     href="mailto:studentska@fon.bg.ac.rs"
                     className="flex items-center gap-1.5 text-gray-800 hover:text-black transition-colors shrink-0"
@@ -376,16 +389,14 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                     </span>
                   </a>
 
-                  {}
                   <div className="shrink-0">
                     <FonLogo />
                   </div>
-
                 </div>
 
               </div>
 
-              {}
+              {/* Embedded login routing footer link */}
               <div className="lg:col-span-12 mt-4 pt-4 border-t border-slate-300/40 text-left select-none">
                 <span className="text-gray-500 text-[14.5px] font-medium whitespace-nowrap">
                   Već imate studentski nalog?{" "}
