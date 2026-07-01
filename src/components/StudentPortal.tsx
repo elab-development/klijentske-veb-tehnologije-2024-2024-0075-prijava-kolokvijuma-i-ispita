@@ -113,7 +113,7 @@ function StudentPortalContent({
     navigate(`/portal/${newTab}`);
   };
   const [payments, setPayments] = useState<PaymentRecord[]>(initialPayments);
-  const [accountBalance, setAccountBalance] = useState<number>(4200.0); // Students have 4.200 RSD to try registering exams immediately!
+  const [accountBalance, setAccountBalance] = useState<number>(4200.0); 
   const [registeredExamsKeys, setRegisteredExamsKeys] = useState<
     Record<string, boolean>
   >({});
@@ -144,135 +144,112 @@ function StudentPortalContent({
 
   return (
     <div
-      className={`min-h-screen w-full flex items-center justify-center p-4 md:p-8 relative overflow-hidden font-sans select-none selection:bg-blue-600/30 transition-colors duration-300 ${
-        isDarkMode ? "bg-[#0b0f19]" : "bg-[#121824]"
+      className={`min-h-screen md:h-screen w-full flex flex-col relative overflow-x-hidden md:overflow-hidden font-sans select-none selection:bg-blue-600/30 transition-colors duration-300 ${
+        isDarkMode ? "bg-[#0b0f19]" : "bg-[#f1f5f9]"
       }`}
     >
-      {/* Decorative Blueprint/Wireframe lines matching layout */}
+      {}
       <div
-        className={`absolute inset-x-0 h-px top-1/2 -translate-y-1/2 pointer-events-none transition-colors duration-300 ${
-          isDarkMode ? "bg-slate-900/40" : "bg-slate-800/60"
-        }`}
-      />
-      <div
-        className={`absolute inset-y-0 w-px left-1/2 -translate-x-1/2 pointer-events-none transition-colors duration-300 ${
-          isDarkMode ? "bg-slate-900/40" : "bg-slate-800/60"
-        }`}
-      />
-      <div className="absolute -top-12 -left-12 w-32 h-32 border border-slate-800 rounded-full pointer-events-none opacity-30" />
-      <div className="absolute -bottom-12 -right-12 w-32 h-32 border border-slate-800 rounded-full pointer-events-none opacity-30" />
-      <div className="absolute top-[10%] right-[15%] w-px h-24 bg-gradient-to-down from-blue-500/10 to-transparent pointer-events-none" />
-
-      {/* Main Container Container (fits 1280px aspect ratio nicely) */}
-      <div
-        className={`w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl relative flex flex-col backdrop-blur-md transition-all duration-300 border ${
-          isDarkMode
-            ? "bg-[#111622]/95 border-slate-800/90 shadow-black/80"
-            : "bg-[#1c2331]/90 border-slate-700/60"
+        className={`relative w-full md:h-[130px] h-auto flex md:items-end items-center p-4 md:p-6 overflow-hidden border-b shrink-0 transition-colors duration-300 ${
+          isDarkMode ? "border-slate-800/90 bg-[#111622]/95" : "border-slate-200 bg-white"
         }`}
       >
-        {/* Top Header/Banner Display Panel with Student Background */}
-        <div
-          className={`relative w-full h-[150px] flex items-end p-6 overflow-hidden border-b transition-colors duration-300 ${
-            isDarkMode ? "border-slate-800/90" : "border-slate-700/75"
-          }`}
-        >
-          {/* Active Banner Image with fallbacks */}
-          <img
-            src={bannerPaths[currentBannerIndex]}
-            alt="Banner background"
-            referrerPolicy="no-referrer"
-            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
-            onError={() => {
-              if (currentBannerIndex < bannerPaths.length - 1) {
-                setCurrentBannerIndex((prev) => prev + 1);
-              }
-            }}
-          />
+        {}
+        <img
+          src={bannerPaths[currentBannerIndex]}
+          alt="Banner background"
+          referrerPolicy="no-referrer"
+          className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+          onError={() => {
+            if (currentBannerIndex < bannerPaths.length - 1) {
+              setCurrentBannerIndex((prev) => prev + 1);
+            }
+          }}
+        />
 
-          {/* Gradients to blend over top of the banner image perfectly */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0c121c]/95 via-[#121824]/85 to-[#121824]/75 z-[2] mix-blend-multiply" />
-          <div className="absolute inset-0 bg-black/45 z-[1]" />
+        {}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0c121c]/95 via-[#121824]/85 to-[#121824]/75 z-[2] mix-blend-multiply" />
+        <div className="absolute inset-0 bg-black/45 z-[1]" />
 
-          <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            {/* Left Header Corner Info */}
-            <div className="text-left flex flex-col gap-2.5 items-start">
-              {/* Theme Toggle Button placed above "Studentski servis" */}
+        <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          {}
+          <div className="text-left flex flex-col sm:flex-row sm:items-center md:flex-col md:items-start gap-3 md:gap-2.5">
+            {}
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDarkMode();
+              }}
+              className="flex items-center gap-1.5 bg-black/40 hover:bg-black/60 border border-slate-700/50 p-2 py-2.5 px-3 rounded-xl cursor-pointer select-none active:scale-95 transition-all text-left self-start sm:self-auto md:self-start"
+              title="Promeni temu (Svetla / Tamna)"
+            >
               <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleDarkMode();
-                }}
-                className="flex items-center gap-1.5 bg-black/40 hover:bg-black/60 border border-slate-700/50 p-2 py-2.5 px-3 rounded-xl cursor-pointer select-none active:scale-95 transition-all text-left"
-                title="Promeni temu (Svetla / Tamna)"
+                className={`relative inline-flex h-4 w-7.5 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out ${
+                  isDarkMode ? "bg-amber-400" : "bg-slate-500"
+                }`}
               >
-                <div
-                  className={`relative inline-flex h-4 w-7.5 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out ${
-                    isDarkMode ? "bg-amber-400" : "bg-slate-500"
+                <span
+                  className={`pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    isDarkMode ? "translate-x-3.5" : "translate-x-0"
                   }`}
-                >
-                  <span
-                    className={`pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                      isDarkMode ? "translate-x-3.5" : "translate-x-0"
-                    }`}
-                  />
-                </div>
-                <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest leading-none">
-                  {isDarkMode ? "TAMNA" : "SVETLA"}
-                </span>
+                />
               </div>
-
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight text-white mb-0 px-1 select-none">
-                  Studentski servis
-                </h1>
-                <p className="text-amber-400 font-bold text-xs uppercase tracking-widest leading-none mt-1 pl-1 select-none">
-                  FAKULTET ORGANIZACIONIH NAUKA
-                </p>
-              </div>
+              <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest leading-none">
+                {isDarkMode ? "TAMNA" : "SVETLA"}
+              </span>
             </div>
 
-            {/* Right student profile card */}
-            <div
-              onClick={() => setActiveTab("profil")}
-              className={`flex items-center gap-3 bg-black/35 hover:bg-black/50 transition-all border p-2.5 px-4 rounded-xl self-end align-middle cursor-pointer active:scale-95 group ${
-                activeTab === "profil"
-                  ? "border-amber-400/85 ring-2 ring-amber-400/20 bg-amber-400/10"
-                  : "border-slate-700/50 hover:border-slate-400/50"
-              }`}
-              title="Pregled profila studenta"
-            >
-              <div className="w-10 h-10 rounded-full bg-slate-200 group-hover:bg-white flex items-center justify-center text-[#1E4C9A] font-bold shadow-lg shadow-black/20 overflow-hidden shrink-0 transition-colors">
-                <User size={22} className="stroke-[2.5]" />
-              </div>
-              <div className="text-right select-none flex flex-col justify-center">
-                <h3 className="text-sm font-semibold text-white leading-normal pr-0.5 group-hover:text-amber-200 transition-colors">
-                  {studentName}
-                </h3>
-                <p className="text-xs font-mono text-slate-400 leading-none mt-0.5 pr-0.5 group-hover:text-slate-300 transition-colors">
-                  {studentIndex}
-                </p>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onLogout();
-                }}
-                title="Odjavi se sa portala"
-                className="ml-2 p-1.5 rounded-lg bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white transition-all cursor-pointer"
-              >
-                <LogOut size={15} />
-              </button>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-white mb-0 px-1 select-none">
+                Studentski servis
+              </h1>
+              <p className="text-amber-400 font-bold text-xs uppercase tracking-widest leading-none mt-1 pl-1 select-none">
+                FAKULTET ORGANIZACIONIH NAUKA
+              </p>
             </div>
           </div>
-        </div>
 
-        {/* Double Column split: Sidemenu on left, Canvas workspace on right */}
-        <div className="w-full flex flex-col md:flex-row items-stretch">
-          {/* Royal Blue Sidebar (Sidemenu tabs) */}
-          <div className="w-full md:w-[190px] bg-[#1E4C9A] flex flex-row md:flex-col gap-1.5 p-3 shrink-0">
-            {/* Side Tabs navigation buttons */}
+          {}
+          <div
+            onClick={() => setActiveTab("profil")}
+            className={`flex items-center gap-3 bg-black/35 hover:bg-black/50 transition-all border p-2.5 px-4 rounded-xl self-stretch md:self-end align-middle cursor-pointer active:scale-95 group ${
+              activeTab === "profil"
+                ? "border-amber-400/85 ring-2 ring-amber-400/20 bg-amber-400/10"
+                : "border-slate-700/50 hover:border-slate-400/50"
+            }`}
+            title="Pregled profila studenta"
+          >
+            <div className="w-10 h-10 rounded-full bg-slate-200 group-hover:bg-white flex items-center justify-center text-[#1E4C9A] font-bold shadow-lg shadow-black/20 overflow-hidden shrink-0 transition-colors">
+              <User size={22} className="stroke-[2.5]" />
+            </div>
+            <div className="text-right select-none flex flex-col justify-center flex-grow md:flex-grow-0">
+              <h3 className="text-sm font-semibold text-white leading-normal pr-0.5 group-hover:text-amber-200 transition-colors">
+                {studentName}
+              </h3>
+              <p className="text-xs font-mono text-slate-400 leading-none mt-0.5 pr-0.5 group-hover:text-slate-300 transition-colors">
+                {studentIndex}
+              </p>
+            </div>
             <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onLogout();
+              }}
+              title="Odjavi se sa portala"
+              className="ml-2 p-1.5 rounded-lg bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white transition-all cursor-pointer"
+            >
+              <LogOut size={15} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {}
+      <div className="w-full flex-1 flex flex-col md:flex-row items-stretch min-h-0 overflow-hidden">
+        {}
+        <div className="w-full md:w-[225px] bg-[#1E4C9A] flex flex-row md:flex-col gap-1.5 p-4 shrink-0 overflow-x-auto md:overflow-x-visible md:overflow-y-auto">
+          {}
+          <button
               onClick={() => setActiveTab("home")}
               className={`flex-1 md:flex-initial flex items-center justify-center md:justify-start gap-2.5 py-3 px-4 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
                 activeTab === "home"
@@ -362,10 +339,10 @@ function StudentPortalContent({
               <span>Položeni ispiti</span>
             </button>
 
-            {/* Spacer za guranje Kontakt dugmeta na dno na desktopu */}
+            {}
             <div className="hidden md:block md:flex-1" />
 
-            {/* AI Assistant Agent above Kontakt */}
+            {}
             <AiAssistant
               studentName={studentName}
               studentIndex={studentIndex}
@@ -386,15 +363,15 @@ function StudentPortalContent({
               <span>Kontakt</span>
             </button>
 
-            {/* Sidebar bottom Contact option removed to satisfy request */}
+            {}
           </div>
 
-          {/* Main Workspace Canvas */}
+          {}
           <div
-            className={`flex-1 p-5 text-left min-h-[460px] relative overflow-hidden transition-all duration-300 ${
+            className={`flex-1 p-6 md:p-8 text-left relative overflow-y-auto transition-all duration-300 min-h-[460px] md:min-h-0 ${
               isDarkMode
-                ? "bg-[#131f36] text-slate-100 border-l border-slate-800/50"
-                : "bg-[#F1F5F9] text-slate-800"
+                ? "bg-[#131f36] text-slate-100 md:border-l border-slate-800/60"
+                : "bg-[#F1F5F9] text-slate-800 md:border-l border-slate-200"
             }`}
           >
             <AnimatePresence mode="wait">
@@ -524,7 +501,6 @@ function StudentPortalContent({
             </AnimatePresence>
           </div>
         </div>
-      </div>
     </div>
   );
 }

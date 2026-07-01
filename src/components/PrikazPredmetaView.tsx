@@ -6,7 +6,7 @@ import { Subject } from "../models/Subject";
 import { useTheme } from "../context/ThemeContext";
 
 const subjectsData: Subject[] = [
-  // Prva godina (iz screenshot-a i PDF-a)
+  // Prva godina 
   { id: "1", name: "Arhitektura računara i operativni sistemi", semester: "prvi", espb: 6, type: "obavezan", year: 1 },
   { id: "2", name: "Programiranje 1", semester: "prvi", espb: 6, type: "obavezan", year: 1 },
   { id: "3", name: "Upravljanje projektima", semester: "prvi", espb: 5, type: "obavezan", year: 1 },
@@ -86,7 +86,7 @@ export function PrikazPredmetaView() {
   const itemsPerPage = 10;
   const { isDarkMode } = useTheme();
 
-  // Filter and search logic
+  
   const filteredSubjects = useMemo(() => {
     return subjectsData.filter((sub) => {
       const matchesSearch = sub.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -97,7 +97,7 @@ export function PrikazPredmetaView() {
     });
   }, [searchQuery, selectedSemester, selectedYear, selectedType]);
 
-  // Reset pagination when filter changes
+  
   React.useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, selectedSemester, selectedYear, selectedType]);
@@ -116,12 +116,12 @@ export function PrikazPredmetaView() {
   const arrowColorHex = isDarkMode ? "%2394A3B8" : "%23475569";
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-sans select-none animate-fadeIn">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch font-sans select-none animate-fadeIn lg:min-h-[calc(100vh-210px)]">
       
-      {/* Left Column: Subject Table and Filters */}
+      {}
       <div className="lg:col-span-8 flex flex-col gap-4">
         
-        {/* Card Header & Filter section */}
+        {}
         <div className={`rounded-2xl p-5 border shadow-sm transition-all duration-300 ${
           isDarkMode ? "bg-[#1E293B]/80 text-white border-slate-705/30 shadow-black/25" : "bg-white border-slate-200"
         }`}>
@@ -146,7 +146,7 @@ export function PrikazPredmetaView() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {/* Search Input */}
+            {}
             <div className="relative">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
@@ -162,7 +162,7 @@ export function PrikazPredmetaView() {
               />
             </div>
 
-            {/* Year Filter */}
+            {}
             <div className="relative">
               <select
                 value={selectedYear}
@@ -182,7 +182,7 @@ export function PrikazPredmetaView() {
               </select>
             </div>
 
-            {/* Semester Filter */}
+            {}
             <div className="relative">
               <select
                 value={selectedSemester}
@@ -206,7 +206,7 @@ export function PrikazPredmetaView() {
               </select>
             </div>
 
-            {/* Type Filter */}
+            {}
             <div className="relative">
               <select
                 value={selectedType}
@@ -226,13 +226,14 @@ export function PrikazPredmetaView() {
           </div>
         </div>
 
-        {/* Subjects Table Grid */}
+        {}
         <div className={`rounded-2xl shadow-sm border overflow-hidden flex flex-col justify-between min-h-[480px] transition-all duration-300 ${
           isDarkMode ? "bg-[#1E293B]/80 text-white border-slate-705/30 shadow-black/35 shadow-lg" : "bg-white border-slate-200"
         }`}>
           
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+          {}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-left border-collapse min-w-[550px]">
               <thead>
                 <tr className={`border-b select-none ${
                   isDarkMode ? "bg-[#162135] border-slate-800 text-slate-200" : "bg-slate-50 border-slate-200"
@@ -263,7 +264,7 @@ export function PrikazPredmetaView() {
                         isDarkMode ? "hover:bg-slate-800/40 bg-[#121c2c]/10" : "hover:bg-slate-50/50"
                       }`}
                     >
-                      {/* Name Column */}
+                      {}
                       <td className={`py-3 px-5 font-semibold text-xs sm:text-[13px] border-r ${
                         isDarkMode ? "text-slate-200 border-slate-800/80" : "text-slate-800 border-slate-100"
                       }`}>
@@ -288,14 +289,14 @@ export function PrikazPredmetaView() {
                         </div>
                       </td>
 
-                      {/* Semester Column */}
+                      {}
                       <td className={`py-3 px-5 text-xs font-semibold text-center border-r ${
                         isDarkMode ? "text-slate-400 border-slate-800/80" : "text-slate-600 border-slate-100"
                       }`}>
                         {sub.semester}
                       </td>
 
-                      {/* ESPB Column */}
+                      {}
                       <td className={`py-3 px-5 font-bold text-xs sm:text-sm text-center ${isDarkMode ? "text-slate-350" : "text-slate-700"}`}>
                         <span className={`inline-block px-2.5 py-0.5 rounded-md min-w-[32px] font-mono ${
                           isDarkMode 
@@ -318,7 +319,65 @@ export function PrikazPredmetaView() {
             </table>
           </div>
 
-          {/* Pagination Controls */}
+          {}
+          <div className="block md:hidden space-y-3 p-4">
+            {paginatedSubjects.length > 0 ? (
+              paginatedSubjects.map((sub) => (
+                <div 
+                  key={sub.id}
+                  className={`rounded-xl border p-4 transition-all duration-300 shadow-sm text-left ${
+                    isDarkMode 
+                      ? "bg-[#141c2c]/75 border-slate-800 text-slate-100" 
+                      : "bg-slate-50/50 border-slate-200 text-slate-800"
+                  }`}
+                >
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="text-left">
+                      <h4 className="font-extrabold text-sm leading-snug">{sub.name}</h4>
+                      <div className="flex flex-wrap items-center gap-1.5 mt-2 select-none">
+                        <span className={`text-[9px] px-1.5 py-0.5 font-extrabold rounded uppercase border ${
+                          sub.type === "obavezan" 
+                            ? (isDarkMode ? "bg-blue-950/45 text-blue-400 border-blue-900/30" : "bg-blue-50 text-blue-600 border border-blue-100")
+                            : (isDarkMode ? "bg-amber-955/45 text-amber-400 border-amber-900/30" : "bg-amber-50 text-amber-600 border border-amber-100")
+                        }`}>
+                          {sub.type}
+                        </span>
+                        <span className={`text-[9px] px-1.5 py-0.5 font-bold rounded uppercase border ${
+                          isDarkMode 
+                            ? "bg-slate-800/50 text-slate-350 border-slate-700/60" 
+                            : "bg-slate-100 text-slate-500 border border-slate-200"
+                        }`}>
+                          {sub.year}. godina
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className={`inline-block px-2.5 py-0.5 rounded-md min-w-[32px] font-mono font-bold text-xs ${
+                        isDarkMode 
+                          ? "bg-amber-400/10 text-amber-400" 
+                          : "bg-[#1E4C9A]/5 text-[#1E4C9A]"
+                      }`}>
+                        {sub.espb} ESPB
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={`mt-3 pt-2.5 border-t flex justify-between items-center text-xs ${
+                    isDarkMode ? "border-slate-800/70 text-slate-400" : "border-slate-200 text-slate-500"
+                  }`}>
+                    <span className="font-medium">Semestar polaganja:</span>
+                    <span className="font-bold text-slate-700 dark:text-slate-300 font-mono">{sub.semester}. semestar</span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={`py-12 text-center font-medium text-xs ${isDarkMode ? "text-slate-500" : "text-slate-400"}`}>
+                Nema pronađenih predmeta za odabrane kriterijume pretrage.
+              </div>
+            )}
+          </div>
+
+          {}
           {filteredSubjects.length > 0 && (
             <div className={`p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 select-none border-t ${
               isDarkMode ? "bg-[#121926]/80 border-slate-800" : "bg-slate-50 border-slate-100"
@@ -330,7 +389,7 @@ export function PrikazPredmetaView() {
               </span>
 
               <div className="flex items-center justify-center gap-1.5">
-                {/* Previous Button */}
+                {}
                 <button
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
@@ -341,9 +400,9 @@ export function PrikazPredmetaView() {
                   <ChevronLeft size={16} />
                 </button>
 
-                {/* Page numbers */}
+                {}
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                  // Only show surrounding pages if total is high
+                  
                   if (totalPages > 5 && Math.abs(page - currentPage) > 1 && page !== 1 && page !== totalPages) {
                     if (page === 2 || page === totalPages - 1) {
                       return <span key={page} className="text-slate-450 text-xs px-1">...</span>;
@@ -366,7 +425,7 @@ export function PrikazPredmetaView() {
                   );
                 })}
 
-                {/* Next Button */}
+                {}
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
@@ -382,11 +441,13 @@ export function PrikazPredmetaView() {
         </div>
       </div>
 
-      {/* Right Column: Calendar & Emblem */}
-      <div className="lg:col-span-4 flex flex-col gap-5 self-stretch">
+      {}
+      <div className="lg:col-span-4 flex flex-col gap-5 self-stretch w-full max-w-[340px] mx-auto lg:mr-0 lg:ml-auto animate-fadeIn">
         <Calendar />
         
-        <div className={`flex-1 flex items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 ${
+        <div className="flex-grow" />
+        
+        <div className={`flex items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 w-full ${
           isDarkMode ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/25" : "bg-white border hover:border-slate-200 border-slate-200"
         }`}>
           <div className="max-w-[145px] w-full flex items-center justify-center opacity-90">

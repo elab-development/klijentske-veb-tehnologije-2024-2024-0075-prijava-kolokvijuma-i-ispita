@@ -23,7 +23,7 @@ interface AiAssistantProps {
   isDarkMode: boolean;
 }
 
-// Quick suggested questions
+
 const SUGGESTED_QUESTIONS = [
   { text: "Kako da prijavim ispite?", label: "Prijava ispita" },
   { text: "Koliko imam novca na računu?", label: "Stanje na računu" },
@@ -43,7 +43,7 @@ function getFallbackResponse(message: string): string {
     return "Zdravo! Ja sam vaš FON Studentski Asistent. Kako vam mogu pomoći danas? Možete me pitati o prijavi ispita, stanju na računu, položenim ispitima ili kontaktu sa studentskom službom.";
   }
 
-  // Exact room location checks in fallback mode
+  
   if (
     msg.includes("sala") ||
     msg.includes("amfiteatar") ||
@@ -113,14 +113,14 @@ function getFallbackResponse(message: string): string {
       return "**Sala 62** se nalazi u novoj zgradi na trećem spratu.";
     }
 
-    // Check for rooms 11 to 18
+    
     const room11to18Match = msg.match(/\b(11|12|13|14|15|16|17|18)\b/);
     if (room11to18Match) {
       const num = room11to18Match[1];
       return `**Sala ${num}** se nalazi u **prizemlju stare zgrade**.`;
     }
 
-    // Default room fallback when not recognized
+    
     return "Nažalost, nemam tačnu lokaciju za tu salu/prostoriju. Najbolje je da proveriš na oglasnoj tabli, rasporedu nastave na studentskom portalu ili pitaš na šalteru Studentske službe.";
   }
 
@@ -195,12 +195,12 @@ export function AiAssistant({
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Initial welcome message
+  
   useEffect(() => {
     if (messages.length === 0) {
       let welcomeText = `Zdravo ${studentName}! Ja sam tvoj **FON e-Student AI Asistent**. 🎓 \n\nMogu ti pomoći sa informacijama o ispitnim rokovima, stanju na računu, prijavi ispita ili rasporedu.`;
 
-      // Personalize welcome message based on the active tab
+      
       if (activeTab === "stanje") {
         welcomeText +=
           "\n\nVidim da trenutno pregledaš **stanje na računu**. Želiš li da ti objasnim kako funkcioniše uplatnica i šifra plaćanja 189?";
@@ -225,7 +225,7 @@ export function AiAssistant({
     }
   }, [activeTab, studentName, messages.length]);
 
-  // Scroll to bottom of the chat container without affecting the outer page scroll
+  
   useEffect(() => {
     if (isOpen && chatContainerRef.current) {
       const container = chatContainerRef.current;
@@ -246,7 +246,7 @@ export function AiAssistant({
     setError(null);
     setIsLoading(true);
 
-    // Add user message
+    
     const userMsg: Message = {
       role: "user",
       text: trimmed,
@@ -257,7 +257,7 @@ export function AiAssistant({
     setMessages(updatedMessages);
 
     try {
-      // Map message history to Gemini expected structure
+     
       const apiHistory = messages.map((m) => ({
         role: m.role,
         text: m.text,
@@ -309,7 +309,7 @@ export function AiAssistant({
     }
   };
 
-  // Render text containing Markdown-like bold formatting securely
+  
   const renderMessageText = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, index) => {
@@ -326,7 +326,7 @@ export function AiAssistant({
 
   return (
     <div className="relative w-full">
-      {/* Trigger Button in Left Sidebar */}
+      {}
       <button
         id="ai-agent-trigger-btn"
         onClick={() => setIsOpen(!isOpen)}
@@ -337,7 +337,7 @@ export function AiAssistant({
         }`}
       >
         <div className="flex items-center gap-2.5 overflow-hidden">
-          {/* Circular Icon with FON Logo Emblem */}
+          {}
           <div className="w-6 h-6 rounded-full bg-slate-950 flex items-center justify-center overflow-hidden shrink-0 border border-amber-400/40 group-hover:border-amber-400 transition-colors">
             {!logoError ? (
               <img
@@ -366,14 +366,14 @@ export function AiAssistant({
           </div>
         </div>
 
-        {/* Active glowing indicator */}
+        {}
         <div className="relative flex h-2 w-2 shrink-0">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
         </div>
       </button>
 
-      {/* Floating Chat Window Panel */}
+      {}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -391,7 +391,7 @@ export function AiAssistant({
               maxHeight: "calc(100vh - 48px)",
             }}
           >
-            {/* Header */}
+            {}
             <div className="flex items-center justify-between p-4 bg-gradient-to-r from-[#173e75] to-[#1E4C9A] border-b border-slate-700/60 text-white shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-slate-950 flex items-center justify-center overflow-hidden border border-amber-400">
@@ -426,7 +426,7 @@ export function AiAssistant({
               </button>
             </div>
 
-            {/* Chat Messages */}
+            {}
             <div
               ref={chatContainerRef}
               className="flex-1 overflow-y-auto p-4 space-y-4 text-left custom-scrollbar bg-slate-950/20"
@@ -467,7 +467,7 @@ export function AiAssistant({
                 </div>
               ))}
 
-              {/* Loader */}
+              {}
               {isLoading && (
                 <div className="flex justify-start items-start gap-2.5">
                   <div className="w-6 h-6 rounded-full bg-slate-900 flex items-center justify-center border border-amber-400/40 text-[10px] font-black text-amber-400 shrink-0 mt-0.5">
@@ -492,7 +492,7 @@ export function AiAssistant({
                 </div>
               )}
 
-              {/* Error indicator */}
+              {}
               {error && (
                 <div className="flex items-center gap-2 p-3 rounded-xl bg-red-950/50 border border-red-500/30 text-red-400 text-xs">
                   <AlertCircle size={16} className="shrink-0" />
@@ -512,7 +512,7 @@ export function AiAssistant({
               )}
             </div>
 
-            {/* Quick Suggestions (Only when user has not typed much, or as helper options) */}
+            {}
             {messages.length <= 2 && !isLoading && (
               <div className="p-3 bg-slate-900/40 border-t border-slate-800/50 shrink-0">
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2 text-left">
@@ -536,7 +536,7 @@ export function AiAssistant({
               </div>
             )}
 
-            {/* Input Form */}
+            {}
             <form
               onSubmit={(e) => {
                 e.preventDefault();

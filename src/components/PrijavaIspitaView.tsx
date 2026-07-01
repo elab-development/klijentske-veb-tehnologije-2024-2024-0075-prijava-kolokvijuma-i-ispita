@@ -29,7 +29,7 @@ interface PrijavaIspitaViewProps {
   onRegisterExam?: (exam: any) => void;
 }
 
-// Fixed rosters for each period
+
 export const ROSTERS: Record<PeriodType, Exam[]> = {
   "druga-kolokvijumska": [
     { id: "mat1", name: "Matematika 1", code: "322001", espb: 6, date: "12.06.2026.", baseRegistrations: 1, price: 0 },
@@ -67,7 +67,7 @@ export function PrijavaIspitaView({
   const [selectedPeriod, setSelectedPeriod] = useState<PeriodType | null>(null);
   const { isDarkMode } = useTheme();
   
-  // Dialog / Modal alerts
+  
   const [confirmExam, setConfirmExam] = useState<Exam | null>(null);
   const [balanceErrorExam, setBalanceErrorExam] = useState<Exam | null>(null);
   const [successInfo, setSuccessInfo] = useState<string | null>(null);
@@ -89,7 +89,7 @@ export function PrijavaIspitaView({
     const isRegistered = registeredExamsKeys[getCompositeKey(selectedPeriod, exam.id)];
     if (isRegistered) return;
 
-    // Validation: check finance
+    
     if (exam.price > 0 && accountBalance < exam.price) {
       setBalanceErrorExam(exam);
     } else {
@@ -123,10 +123,10 @@ export function PrijavaIspitaView({
 
     if (price > 0) {
       setAccountBalance(prev => Math.max(0, prev - price));
-      // Log payment transaction under Stanje na računu history
+      
       addPaymentRecord(`Prijava ispita: ${confirmExam.name} (${getPeriodLabel(selectedPeriod)})`, `-${price}`);
     } else {
-      // Free colloquium has zero balance subtraction but we can log the registration row
+      
       addPaymentRecord(`Prijava kolokvijuma: ${confirmExam.name} (Slobodan unos)`, "0");
     }
 
@@ -145,7 +145,7 @@ export function PrijavaIspitaView({
   return (
     <div className="flex flex-col gap-6 w-full animate-fadeIn select-none">
       
-      {/* Visual Success Announcement */}
+      {}
       {successInfo && (
         <div className={`border rounded-2xl p-4 text-xs font-semibold flex items-center gap-3 animate-fadeIn text-left shadow-sm ${
           isDarkMode ? "bg-emerald-950/40 border-emerald-800 text-emerald-300" : "bg-emerald-50 border-emerald-300 text-emerald-800"
@@ -162,7 +162,7 @@ export function PrijavaIspitaView({
         </div>
       )}
 
-      {/* Screen A: Select Period (Preporučeni izbor pre prikaza liste) */}
+      {}
       <AnimatePresence mode="wait">
         {!selectedPeriod ? (
           <motion.div
@@ -173,7 +173,7 @@ export function PrijavaIspitaView({
             transition={{ duration: 0.2 }}
             className="flex flex-col gap-6 w-full text-center animate-fadeIn"
           >
-            {/* Header info selection card */}
+            {}
             <div className={`rounded-2xl shadow p-6 flex flex-col items-center gap-2 text-center border transition-all duration-300 ${
               isDarkMode 
                 ? "bg-[#1E293B]/80 text-white border-slate-705/30 shadow-black/25" 
@@ -197,10 +197,10 @@ export function PrijavaIspitaView({
               </div>
             </div>
 
-            {/* Grid of the three options requested by the user */}
+            {}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               
-              {/* Option 1: Druga kolokvijumska nedelja */}
+              {}
               <div 
                 onClick={() => setSelectedPeriod("druga-kolokvijumska")}
                 className={`border-2 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group text-center ${
@@ -228,7 +228,7 @@ export function PrijavaIspitaView({
                 </div>
               </div>
 
-              {/* Option 2: Junski ispitni rok */}
+              {}
               <div 
                 onClick={() => setSelectedPeriod("junski-rok")}
                 className={`border-2 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between group text-center ${
@@ -256,7 +256,7 @@ export function PrijavaIspitaView({
                 </div>
               </div>
 
-              {/* Option 3: Julski ispitni rok */}
+              {}
               <div 
                 className={`border-2 rounded-2xl p-5 shadow-sm opacity-60 flex flex-col justify-between text-center select-none cursor-not-allowed relative ${
                   isDarkMode 
@@ -297,16 +297,16 @@ export function PrijavaIspitaView({
 
           </motion.div>
         ) : (
-          /* Screen B: Exam Table and Calendar as layout requested */
+          
           <motion.div
             key="list-screen"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.2 }}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch lg:min-h-[calc(100vh-210px)]"
           >
-            {/* Top Back Action Bar */}
+            {}
             <div className={`col-span-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl shadow border transition-all duration-300 ${
               isDarkMode 
                 ? "bg-[#1E293B]/80 border-slate-705/30 text-white shadow-black/25" 
@@ -346,7 +346,7 @@ export function PrijavaIspitaView({
               </div>
             </div>
 
-            {/* Table Area (8 spans) */}
+            {}
             <div className="lg:col-span-8 flex flex-col justify-between">
               <div className={`rounded-2xl p-6 shadow border transition-all duration-300 ${
                 isDarkMode ? "bg-[#1E293B]/80 text-white border-slate-705/30 shadow-black/35" : "bg-white border-slate-200"
@@ -356,8 +356,8 @@ export function PrijavaIspitaView({
                   Lista raspoloživih predmeta za prijavu
                 </h3>
 
-                {/* Main Table Styled exactly as the requested image layout */}
-                <div className="w-full overflow-x-auto select-none rounded border border-black/30">
+                {}
+                <div className="hidden md:block w-full overflow-x-auto select-none rounded border border-black/30">
                   <table className={`w-full min-w-[580px] border-collapse text-xs ${
                     isDarkMode ? "bg-[#141c2c] text-slate-100" : "bg-white text-slate-900"
                   }`}>
@@ -430,6 +430,65 @@ export function PrijavaIspitaView({
                   </table>
                 </div>
 
+                {}
+                <div className="block md:hidden space-y-4">
+                  {ROSTERS[selectedPeriod].map((exam) => {
+                    const isRegistered = registeredExamsKeys[getCompositeKey(selectedPeriod, exam.id)];
+                    return (
+                      <div 
+                        key={exam.id}
+                        className={`rounded-xl border p-4 transition-all duration-300 shadow-sm ${
+                          isRegistered 
+                            ? (isDarkMode ? "bg-emerald-955/15 border-emerald-800/80 text-emerald-100" : "bg-emerald-50/50 border-emerald-200 text-slate-800") 
+                            : (isDarkMode ? "bg-[#141c2c]/75 border-slate-800 text-slate-100" : "bg-slate-50/50 border-slate-200 text-slate-800")
+                        }`}
+                      >
+                        <div className="flex justify-between items-start gap-3">
+                          <div className="text-left">
+                            <h4 className="font-extrabold text-sm leading-snug">{exam.name}</h4>
+                            <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                              <span>Šifra: {exam.code}</span>
+                              <span>•</span>
+                              <span>{exam.espb} ESPB</span>
+                            </div>
+                          </div>
+                          <div>
+                            {isRegistered ? (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-extrabold rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                                Prijavljen
+                              </span>
+                            ) : (
+                              <button
+                                onClick={() => handlePrijaviClick(exam)}
+                                className={`px-3 py-1 border hover:active:scale-95 text-[11px] font-bold tracking-wide transition-all rounded shadow-sm cursor-pointer ${
+                                  isDarkMode 
+                                    ? "bg-slate-800 border-slate-700 text-slate-200 hover:bg-amber-400 hover:text-slate-900 hover:border-amber-400" 
+                                    : "bg-white border-slate-300 text-slate-800 hover:bg-[#1E4C9A] hover:text-white hover:border-[#1E4C9A]"
+                                }`}
+                              >
+                                Prijavi
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className={`mt-3 pt-2.5 border-t flex justify-between items-center text-xs ${
+                          isDarkMode ? "border-slate-800/70 text-slate-400" : "border-slate-200 text-slate-500"
+                        }`}>
+                          <div className="text-left">
+                            <span className="font-medium text-[11px]">Datum polaganja:</span>
+                            <div className="font-bold font-mono text-slate-700 dark:text-slate-300 mt-0.5">{exam.date}</div>
+                          </div>
+                          <div className="text-right">
+                            <span className="font-medium text-[11px]">Prijave:</span>
+                            <div className="font-bold font-mono text-slate-700 dark:text-slate-300 mt-0.5">{exam.baseRegistrations + (isRegistered ? 1 : 0)}</div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
                 <div className={`mt-4 flex gap-2 items-start text-left text-[11px] border rounded-xl p-3.5 ${
                   isDarkMode 
                     ? "bg-[#111a30] border-slate-800/85 text-slate-450" 
@@ -447,11 +506,13 @@ export function PrijavaIspitaView({
               </div>
             </div>
 
-            {/* Right block: Calendar and FON emblem (4 spans) */}
-            <div className="lg:col-span-4 flex flex-col gap-6 self-stretch">
+            {}
+            <div className="lg:col-span-4 flex flex-col gap-6 self-stretch w-full max-w-[340px] mx-auto lg:mr-0 lg:ml-auto animate-fadeIn">
               <Calendar />
               
-              <div className={`flex-1 flex flex-col gap-1 items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 ${
+              <div className="flex-grow" />
+              
+              <div className={`flex flex-col gap-1 items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 w-full ${
                 isDarkMode ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/25" : "bg-white border text-slate-800 border-slate-200"
               }`}>
                 <div className="max-w-[140px] w-full flex items-center justify-center opacity-90">
@@ -464,7 +525,7 @@ export function PrijavaIspitaView({
         )}
       </AnimatePresence>
 
-      {/* Confirmation Dialog Modal */}
+      {}
       <AnimatePresence>
         {confirmExam && (
           <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">
@@ -534,7 +595,7 @@ export function PrijavaIspitaView({
         )}
       </AnimatePresence>
 
-      {/* Account Balance Error Dialog Modal */}
+      {}
       <AnimatePresence>
         {balanceErrorExam && (
           <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fadeIn">

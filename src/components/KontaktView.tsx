@@ -11,24 +11,24 @@ interface KontaktViewProps {
 export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
   const { isDarkMode } = useTheme();
 
-  // Parse student name into first and last name if possible
+  
   const nameParts = studentName.trim().split(/\s+/);
   const isDefaultPlacer = studentName === "Ime Prezime" || studentName === "Student Student";
   const detectedFirstName = isDefaultPlacer ? "" : (nameParts[0] || "");
   const detectedLastName = isDefaultPlacer ? "" : (nameParts.slice(1).join(" ") || "");
 
-  // Form states
+  
   const [ime, setIme] = useState(detectedFirstName);
   const [prezime, setPrezime] = useState(detectedLastName);
   const [studijskiProgram, setStudijskiProgram] = useState("Informacioni sistemi i tehnologije");
   const [problem, setProblem] = useState<"Uplata" | "Prijava ispita" | "Termin konsultacija" | "Drugo">("Uplata");
   const [poruka, setPoruka] = useState("");
   
-  // Feedback states
+  
   const [showSuccess, setShowSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // NOVO: Stanje za indikaciju slanja
+  const [isLoading, setIsLoading] = useState(false); 
 
-  // Sync with props if they change
+  
   useEffect(() => {
     if (studentName && studentName !== "Ime Prezime" && studentName !== "Student Student") {
       const parts = studentName.trim().split(/\s+/);
@@ -40,7 +40,7 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
     }
   }, [studentName]);
 
-  // async funkcija koja šalje podatke na MockAPI
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!ime.trim() || !prezime.trim() || !poruka.trim()) {
@@ -50,7 +50,7 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
 
     setIsLoading(true); 
 
-    // Pakovanje podataka
+    
     const noviTiket = {
       ime,
       prezime,
@@ -94,9 +94,9 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start font-sans">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch font-sans lg:min-h-[calc(100vh-210px)]">
       
-      {/* Left Column: Form Section */}
+      {}
       <div className="lg:col-span-8">
         <form 
           onSubmit={handleSubmit}
@@ -123,10 +123,10 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
             </div>
           )}
 
-          {/* Fields grid */}
+          {}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             
-            {/* Field: Ime */}
+            {}
             <div className="flex flex-col text-left">
               <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 select-none">
                 Ime
@@ -144,7 +144,7 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
               />
             </div>
 
-            {/* Field: Prezime */}
+            {}
             <div className="flex flex-col text-left">
               <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 select-none">
                 Prezime
@@ -162,7 +162,7 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
               />
             </div>
 
-            {/* Field: Studijski program */}
+            {}
             <div className="flex flex-col text-left md:col-span-2">
               <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 select-none">
                 Studijski program
@@ -188,9 +188,11 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
 
           </div>
 
-          {/* Izaberite problem options checkbox design */}
+          {}
           <div className="mt-8 text-left">
-            <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 select-none">
+            <h4 className={`text-xs font-bold uppercase tracking-wider mb-3 select-none ${
+              isDarkMode ? "text-slate-400" : "text-slate-600"
+            }`}>
               Izaberite problem:
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -200,13 +202,15 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
                   type="checkbox"
                   checked={problem === "Uplata"}
                   onChange={() => setProblem("Uplata")}
-                  className={`w-4 h-4 rounded focus:ring-1 ${
+                  className={`w-5 h-5 rounded cursor-pointer border-2 transition-all duration-200 ${
                     isDarkMode 
-                      ? "text-amber-400 focus:ring-amber-400/50 bg-slate-800 border-slate-700" 
-                      : "text-blue-600 focus:ring-[#1E4C9A]/50 bg-white border-slate-300"
+                      ? "text-amber-400 focus:ring-amber-400/50 bg-slate-800 border-slate-600 accent-amber-400" 
+                      : "text-[#1E4C9A] focus:ring-[#1E4C9A]/50 bg-white border-slate-400 accent-[#1E4C9A]"
                   }`}
                 />
-                <span className="text-xs sm:text-sm font-semibold text-slate-750 dark:text-slate-200">
+                <span className={`text-xs sm:text-sm font-bold ${
+                  isDarkMode ? "text-slate-100" : "text-slate-800"
+                }`}>
                   Uplata
                 </span>
               </label>
@@ -216,13 +220,15 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
                   type="checkbox"
                   checked={problem === "Prijava ispita"}
                   onChange={() => setProblem("Prijava ispita")}
-                  className={`w-4 h-4 rounded focus:ring-1 ${
+                  className={`w-5 h-5 rounded cursor-pointer border-2 transition-all duration-200 ${
                     isDarkMode 
-                      ? "text-amber-400 focus:ring-amber-400/50 bg-slate-800 border-slate-700" 
-                      : "text-blue-600 focus:ring-[#1E4C9A]/50 bg-white border-slate-300"
+                      ? "text-amber-400 focus:ring-amber-400/50 bg-slate-800 border-slate-600 accent-amber-400" 
+                      : "text-[#1E4C9A] focus:ring-[#1E4C9A]/50 bg-white border-slate-400 accent-[#1E4C9A]"
                   }`}
                 />
-                <span className="text-xs sm:text-sm font-semibold text-slate-750 dark:text-slate-200">
+                <span className={`text-xs sm:text-sm font-bold ${
+                  isDarkMode ? "text-slate-100" : "text-slate-800"
+                }`}>
                   Prijava ispita
                 </span>
               </label>
@@ -232,13 +238,15 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
                   type="checkbox"
                   checked={problem === "Termin konsultacija"}
                   onChange={() => setProblem("Termin konsultacija")}
-                  className={`w-4 h-4 rounded focus:ring-1 ${
+                  className={`w-5 h-5 rounded cursor-pointer border-2 transition-all duration-200 ${
                     isDarkMode 
-                      ? "text-amber-400 focus:ring-amber-400/50 bg-slate-800 border-slate-700" 
-                      : "text-blue-600 focus:ring-[#1E4C9A]/50 bg-white border-slate-300"
+                      ? "text-amber-400 focus:ring-amber-400/50 bg-slate-800 border-slate-600 accent-amber-400" 
+                      : "text-[#1E4C9A] focus:ring-[#1E4C9A]/50 bg-white border-slate-400 accent-[#1E4C9A]"
                   }`}
                 />
-                <span className="text-xs sm:text-sm font-semibold text-slate-750 dark:text-slate-200">
+                <span className={`text-xs sm:text-sm font-bold ${
+                  isDarkMode ? "text-slate-100" : "text-slate-800"
+                }`}>
                   Termin konsultacija
                 </span>
               </label>
@@ -248,13 +256,15 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
                   type="checkbox"
                   checked={problem === "Drugo"}
                   onChange={() => setProblem("Drugo")}
-                  className={`w-4 h-4 rounded focus:ring-1 ${
+                  className={`w-5 h-5 rounded cursor-pointer border-2 transition-all duration-200 ${
                     isDarkMode 
-                      ? "text-amber-400 focus:ring-amber-400/50 bg-slate-800 border-slate-700" 
-                      : "text-blue-600 focus:ring-[#1E4C9A]/50 bg-white border-slate-300"
+                      ? "text-amber-400 focus:ring-amber-400/50 bg-slate-800 border-slate-600 accent-amber-400" 
+                      : "text-[#1E4C9A] focus:ring-[#1E4C9A]/50 bg-white border-slate-400 accent-[#1E4C9A]"
                   }`}
                 />
-                <span className="text-xs sm:text-sm font-semibold text-slate-750 dark:text-slate-200">
+                <span className={`text-xs sm:text-sm font-bold ${
+                  isDarkMode ? "text-slate-100" : "text-slate-800"
+                }`}>
                   Drugo
                 </span>
               </label>
@@ -262,7 +272,7 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
             </div>
           </div>
 
-          {/* Poruka Textarea */}
+          {}
           <div className="mt-8 flex flex-col text-left">
             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none">
               Poruka
@@ -276,16 +286,16 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
               className={`w-full text-sm font-medium bg-transparent border-b-2 py-1 outline-none resize-none transition-all ${
                 isDarkMode 
                   ? "border-slate-700 text-white placeholder-slate-500 focus:border-amber-400" 
-                  : "border-slate-300 text-slate-850 placeholder-slate-400 focus:border-[#1E4C9A]"
+                  : "border-slate-300 text-slate-800 placeholder-slate-400 focus:border-[#1E4C9A]"
               }`}
             />
           </div>
 
-          {/* Submit Button on Bottom Right */}
+          {}
           <div className="mt-8 flex justify-end">
             <button
               type="submit"
-              disabled={isLoading} // Blokiramo dugme dok slanje traje
+              disabled={isLoading} 
               className={`px-8 py-3 bg-[#FFA41D] hover:bg-[#E08A00] text-slate-900 font-extrabold text-sm tracking-wide rounded-xl shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-2 cursor-pointer transition-all border border-amber-500/10 ${
                 isLoading ? "opacity-50 cursor-not-allowed" : ""
               }`}
@@ -302,17 +312,17 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
         </form>
       </div>
 
-      {/* Right Column: Royal Blue Kontakt Board */}
+      {}
       <div className="lg:col-span-4 flex flex-col gap-6 self-stretch justify-between">
         
-        {/* Kontakt Blue Box */}
+        {}
         <div className="bg-[#1E4C9A] text-white p-6 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg gap-7 select-none border border-blue-700/50">
           
           <h3 className="text-xl font-bold tracking-tight border-b border-white/20 pb-2 w-full">
             Kontakt
           </h3>
 
-          {/* Phone */}
+          {}
           <div className="flex flex-col items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white border border-white/15">
               <Phone size={18} />
@@ -325,7 +335,7 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
             </a>
           </div>
 
-          {/* Email */}
+          {}
           <div className="flex flex-col items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white border border-white/15">
               <Mail size={18} />
@@ -338,7 +348,7 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
             </a>
           </div>
 
-          {/* Location */}
+          {}
           <div className="flex flex-col items-center gap-2 px-2">
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white border border-white/15">
               <MapPin size={18} />
@@ -351,7 +361,7 @@ export function KontaktView({ studentName, studentIndex }: KontaktViewProps) {
 
         </div>
 
-        {/* Logo representation */}
+        {}
         <div className="flex flex-col items-center justify-center">
           <div className={`p-4 rounded-xl shadow-sm border w-full flex items-center justify-center transition-colors ${
             isDarkMode ? "bg-[#1E293B]/60 border-slate-700/50" : "bg-white border-slate-200"

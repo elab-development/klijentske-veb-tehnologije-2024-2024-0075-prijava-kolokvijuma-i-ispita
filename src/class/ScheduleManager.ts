@@ -1,6 +1,6 @@
 import { ScheduleItem } from "../components/RasporedNastaveView";
 
-// Define Schedule Manager Interface with methods
+
 export interface IScheduleManager {
   filterSchedule(
     items: ScheduleItem[],
@@ -17,7 +17,7 @@ export interface IScheduleManager {
   getAvailableGroups(items: ScheduleItem[], selectedYear: string): string[];
 }
 
-// Implement Schedule Manager Class with methods
+
 export class ScheduleManager implements IScheduleManager {
   public filterSchedule(
     items: ScheduleItem[],
@@ -60,7 +60,7 @@ export class ScheduleManager implements IScheduleManager {
       }
     });
 
-    // Sort items inside each day by start time
+  
     Object.keys(grouped).forEach((day) => {
       grouped[day].sort((a, b) => a.timeStart.localeCompare(b.timeStart));
     });

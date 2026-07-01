@@ -20,7 +20,7 @@ import {
 import { useTheme } from "../context/ThemeContext";
 import { ScheduleManager } from "../class/ScheduleManager";
 
-// Define Schedule Item Interface
+
 export interface ScheduleItem {
   id: string;
   subjectName: string;
@@ -34,10 +34,10 @@ export interface ScheduleItem {
   classroom: string;
 }
 
-// Instantiate the manager
+
 const scheduleManager = new ScheduleManager();
 
-// Complete realistic schedule data based on FON subjects
+
 const scheduleData: ScheduleItem[] = [
   // ==================== PRVA GODINA (A GRUPE) ====================
   // PONEDELJAK
@@ -1337,31 +1337,31 @@ const daniUNedelji = [
 export function RasporedNastaveView() {
   const { isDarkMode } = useTheme();
 
-  // States
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedYear, setSelectedYear] = useState<string>("sve");
   const [selectedGroup, setSelectedGroup] = useState<string>("sve");
   const [selectedSubject, setSelectedSubject] = useState<string>("svi");
   const [viewType, setViewType] = useState<"grid" | "list">("list");
 
-  // Dynamic subjects list based on selected year
+  
   const availableSubjects = useMemo(() => {
     return scheduleManager.getAvailableSubjects(scheduleData, selectedYear);
   }, [selectedYear]);
 
-  // Dynamic groups list based on selected year
+  
   const availableGroups = useMemo(() => {
     return scheduleManager.getAvailableGroups(scheduleData, selectedYear);
   }, [selectedYear]);
 
-  // Handle year change to reset subject and group filters if necessary
+  
   const handleYearChange = (year: string) => {
     setSelectedYear(year);
     setSelectedSubject("svi"); // reset subject
     setSelectedGroup("sve"); // reset group
   };
 
-  // Filtered Schedule Data
+  
   const filteredSchedule = useMemo(() => {
     return scheduleManager.filterSchedule(
       scheduleData,
@@ -1372,7 +1372,7 @@ export function RasporedNastaveView() {
     );
   }, [searchQuery, selectedYear, selectedGroup, selectedSubject]);
 
-  // Group filtered schedule by day for the list view
+  
   const scheduleByDay = useMemo(() => {
     return scheduleManager.groupByDay(filteredSchedule);
   }, [filteredSchedule]);
@@ -1392,7 +1392,7 @@ export function RasporedNastaveView() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-sans select-none animate-fadeIn">
-      {/* Filters and Controls Card */}
+      {}
       <div className="lg:col-span-12 flex flex-col gap-4">
         <div
           className={`rounded-2xl p-5 border shadow-sm transition-all duration-300 ${
@@ -1401,7 +1401,7 @@ export function RasporedNastaveView() {
               : "bg-white border-slate-200"
           }`}
         >
-          {/* Header row */}
+          {}
           <div
             className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 pb-3 border-b ${
               isDarkMode ? "border-slate-800" : "border-slate-100"
@@ -1422,9 +1422,9 @@ export function RasporedNastaveView() {
               </div>
             </div>
 
-            {/* Action buttons */}
+            {}
             <div className="flex items-center gap-2 flex-wrap">
-              {/* View type switcher */}
+              {}
               <div
                 className={`p-0.5 rounded-xl border flex items-center gap-0.5 ${
                   isDarkMode
@@ -1466,7 +1466,7 @@ export function RasporedNastaveView() {
                 </button>
               </div>
 
-              {/* Reset filters */}
+              {}
               <button
                 onClick={resetFilters}
                 className={`px-3.5 py-2 font-bold text-xs rounded-xl transition-colors border flex items-center gap-1.5 cursor-pointer ${
@@ -1479,7 +1479,7 @@ export function RasporedNastaveView() {
                 <span>Resetuj</span>
               </button>
 
-              {/* Print schedule */}
+              {}
               <button
                 onClick={printPage}
                 className={`px-3.5 py-2 font-bold text-xs rounded-xl transition-colors border flex items-center gap-1.5 cursor-pointer ${
@@ -1494,9 +1494,9 @@ export function RasporedNastaveView() {
             </div>
           </div>
 
-          {/* Filter row */}
+          {}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {/* Search Input */}
+            {}
             <div className="relative">
               <Search
                 size={14}
@@ -1515,7 +1515,7 @@ export function RasporedNastaveView() {
               />
             </div>
 
-            {/* Year of Study Filter */}
+            {}
             <div className="relative">
               <select
                 value={selectedYear}
@@ -1540,7 +1540,7 @@ export function RasporedNastaveView() {
               </select>
             </div>
 
-            {/* Group Filter */}
+            {}
             <div className="relative">
               <select
                 value={selectedGroup}
@@ -1566,7 +1566,7 @@ export function RasporedNastaveView() {
               </select>
             </div>
 
-            {/* Subject Filter (dynamic) */}
+            {}
             <div className="relative">
               <select
                 value={selectedSubject}
@@ -1595,14 +1595,14 @@ export function RasporedNastaveView() {
         </div>
       </div>
 
-      {/* Main Content Area */}
+      {}
       <div className="lg:col-span-12">
         {viewType === "list" ? (
-          /* List View Grouped by Day */
+          
           <div className="flex flex-col gap-6">
             {daniUNedelji.map((dan) => {
               const dayClasses = scheduleByDay[dan];
-              if (dayClasses.length === 0) return null; // Skip days with no matches
+              if (dayClasses.length === 0) return null; 
 
               return (
                 <div
@@ -1746,7 +1746,7 @@ export function RasporedNastaveView() {
               );
             })}
 
-            {/* Check if absolutely nothing matched */}
+            {}
             {filteredSchedule.length === 0 && (
               <div
                 className={`rounded-2xl border p-12 text-center transition-all duration-300 ${
@@ -1785,7 +1785,7 @@ export function RasporedNastaveView() {
             )}
           </div>
         ) : (
-          /* Weekly Grid View */
+          
           <div
             className={`rounded-2xl border shadow-sm overflow-hidden transition-all duration-300 ${
               isDarkMode
@@ -1831,7 +1831,7 @@ export function RasporedNastaveView() {
                     isDarkMode ? "divide-slate-800/80" : "divide-slate-100"
                   }`}
                 >
-                  {/* We map typical time slots */}
+                  {}
                   {[
                     "08:15 - 10:00",
                     "10:15 - 12:00",
@@ -1849,7 +1849,7 @@ export function RasporedNastaveView() {
                           isDarkMode ? "bg-[#121c2c]/5" : "bg-transparent"
                         }
                       >
-                        {/* Time label */}
+                        {}
                         <td
                           className={`py-6 px-3 text-center font-mono font-bold border-r ${
                             isDarkMode
@@ -1860,13 +1860,13 @@ export function RasporedNastaveView() {
                           {slotRange}
                         </td>
 
-                        {/* Days slots */}
+                        {}
                         {daniUNedelji.map((dan) => {
-                          // Find items on this day starting within this time interval
+                          
                           const slotItems = filteredSchedule.filter((item) => {
                             if (item.day !== dan) return false;
 
-                            // Simple match: does it start at the exact startHour or overlap?
+                            
                             return item.timeStart === startHour;
                           });
 

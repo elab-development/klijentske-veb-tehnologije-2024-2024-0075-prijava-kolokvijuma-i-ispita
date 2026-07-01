@@ -6,7 +6,7 @@ import { Calendar } from "./Calendar";
 import { useTheme } from "../context/ThemeContext";
 
 interface HomeViewProps {
-  // Any global event/handlers if needed
+  
 }
 
 const monthsSerbian = [
@@ -68,7 +68,7 @@ function NewsCardImage({ category, isModal = false }: { category: string; isModa
           referrerPolicy="no-referrer"
           className="w-full h-full object-cover select-none transition-transform duration-500 ease-out group-hover:scale-110"
           onError={() => {
-            // Move to the next potential custom path or finally fallback to pre-designed vector
+            
             setCurrentPathIndex(prev => prev + 1);
           }}
         />
@@ -91,24 +91,24 @@ function NewsCardImage({ category, isModal = false }: { category: string; isModa
     const opacityClass = isModal ? "opacity-10" : "opacity-15";
     return (
        <div className={`w-full ${isModal ? "h-[180px]" : "h-[150px]"} relative ${bgClass} overflow-hidden flex flex-col items-center justify-center select-none`}>
-        {/* Atrium light building interior background shadow */}
+        {}
         <div 
            className={`absolute inset-0 bg-cover bg-center object-cover ${opacityClass} transition-transform duration-500 ease-out group-hover:scale-110`}
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=600')" }}
         />
         
-        {/* Custom design vector of the FON circular emblem */}
+        {}
         <div className="relative z-10 flex flex-col items-center justify-center scale-90 sm:scale-100 transition-transform duration-500 ease-out group-hover:scale-95 sm:group-hover:scale-105">
           <div className="flex items-center justify-center h-[52px] gap-2.5">
                <span className={`text-[36px] font-bold ${textColor} leading-none tracking-tight`}>Ф</span>
             
             <div className="relative w-[40px] h-[40px] flex items-center justify-center">
               <svg className="w-full h-full" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-               {/* 3 Concentric circles matching user's custom screenshot */}
+               {}
                 <circle cx="17" cy="17" r="14" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" strokeDasharray="64 16" transform="rotate(-30 17 17)" />
                 <circle cx="17" cy="17" r="9.5" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" strokeDasharray="36 12" transform="rotate(120 17 17)" />
                 <circle cx="17" cy="17" r="5" stroke={strokeColor} strokeWidth="2.5" strokeLinecap="round" strokeDasharray="18 6" transform="rotate(-60 17 17)" />
-                {/* 3 Dark Slate Concentric circles matching user's custom screenshot */}
+                {}
                 <circle cx="17" cy="17" r="14" stroke="#101827" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="64 16" transform="rotate(-30 17 17)" />
                 <circle cx="17" cy="17" r="9.5" stroke="#101827" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="36 12" transform="rotate(120 17 17)" />
                 <circle cx="17" cy="17" r="5" stroke="#101827" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="18 6" transform="rotate(-60 17 17)" />
@@ -135,7 +135,7 @@ function NewsCardImage({ category, isModal = false }: { category: string; isModa
   // Else "VANNASTAVNA AKTIVNOST" - Hakaton image
   return (
     <div className={`w-full ${isModal ? "h-[180px]" : "h-[150px]"} relative bg-[#0d1c3a] overflow-hidden flex flex-col items-center justify-center select-none`}>
-      {/* Blueprint grid pattern background */}
+      {}
       <div 
         className="absolute inset-0 opacity-20 transition-transform duration-500 ease-out group-hover:scale-110"
         style={{
@@ -148,18 +148,18 @@ function NewsCardImage({ category, isModal = false }: { category: string; isModa
         }}
       />
       
-      {/* Cyan radial glow accent */}
+      {}
       <div className="absolute w-[160px] h-[160px] rounded-full bg-cyan-500/10 blur-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 ease-out group-hover:scale-110" />
       
-      {/* Cyber Glitch elements of the Hakaton card */}
+      {}
       <div className="relative z-10 flex flex-col items-center justify-center scale-90 sm:scale-100 transition-transform duration-500 ease-out group-hover:scale-95 sm:group-hover:scale-105">
         <div className="relative flex items-center justify-center select-none">
-          {/* Background letters */}
+          {}
           <span className="text-[54px] font-black tracking-tight text-white/95 leading-none select-none font-sans">
             FON
           </span>
 
-          {/* Orbit rings */}
+          {}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <svg className="w-[88px] h-[88px] text-[#38bdf8] rotate-[-15deg] opacity-90" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
               <ellipse cx="50" cy="50" rx="46" ry="14" stroke="currentColor" strokeWidth="2.8" strokeDasharray="180 30" />
@@ -169,7 +169,7 @@ function NewsCardImage({ category, isModal = false }: { category: string; isModa
           </div>
         </div>
 
-        {/* Hakaton title text */}
+        {}
         <div className="text-[22px] font-black tracking-[0.16em] text-[#38bdf8] font-sans leading-none uppercase -mt-2.5 select-none relative filter drop-shadow-[0_2px_8px_rgba(34,211,238,0.4)]">
           <span>hakaton</span>
           <div className="absolute left-0 right-0 h-[1.5px] bg-[#38bdf8]/50 top-1/2 -translate-y-1/2" />
@@ -196,9 +196,9 @@ export function HomeView({}: HomeViewProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch lg:min-h-[calc(100vh-210px)]">
       
-      {/* Left block: Obaveštenja */}
+      {}
       <div className="lg:col-span-8 flex flex-col gap-4 justify-between">
         <div>
           <h2 className={`text-xl font-bold flex items-center gap-2 select-none border-b border-dashed pb-2 mb-1 transition-colors duration-300 ${
@@ -210,7 +210,7 @@ export function HomeView({}: HomeViewProps) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-3">
             
-            {/* Card 1: Otvorena prijava za kolokvijumsku nedelju */}
+            {}
             <div className={`flex flex-col rounded-xl shadow overflow-hidden group hover:shadow-lg transition-all border ${
               isDarkMode ? "bg-[#1E293B]/80 border-slate-705/30 text-slate-100 shadow-black/30" : "bg-white border-slate-200"
             }`}>
@@ -241,7 +241,7 @@ export function HomeView({}: HomeViewProps) {
             </div>
 
             {" "}
-            {/* Card 2: Informacije o održavanju Hakatona */}
+            {}
             <div className={`flex flex-col rounded-xl shadow overflow-hidden group hover:shadow-lg transition-all border ${
               isDarkMode ? "bg-[#1E293B]/80 border-slate-705/30 text-slate-100 shadow-black/30" : "bg-white border-slate-200"
             }`}>
@@ -275,11 +275,13 @@ export function HomeView({}: HomeViewProps) {
         </div>
       </div>
 
-      {/* Right block: Calendar and FON Emblem Logo Card */}
-      <div className="lg:col-span-4 flex flex-col gap-5 self-stretch">
+      {}
+      <div className="lg:col-span-4 flex flex-col gap-5 self-stretch w-full max-w-[340px] mx-auto lg:mr-0 lg:ml-auto">
         <Calendar />
         
-        <div className={`flex-1 flex items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 ${
+        <div className="flex-grow" />
+        
+        <div className={`flex items-center justify-center rounded-2xl shadow p-6 min-h-[140px] border transition-all duration-300 w-full ${
           isDarkMode ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/20" : "bg-white border-slate-200"
         }`}>
           <div className="max-w-[140px] w-full flex items-center justify-center opacity-90">
@@ -288,7 +290,7 @@ export function HomeView({}: HomeViewProps) {
         </div>
       </div>
 
-      {/* Detail overlay Modal */}
+      {}
       <AnimatePresence>
         {showModal && selectedNews && (
           <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">

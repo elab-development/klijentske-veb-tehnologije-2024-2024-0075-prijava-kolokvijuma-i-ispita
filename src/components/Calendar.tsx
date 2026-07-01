@@ -1,4 +1,4 @@
-// src/components/Calendar.tsx
+
 import React, { useState } from "react";
 import { Info, X } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
@@ -10,12 +10,12 @@ const monthsSerbian = [
 
 export function Calendar() {
   const { isDarkMode } = useTheme();
-  // Calendar states
+  
   const [calendarMonth, setCalendarMonth] = useState<number>(5); // 5 = Jun
   const [calendarYear, setCalendarYear] = useState<number>(2026);
   const [calendarSelectedDayInfo, setCalendarSelectedDayInfo] = useState<string | null>(null);
 
-  // Generisanje matrice dana za kalendar
+  
   const buildCalendarGrid = () => {
     const firstDay = new Date(calendarYear, calendarMonth, 1);
     const dayOfWeek = firstDay.getDay(); // 0 = Nedelja, 1 = Ponedeljak...
@@ -23,7 +23,7 @@ export function Calendar() {
     const prevMonthDays = new Date(calendarYear, calendarMonth, 0).getDate();
     const grid: { day: number; isCurrent: boolean; isPrev?: boolean; isNext?: boolean }[] = [];
     
-    // Pomeraj za dane iz prethodnog meseca (podesili smo raspored Ned-Sub)
+    
     for (let i = dayOfWeek - 1; i >= 0; i--) {
       grid.push({
         day: prevMonthDays - i,
@@ -97,7 +97,7 @@ export function Calendar() {
   };
 
   return (
-    <div className={`rounded-2xl shadow p-4 border transition-all duration-300 w-full relative overflow-hidden ${
+    <div className={`rounded-2xl shadow p-4 border transition-all duration-300 w-full max-w-[340px] mx-auto lg:mx-0 relative overflow-hidden ${
       isDarkMode 
         ? "bg-[#1E293B]/80 text-white border-slate-800 shadow-xl shadow-black/30" 
         : "bg-white border-slate-200 text-slate-800"
@@ -105,7 +105,7 @@ export function Calendar() {
       {isDarkMode && (
         <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#1E4C9A] via-[#5E97F6] to-amber-400" />
       )}
-      {/* Navigacija kroz mesece */}
+      {}
       <div className={`flex items-center justify-between gap-1 mb-4 select-none pb-2 border-b ${
         isDarkMode ? "border-slate-800/80" : "border-slate-100"
       }`}>
@@ -158,7 +158,7 @@ export function Calendar() {
         </button>
       </div>
 
-      {/* Nazivi dana */}
+      {}
       <div className={`grid grid-cols-7 text-center font-bold text-[10px] uppercase tracking-wider mb-2 select-none ${
         isDarkMode ? "text-slate-400" : "text-slate-450"
       }`}>
@@ -171,7 +171,7 @@ export function Calendar() {
         <span>Sub</span>
       </div>
 
-      {/* Grid sa danima sa finim linijama u dark modu */}
+      {}
       <div className={`grid grid-cols-7 gap-1 p-1 rounded-xl ${
         isDarkMode ? "bg-[#131d30]/50 border border-[#1E4C9A]/15 shadow-inner" : ""
       }`}>
@@ -210,7 +210,7 @@ export function Calendar() {
         })}
       </div>
 
-      {/* Informacije o kliknutom danu */}
+      {}
       <div className={`mt-4 pt-3 border-t min-h-[46px] ${
         isDarkMode ? "border-slate-800" : "border-slate-100"
       }`}>

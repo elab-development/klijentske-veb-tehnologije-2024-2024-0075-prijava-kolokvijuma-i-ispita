@@ -4,10 +4,10 @@ import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 
-// Load environment variables
+
 dotenv.config();
 
-// System instruction to guide the AI assistant on Serbian language and exact locations
+
 const SYSTEM_INSTRUCTION = `
 Vi ste "FON Studentski Asistent" (FON e-Student AI Asistent) - inteligentni asistent za studentski portal Fakulteta organizacionih nauka (FON), Univerziteta u Beogradu.
 Vaša uloga je da pomažete studentima sa informacijama u vezi sa portalom, studijama i lokacijama sala na srpskom jeziku.
@@ -49,10 +49,10 @@ Ukoliko student pita o stvarima koje portal ne prikazuje (npr. cene hrane u menz
 const app = express();
 const PORT = 3000;
 
-// Body parser
+
 app.use(express.json());
 
-// Lazy-loaded Gemini Client
+
 let aiClient: GoogleGenAI | null = null;
 
 function getAiClient() {
@@ -72,7 +72,7 @@ function getAiClient() {
   return aiClient;
 }
 
-// Fallback rules-based AI response when API key is missing
+
 function getFallbackResponse(message: string): string {
   const msg = message.toLowerCase();
 
@@ -85,7 +85,7 @@ function getFallbackResponse(message: string): string {
     return "Zdravo! Ja sam vaš FON Studentski Asistent. Kako vam mogu pomoći danas? Možete me pitati o prijavi ispita, stanju na računu, položenim ispitima ili kontaktu sa studentskom službom.";
   }
 
-  // Exact room location checks in fallback mode
+  
   if (
     msg.includes("sala") ||
     msg.includes("amfiteatar") ||
@@ -155,14 +155,14 @@ function getFallbackResponse(message: string): string {
       return "**Sala 62** se nalazi u novoj zgradi na trećem spratu.";
     }
 
-    // Check for rooms 11 to 18
+    
     const room11to18Match = msg.match(/\b(11|12|13|14|15|16|17|18)\b/);
     if (room11to18Match) {
       const num = room11to18Match[1];
       return `**Sala ${num}** se nalazi u **prizemlju stare zgrade**.`;
     }
 
-    // Default room fallback when not recognized
+    
     return "Nažalost, nemam tačnu lokaciju za tu salu/prostoriju. Najbolje je da proveriš na oglasnoj tabli, rasporedu nastave na studentskom portalu ili pitaš na šalteru Studentske službe.";
   }
 
@@ -233,7 +233,7 @@ function getFallbackResponse(message: string): string {
   return "Hvala na pitanju! Ja sam FON Studentski AI asistent. Možete me pitati bilo šta o studentskom portalu (prijava ispita, stanje na računu, raspored nastave, položeni ispiti, kontakt studentske službe...). Da li biste želeli da vam pomognem da pronađete neku od ovih sekcija?";
 }
 
-// AI Chat Endpoint
+
 app.post("/api/ai/chat", async (req, res) => {
   try {
     const { message, history } = req.body;
@@ -246,7 +246,7 @@ app.post("/api/ai/chat", async (req, res) => {
 
     const client = getAiClient();
     if (!client) {
-      // Graceful fallback to rich mock assistant
+      
       console.warn(
         "GEMINI_API_KEY is not defined. Using local fallback rules-based assistant.",
       );
@@ -254,7 +254,7 @@ app.post("/api/ai/chat", async (req, res) => {
       return res.json({ reply });
     }
 
-    // Format chat history for Gemini API
+    
     const formattedContents = [];
     if (history && Array.isArray(history)) {
       for (const item of history) {
@@ -267,7 +267,7 @@ app.post("/api/ai/chat", async (req, res) => {
       }
     }
 
-    // Append current user message
+    
     formattedContents.push({
       role: "user",
       parts: [{ text: message }],
@@ -297,7 +297,7 @@ app.post("/api/ai/chat", async (req, res) => {
     }
   } catch (error: any) {
     console.error("AI chat endpoint internal error:", error);
-    // Even if everything else crashes, we return a fallback response so the UI never breaks
+    
     try {
       const { message } = req.body;
       const reply = getFallbackResponse(message || "Zdravo");
@@ -311,9 +311,9 @@ app.post("/api/ai/chat", async (req, res) => {
   }
 });
 
-// Start Express server and setup Vite
+
 async function startServer() {
-  // Vite middleware for development
+  
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },

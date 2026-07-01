@@ -9,13 +9,14 @@ import {
 import { Calendar } from "./Calendar";
 import { FonLogo } from "./FonLogo";
 import { StudentCardManager } from "../class/StudentCardManager";
+import { useTheme } from "../context/ThemeContext";
 
 interface ProfilStudentaViewProps {
   studentName: string;
   studentIndex: string;
 }
 
-// Map Latin names/chars to Serbian Cyrillic
+
 function transliterateToCyrillic(text: string): string {
   const map: Record<string, string> = {
     A: "А",
@@ -90,10 +91,11 @@ export function ProfilStudentaView({
   studentName,
   studentIndex,
 }: ProfilStudentaViewProps) {
-  // Instantiate student card manager
+  const { isDarkMode } = useTheme();
+  
   const cardManager = useMemo(() => new StudentCardManager(), []);
 
-  // Set default details based on index or placeholders
+  
   const isDemoUser =
     studentIndex === "2025/0001" || studentIndex === "2023/3858";
 
@@ -111,7 +113,7 @@ export function ProfilStudentaView({
     };
   }, [studentName, studentIndex, isDemoUser]);
 
-  // Derived student card info
+  
   const cardData = useMemo(() => {
     const birthdate = cardManager.parseBirthdateFromJmbg(studentDetails.jmbg);
     const rawCardNumber = cardManager.generateCardNumber(
@@ -130,12 +132,12 @@ export function ProfilStudentaView({
     };
   }, [cardManager, studentDetails]);
 
-  // Visual card controls
+  
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0, r: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // 3D Card tilt on mouse move
+  
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
@@ -143,12 +145,10 @@ export function ProfilStudentaView({
     const height = rect.height;
     const mouseX = e.clientX - rect.left - width / 2;
     const mouseY = e.clientY - rect.top - height / 2;
-
-    // Normalize values
+    
     const rX = (mouseY / (height / 2)) * -10; // tilt limit
     const rY = (mouseX / (width / 2)) * 10;
-
-    // Highlight coordinate
+    
     const percentageX = ((e.clientX - rect.left) / width) * 100;
     const percentageY = ((e.clientY - rect.top) / height) * 100;
 
@@ -167,28 +167,40 @@ export function ProfilStudentaView({
     "УНИВЕРЗИТЕТ У БЕОГРАДУ\nФАКУЛТЕТ ОРГАНИЗАЦИОНИХ НАУКА";
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-sans">
-      {/* Left Column: Card + Details */}
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch font-sans lg:min-h-[calc(100vh-210px)]">
+      {}
       <div className="lg:col-span-8 flex flex-col gap-6">
-        {/* Virtual Student Card Interactive Section */}
-        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5 pb-4 border-b border-slate-200">
+        {}
+        <div className={`rounded-2xl p-6 shadow-sm border transition-all duration-300 ${
+          isDarkMode 
+            ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/25" 
+            : "bg-slate-50 border-slate-200"
+        }`}>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-5 pb-4 border-b border-slate-200 dark:border-slate-700">
             <div>
-              <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 select-none">
+              <h3 className={`text-lg font-bold flex items-center gap-2 select-none ${
+                isDarkMode ? "text-slate-100" : "text-slate-800"
+              }`}>
                 <Sparkles size={18} className="text-teal-600 animate-pulse" />
                 Виртуелна студентска картица (ISIC)
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className={`text-xs mt-0.5 ${
+                isDarkMode ? "text-slate-400" : "text-slate-500"
+              }`}>
                 Интерактивни приказ Ваше званичне ИСИЦ идентификационе картице
               </p>
             </div>
 
-            {/* Control buttons */}
+            {}
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
                 id="btn-flip-card"
                 onClick={() => setIsFlipped(!isFlipped)}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-all shadow-sm active:scale-95"
+                className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-semibold transition-all shadow-sm active:scale-95 ${
+                  isDarkMode 
+                    ? "bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700" 
+                    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+                }`}
               >
                 <RotateCw
                   size={14}
@@ -199,7 +211,7 @@ export function ProfilStudentaView({
             </div>
           </div>
 
-          {/* Perspective Container with strict 1.586 credit card ratio */}
+          {}
           <div className="w-full flex justify-center py-4 select-none">
             <div
               id="isic-card-3d-wrapper"
@@ -212,7 +224,7 @@ export function ProfilStudentaView({
                 transformStyle: "preserve-3d",
               }}
             >
-              {/* Card Holographic / Gloss shine overlay */}
+              {}
               {tilt.r === 1 && !isFlipped && (
                 <div
                   className="absolute inset-0 pointer-events-none z-30 opacity-30 transition-opacity duration-150"
@@ -223,7 +235,7 @@ export function ProfilStudentaView({
                 />
               )}
 
-              {/* CARD FRONT SIDE */}
+              {}
               <div
                 className={`absolute inset-0 w-full h-full bg-gradient-to-br from-[#009E96] via-[#10bebe] to-[#00807a] flex flex-col justify-between p-[3.5%] transition-all duration-500 [backface-visibility:hidden] ${
                   isFlipped
@@ -231,7 +243,7 @@ export function ProfilStudentaView({
                     : "opacity-100 scale-100"
                 }`}
               >
-                {/* Curved waves on teal background */}
+                {}
                 <div className="absolute inset-0 opacity-20 pointer-events-none">
                   <svg
                     width="100%"
@@ -260,9 +272,9 @@ export function ProfilStudentaView({
                   </svg>
                 </div>
 
-                {/* Top Section - Teal Header Bar containing White ISIC Plate & UNESCO Badge */}
+                {}
                 <div className="absolute top-0 inset-x-0 h-[24%] flex justify-between items-start z-10 pointer-events-none">
-                  {/* Slanted White Plate for ISIC Brand logo */}
+                  {}
                   <div
                     className="bg-white h-full w-[54%] flex items-center pl-[4.5%] gap-[6%] shadow-md"
                     style={{
@@ -285,10 +297,10 @@ export function ProfilStudentaView({
                     </div>
                   </div>
 
-                  {/* UNESCO Badge & ISIC ID Number */}
+                  {}
                   <div className="h-full flex items-center gap-[5%] pr-[3.5%]">
                     <div className="flex items-center gap-[8px] opacity-95 shrink-0">
-                      {/* UNESCO Columns Icon in dark teal */}
+                      {}
                       <div className="flex flex-col items-center shrink-0">
                         <svg
                           viewBox="0 0 24 24"
@@ -319,14 +331,14 @@ export function ProfilStudentaView({
                   </div>
                 </div>
 
-                {/* Middle Body Section (Chips, Logos, and Portrait placement) */}
-                {/* Background underneath the top bar: light blue gradient */}
+                {}
+                {}
                 <div className="absolute inset-x-0 top-[24%] bottom-[32%] bg-gradient-to-b from-[#dbfcfb] to-[#f4fdfd] p-[3.5%] flex flex-col justify-between">
-                  {/* Left row: chip & logos */}
+                  {}
                   <div className="w-[66%] flex flex-col justify-between h-full">
-                    {/* Golden chip & EYCA, Serbian Coat of Arms */}
+                    {}
                     <div className="flex items-center gap-[6%] mt-[1%]">
-                      {/* Standard credit card gold chip */}
+                      {}
                       <div className="w-[17%] aspect-[1.3] rounded-md bg-gradient-to-br from-yellow-100 via-amber-300 to-amber-500 border border-amber-600/30 shadow-sm relative overflow-hidden flex flex-col justify-between p-[2%] shrink-0">
                         <div className="absolute inset-0 bg-white/10 pointer-events-none" />
                         <div className="border-b border-r border-amber-600/30 w-1/2 h-1/2" />
@@ -336,9 +348,9 @@ export function ProfilStudentaView({
                         <div className="absolute w-[30%] aspect-square rounded-full border border-amber-600/30 bg-amber-300/40 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                       </div>
 
-                      {/* EYCA */}
+                      {}
                       <div className="flex items-center gap-[8px] shrink-0">
-                        {/* Yellow text on pink background for EYCA badge */}
+                        {}
                         <div className="bg-[#E2007A] text-[#FFF200] w-[8vw] h-[8vw] sm:w-[44px] sm:h-[44px] rounded-lg flex flex-col justify-center items-center shadow-sm select-none font-sans italic leading-none font-black text-[2.2vw] sm:text-[12px] tracking-tighter shrink-0">
                           <span className="ml-[-3px]">ey</span>
                           <span className="mr-[-3px] mt-[-2px]">ca</span>
@@ -353,7 +365,7 @@ export function ProfilStudentaView({
                         </div>
                       </div>
 
-                      {/* Serbian Flag/Grb (Real Coat of Arms Vector from Wikimedia Commons served via reliable weserv image proxy) */}
+                      {}
                       <img
                         src="/srbgrb.png"
                         alt="Grb Srbije"
@@ -362,7 +374,7 @@ export function ProfilStudentaView({
                       />
                     </div>
 
-                    {/* Studies At section */}
+                    {}
                     <div className="flex flex-col mt-[2%] leading-tight">
                       <span className="text-[1.1vw] sm:text-[6.5px] font-extrabold text-[#009E96] tracking-wide uppercase">
                         Студира на | Studies at
@@ -373,11 +385,11 @@ export function ProfilStudentaView({
                     </div>
                   </div>
 
-                  {/* Absolute Portrait container on the right side spanning multiple layers */}
+                  {}
                   <div className="absolute right-[4%] top-[-10%] w-[25%] h-[120%] bg-white border border-slate-300 rounded-lg p-[1.5%] shadow-md flex items-center justify-center overflow-hidden z-20">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-cyan-400/10 to-transparent pointer-events-none" />
 
-                    {/* Graphic portrait avatar placeholder */}
+                    {}
                     <div className="w-full h-full bg-slate-100 rounded border border-slate-150 overflow-hidden flex flex-col items-center justify-end relative">
                       <svg
                         className="w-[70%] h-[70%] text-slate-300 absolute top-[15%]"
@@ -387,7 +399,7 @@ export function ProfilStudentaView({
                         <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                       </svg>
 
-                      {/* Holographic custom watermarking over the face */}
+                      {}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-teal-400/5 to-transparent pointer-events-none rotate-45 transform scale-150" />
 
                       <div className="w-full py-[4%] bg-teal-600 text-[1.3vw] sm:text-[7.5px] font-black text-white text-center uppercase tracking-wider z-10">
@@ -397,10 +409,10 @@ export function ProfilStudentaView({
                   </div>
                 </div>
 
-                {/* Bottom Section - Contains Metadata Fields */}
+                {}
                 <div className="absolute inset-x-0 bottom-0 h-[32%] bg-[#ffffff] border-t border-slate-200 p-[3.5%] flex flex-col justify-between z-10">
                   <div className="grid grid-cols-12 h-full items-center gap-[2%]">
-                    {/* Col 1: Cardholder Name & Birthdate */}
+                    {}
                     <div className="col-span-5 flex flex-col justify-center h-full border-r border-slate-100 pr-[4%]">
                       <span className="text-[1.1vw] sm:text-[6.5px] font-bold text-slate-400 leading-none">
                         Име и презиме | Cardholder name
@@ -417,7 +429,7 @@ export function ProfilStudentaView({
                       </span>
                     </div>
 
-                    {/* Col 2: Dates (Issued / Valid) */}
+                    {}
                     <div className="col-span-4 flex flex-col justify-center h-full border-r border-slate-100 px-[4%]">
                       <span className="text-[1.1vw] sm:text-[6.5px] font-bold text-slate-400 leading-none">
                         Датум издавања | Issued
@@ -434,7 +446,7 @@ export function ProfilStudentaView({
                       </span>
                     </div>
 
-                    {/* Col 3: Student index / Real ID */}
+                    {}
                     <div className="col-span-3 flex flex-col justify-center h-full pl-[4%]">
                       <span className="text-[1.1vw] sm:text-[6.5px] font-bold text-slate-400 leading-none">
                         Број индекса | Student ID
@@ -454,7 +466,7 @@ export function ProfilStudentaView({
                 </div>
               </div>
 
-              {/* CARD BACK SIDE */}
+              {}
               <div
                 className={`absolute inset-0 w-full h-full bg-[#EBF9F9] flex flex-col justify-between p-[4%] border border-teal-500/20 rounded-2xl shadow-xl transition-all duration-500 [backface-visibility:hidden] ${
                   isFlipped
@@ -462,10 +474,10 @@ export function ProfilStudentaView({
                     : "opacity-0 scale-95 pointer-events-none"
                 }`}
               >
-                {/* Magnetic Stripe */}
+                {}
                 <div className="absolute top-[8%] left-0 right-0 h-[12%] bg-neutral-800" />
 
-                {/* Back Header */}
+                {}
                 <div className="mt-[16%] flex justify-between items-start z-10">
                   <div className="flex flex-col">
                     <span className="text-[1.6vw] sm:text-[9px] font-black text-teal-800 tracking-wide uppercase leading-none">
@@ -480,10 +492,10 @@ export function ProfilStudentaView({
                   </div>
                 </div>
 
-                {/* Central bar code representation */}
+                {}
                 <div className="flex flex-col items-center justify-center my-[1.5%] z-10">
                   <div className="bg-white px-[4%] py-[2%] rounded border border-slate-200 flex flex-col items-center shadow-sm">
-                    {/* Barcode Mock Lines */}
+                    {}
                     <div className="flex items-center gap-[1.5px] h-[3vw] min-h-[16px] max-h-[32px] select-none">
                       <div className="w-[1.5px] bg-black h-full" />
                       <div className="w-[3px] bg-black h-full" />
@@ -507,7 +519,7 @@ export function ProfilStudentaView({
                   </div>
                 </div>
 
-                {/* Warning and standard terms */}
+                {}
                 <div className="text-[1vw] sm:text-[6.5px] text-slate-500 leading-normal px-[2%] text-center font-semibold border-t border-slate-300/40 pt-[2%]">
                   Картица је лична и непреносива. Свака злоупотреба подлеже
                   академском дисциплинском правилнику ФОН-а и ИСИЦ асоцијације.
@@ -519,117 +531,163 @@ export function ProfilStudentaView({
           </div>
 
           <div className="flex justify-center items-center gap-1.5 text-xs text-slate-500 mt-1 text-center select-none">
-            <AlertCircle size={13} className="text-slate-400" />
-            <span>
+            <AlertCircle size={13} className={isDarkMode ? "text-slate-400" : "text-slate-400"} />
+            <span className={isDarkMode ? "text-slate-400" : "text-slate-500"}>
               Кликните на картицу или дугме "Окрени картицу" да бисте видели
               другу страну
             </span>
           </div>
         </div>
 
-        {/* Profile Card Container matching screenshot style */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden p-6">
-          {/* Header */}
-          <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-150 select-none">
-            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2.5">
+        {/* Profil */}
+        <div className={`rounded-2xl shadow-sm border overflow-hidden p-6 transition-all duration-300 ${
+          isDarkMode 
+            ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/25" 
+            : "bg-white border-slate-200"
+        }`}>
+          {}
+          <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-150 dark:border-slate-700 select-none">
+            <h2 className={`text-xl font-bold flex items-center gap-2.5 ${
+              isDarkMode ? "text-slate-100" : "text-slate-800"
+            }`}>
               Административни подаци о студенту
             </h2>
-            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 border border-slate-200">
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300 ${
+              isDarkMode ? "bg-slate-800 text-slate-300 border-slate-700" : "bg-slate-100 text-slate-500 border-slate-200"
+            }`}>
               <User size={20} />
             </div>
           </div>
 
-          {/* Table representing exactly the screenshot */}
-          <div className="border-2 border-black rounded-lg overflow-hidden">
+          {}
+          <div className={`border-2 rounded-lg overflow-hidden transition-all duration-300 ${
+            isDarkMode ? "border-slate-700" : "border-black"
+          }`}>
             <table className="w-full border-collapse">
               <tbody>
                 {/* 1. Ime i prezime */}
-                <tr className="border-b-2 border-black">
-                  <td className="w-1/2 py-3 px-4 font-bold text-slate-900 border-r-2 border-black bg-slate-50/50 text-center text-xs sm:text-sm uppercase tracking-wide select-none">
+                <tr className={isDarkMode ? "border-b-2 border-slate-700" : "border-b-2 border-black"}>
+                  <td className={`w-1/2 py-3 px-4 font-bold border-r-2 text-center text-xs sm:text-sm uppercase tracking-wide select-none ${
+                    isDarkMode ? "border-slate-700 bg-slate-800/40 text-slate-300" : "border-black bg-slate-50/50 text-slate-900"
+                  }`}>
                     Име и презиме
                   </td>
-                  <td className="w-1/2 py-3 px-4 text-slate-800 font-semibold text-xs sm:text-sm text-center">
+                  <td className={`w-1/2 py-3 px-4 text-center text-xs sm:text-sm font-semibold ${
+                    isDarkMode ? "text-slate-100" : "text-slate-800"
+                  }`}>
                     {studentDetails.fullName}
                   </td>
                 </tr>
 
                 {/* 2. Ime jednog roditelja */}
-                <tr className="border-b-2 border-black">
-                  <td className="w-1/2 py-3 px-4 font-bold text-slate-900 border-r-2 border-black bg-slate-50/50 text-center text-xs sm:text-sm uppercase tracking-wide select-none">
+                <tr className={isDarkMode ? "border-b-2 border-slate-700" : "border-b-2 border-black"}>
+                  <td className={`w-1/2 py-3 px-4 font-bold border-r-2 text-center text-xs sm:text-sm uppercase tracking-wide select-none ${
+                    isDarkMode ? "border-slate-700 bg-slate-800/40 text-slate-300" : "border-black bg-slate-50/50 text-slate-900"
+                  }`}>
                     Име једног родитеља
                   </td>
-                  <td className="w-1/2 py-3 px-4 text-slate-800 font-semibold text-xs sm:text-sm text-center">
+                  <td className={`w-1/2 py-3 px-4 text-center text-xs sm:text-sm font-semibold ${
+                    isDarkMode ? "text-slate-100" : "text-slate-800"
+                  }`}>
                     {studentDetails.parentName}
                   </td>
                 </tr>
 
                 {/* 3. Broj indeksa */}
-                <tr className="border-b-2 border-black">
-                  <td className="w-1/2 py-3 px-4 font-bold text-slate-900 border-r-2 border-black bg-slate-50/50 text-center text-xs sm:text-sm uppercase tracking-wide select-none">
+                <tr className={isDarkMode ? "border-b-2 border-slate-700" : "border-b-2 border-black"}>
+                  <td className={`w-1/2 py-3 px-4 font-bold border-r-2 text-center text-xs sm:text-sm uppercase tracking-wide select-none ${
+                    isDarkMode ? "border-slate-700 bg-slate-800/40 text-slate-300" : "border-black bg-slate-50/50 text-slate-900"
+                  }`}>
                     Број индекса
                   </td>
-                  <td className="w-1/2 py-3 px-4 text-[#1E4C9A] font-bold text-xs sm:text-sm text-center font-mono">
+                  <td className={`w-1/2 py-3 px-4 text-center font-mono text-xs sm:text-sm ${
+                    isDarkMode ? "text-amber-400 font-extrabold" : "text-[#1E4C9A] font-bold"
+                  }`}>
                     {studentDetails.index}
                   </td>
                 </tr>
 
                 {/* 4. JMBG */}
-                <tr className="border-b-2 border-black">
-                  <td className="w-1/2 py-3 px-4 font-bold text-slate-900 border-r-2 border-black bg-slate-50/50 text-center text-xs sm:text-sm uppercase tracking-wide select-none">
+                <tr className={isDarkMode ? "border-b-2 border-slate-700" : "border-b-2 border-black"}>
+                  <td className={`w-1/2 py-3 px-4 font-bold border-r-2 text-center text-xs sm:text-sm uppercase tracking-wide select-none ${
+                    isDarkMode ? "border-slate-700 bg-slate-800/40 text-slate-300" : "border-black bg-slate-50/50 text-slate-900"
+                  }`}>
                     ЈМБГ
                   </td>
-                  <td className="w-1/2 py-3 px-4 text-slate-800 font-semibold text-xs sm:text-sm text-center font-mono tracking-wider">
+                  <td className={`w-1/2 py-3 px-4 text-center font-mono text-xs sm:text-sm tracking-wider font-semibold ${
+                    isDarkMode ? "text-slate-100" : "text-slate-800"
+                  }`}>
                     {studentDetails.jmbg}
                   </td>
                 </tr>
 
                 {/* 5. Email */}
-                <tr className="border-b-2 border-black">
-                  <td className="w-1/2 py-3 px-4 font-bold text-slate-900 border-r-2 border-black bg-slate-50/50 text-center text-xs sm:text-sm uppercase tracking-wide select-none">
+                <tr className={isDarkMode ? "border-b-2 border-slate-700" : "border-b-2 border-black"}>
+                  <td className={`w-1/2 py-3 px-4 font-bold border-r-2 text-center text-xs sm:text-sm uppercase tracking-wide select-none ${
+                    isDarkMode ? "border-slate-700 bg-slate-800/40 text-slate-300" : "border-black bg-slate-50/50 text-slate-900"
+                  }`}>
                     Е-пошта
                   </td>
-                  <td className="w-1/2 py-3 px-4 text-slate-800 font-semibold text-[11px] sm:text-xs text-center break-all select-all">
+                  <td className={`w-1/2 py-3 px-4 text-center text-[11px] sm:text-xs break-all select-all font-semibold ${
+                    isDarkMode ? "text-slate-100" : "text-slate-800"
+                  }`}>
                     {studentDetails.email}
                   </td>
                 </tr>
 
                 {/* 6. Broj telefona */}
-                <tr className="border-b-2 border-black">
-                  <td className="w-1/2 py-3 px-4 font-bold text-slate-900 border-r-2 border-black bg-slate-50/50 text-center text-xs sm:text-sm uppercase tracking-wide select-none">
+                <tr className={isDarkMode ? "border-b-2 border-slate-700" : "border-b-2 border-black"}>
+                  <td className={`w-1/2 py-3 px-4 font-bold border-r-2 text-center text-xs sm:text-sm uppercase tracking-wide select-none ${
+                    isDarkMode ? "border-slate-700 bg-slate-800/40 text-slate-300" : "border-black bg-slate-50/50 text-slate-900"
+                  }`}>
                     Број телефона
                   </td>
-                  <td className="w-1/2 py-3 px-4 text-slate-800 font-semibold text-xs sm:text-sm text-center">
+                  <td className={`w-1/2 py-3 px-4 text-center text-xs sm:text-sm font-semibold ${
+                    isDarkMode ? "text-slate-100" : "text-slate-800"
+                  }`}>
                     {studentDetails.phone}
                   </td>
                 </tr>
 
                 {/* 7. Studijski program */}
-                <tr className="border-b-2 border-black">
-                  <td className="w-1/2 py-3 px-4 font-bold text-slate-900 border-r-2 border-black bg-slate-50/50 text-center text-xs sm:text-sm uppercase tracking-wide select-none">
+                <tr className={isDarkMode ? "border-b-2 border-slate-700" : "border-b-2 border-black"}>
+                  <td className={`w-1/2 py-3 px-4 font-bold border-r-2 text-center text-xs sm:text-sm uppercase tracking-wide select-none ${
+                    isDarkMode ? "border-slate-700 bg-slate-800/40 text-slate-300" : "border-black bg-slate-50/50 text-slate-900"
+                  }`}>
                     Студијски програм
                   </td>
-                  <td className="w-1/2 py-3 px-4 text-slate-800 font-bold text-xs sm:text-sm text-center">
+                  <td className={`w-1/2 py-3 px-4 text-center text-xs sm:text-sm font-bold ${
+                    isDarkMode ? "text-slate-100" : "text-slate-800"
+                  }`}>
                     {studentDetails.studyProgram}
                   </td>
                 </tr>
 
                 {/* 8. Modul */}
-                <tr className="border-b-2 border-black">
-                  <td className="w-1/2 py-3 px-4 font-bold text-slate-900 border-r-2 border-black bg-slate-50/50 text-center text-xs sm:text-sm uppercase tracking-wide select-none">
+                <tr className={isDarkMode ? "border-b-2 border-slate-700" : "border-b-2 border-black"}>
+                  <td className={`w-1/2 py-3 px-4 font-bold border-r-2 text-center text-xs sm:text-sm uppercase tracking-wide select-none ${
+                    isDarkMode ? "border-slate-700 bg-slate-800/40 text-slate-300" : "border-black bg-slate-50/50 text-slate-900"
+                  }`}>
                     Модул
                   </td>
-                  <td className="w-1/2 py-3 px-4 text-slate-800 font-semibold text-xs sm:text-sm text-center">
+                  <td className={`w-1/2 py-3 px-4 text-center text-xs sm:text-sm font-semibold ${
+                    isDarkMode ? "text-slate-100" : "text-slate-800"
+                  }`}>
                     {studentDetails.module}
                   </td>
                 </tr>
 
                 {/* 9. Status finansiranja */}
                 <tr>
-                  <td className="w-1/2 py-3 px-4 font-bold text-slate-900 border-r-2 border-black bg-slate-50/50 text-center text-xs sm:text-sm uppercase tracking-wide select-none">
+                  <td className={`w-1/2 py-3 px-4 font-bold border-r-2 text-center text-xs sm:text-sm uppercase tracking-wide select-none ${
+                    isDarkMode ? "border-slate-700 bg-slate-800/40 text-slate-300" : "border-black bg-slate-50/50 text-slate-900"
+                  }`}>
                     Статус финансирања
                   </td>
-                  <td className="w-1/2 py-3 px-4 text-emerald-700 font-extrabold text-xs sm:text-sm text-center">
-                    <span className="inline-block bg-emerald-50 border border-emerald-200 px-3 py-0.5 rounded-full">
+                  <td className="w-1/2 py-3 px-4 text-center">
+                    <span className={`inline-block border px-3 py-0.5 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-300 ${
+                      isDarkMode ? "bg-emerald-950/40 border-emerald-800 text-emerald-400" : "bg-emerald-50 border-emerald-200 text-emerald-700"
+                    }`}>
                       {studentDetails.financialStatus}
                     </span>
                   </td>
@@ -640,11 +698,15 @@ export function ProfilStudentaView({
         </div>
       </div>
 
-      {/* Right Column: Calendar & Emblem */}
-      <div className="lg:col-span-4 flex flex-col gap-5 self-stretch">
+      {}
+      <div className="lg:col-span-4 flex flex-col gap-5 self-stretch w-full max-w-[340px] mx-auto lg:mr-0 lg:ml-auto animate-fadeIn">
         <Calendar />
 
-        <div className="flex-1 flex items-center justify-center bg-white rounded-2xl shadow border border-slate-200 p-6 min-h-[140px]">
+        <div className="flex-grow" />
+
+        <div className={`flex items-center justify-center rounded-2xl shadow border p-6 min-h-[140px] transition-all duration-300 w-full ${
+          isDarkMode ? "bg-[#1E293B]/80 border-slate-700/60 shadow-black/25" : "bg-white border-slate-200"
+        }`}>
           <div className="max-w-[145px] w-full flex items-center justify-center opacity-90">
             <FonLogo />
           </div>

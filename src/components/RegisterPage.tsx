@@ -19,7 +19,7 @@ interface RegisterPageProps {
 }
 
 export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: RegisterPageProps) {
-  // Form fields
+  
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [city, setCity] = useState("");
@@ -27,20 +27,20 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
   const [jmbg, setJmbg] = useState("");
   const [indexNum, setIndexNum] = useState("");
   
-  // File upload state
+  
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Checkbox agreement
+  
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  // Loading & Flow control
+  
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [regSuccess, setRegSuccess] = useState(false);
 
-  // Drag and drop event handlers
+  
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -76,12 +76,12 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
     fileInputRef.current?.click();
   };
 
-  // Full validation check
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
 
-    // 1. Check if all fields are populated
+    
     if (!firstName.trim()) {
       setErrorMsg("Molimo unesite Vaše ime.");
       return;
@@ -107,19 +107,19 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
       return;
     }
 
-    // 2. Check if index file has been uploaded
+    
     if (!selectedFile) {
       setErrorMsg("Molimo zakačite sliku prve dve stranice Vašeg indeksa.");
       return;
     }
 
-    // 3. Confirm that square checkbox is checked
+    
     if (!acceptedTerms) {
       setErrorMsg("Morate potvrditi da su uneti podaci ispravni i saglasiti se sa njihovim hrišćenjem.");
       return;
     }
 
-    // Show beautiful mock loading screen
+    
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -129,12 +129,12 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
 
   return (
     <div className="w-full max-w-[1240px] px-4 md:px-0 transition-all duration-300">
-      {/* "Registrujte se" Title above the card */}
+      {}
       <h1 className="text-white text-[32px] font-medium tracking-wide text-center mb-5 select-none">
         Registrujte se
       </h1>
 
-      {/* Main Split registration container */}
+      {}
       <div className="bg-[#EDF2FA] rounded-[16px] shadow-2xl p-6 md:p-8 w-full border border-white/20 relative">
         <AnimatePresence mode="wait">
           {!regSuccess ? (
@@ -148,10 +148,10 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
               className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
             >
               
-              {/* Left Column: Input Form Fields (7 cols of 12) */}
+              {}
               <div className="lg:col-span-7 flex flex-col gap-4">
                 
-                {/* 1. Row: Ime & Prezime */}
+                {}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5 text-left">
                     <label className="text-gray-700 text-[14.5px] font-semibold select-none pl-1">
@@ -179,7 +179,7 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                   </div>
                 </div>
 
-                {/* 2. Row: Grad & Broj telefona */}
+                {}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5 text-left">
                     <label className="text-gray-700 text-[14.5px] font-semibold select-none pl-1">
@@ -207,7 +207,7 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                   </div>
                 </div>
 
-                {/* 3. Row: JMBG & Broj indeksa */}
+                {}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5 text-left">
                     <label className="text-gray-700 text-[14.5px] font-semibold select-none pl-1">
@@ -236,7 +236,7 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                   </div>
                 </div>
 
-                {/* 4. Custom Drag-and-Drop Index File Uploader Box */}
+                {}
                 <div className="flex flex-col text-left gap-1 mt-1">
                   <input
                     type="file"
@@ -290,7 +290,7 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                   </p>
                 </div>
 
-                {/* Checkbox item */}
+                {}
                 <div className="flex items-start gap-2.5 mt-3 text-left">
                   <input
                     id="accept-terms-check"
@@ -307,7 +307,7 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                   </label>
                 </div>
 
-                {/* Validation warnings */}
+                {}
                 {errorMsg && (
                   <motion.div
                     initial={{ opacity: 0, y: -4 }}
@@ -318,7 +318,7 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                   </motion.div>
                 )}
 
-                {/* Submit button bar */}
+                {}
                 <div className="flex justify-start mt-2">
                   <button
                     type="submit"
@@ -335,10 +335,10 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
 
               </div>
 
-              {/* Right Column: Google Maps Placeholder, Contact info, and Logo (5 cols of 12) */}
+              {}
               <div className="lg:col-span-5 flex flex-col gap-5 h-full justify-between">
                 
-                {/* Embedded Map mockup container */}
+                {}
                 <div className="relative w-full aspect-[4/3] sm:aspect-video lg:aspect-[4/3] rounded-lg overflow-hidden border border-slate-300 shadow bg-white flex flex-col">
                   
                    <iframe
@@ -351,10 +351,10 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                   />
                 </div>
 
-                {/* PLACEHOLDER: Communication channels - dynamic links and FON Logo aligned horizontally in a single row (no wrap) */}
+                {}
                 <div className="flex flex-row flex-nowrap items-center justify-between gap-2.5 px-0.5 mt-2.5 w-full select-none">
                   
-                  {/* Phone contact channel */}
+                  {}
                   <a 
                     href="tel:+381113950813"
                     className="flex items-center gap-1.5 text-gray-800 hover:text-black transition-colors shrink-0"
@@ -365,7 +365,7 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                     </span>
                   </a>
 
-                  {/* Email contact channel */}
+                  {}
                   <a 
                     href="mailto:studentska@fon.bg.ac.rs"
                     className="flex items-center gap-1.5 text-gray-800 hover:text-black transition-colors shrink-0"
@@ -376,7 +376,7 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
                     </span>
                   </a>
 
-                  {/* PLACEHOLDER: Place/Insert image logo of the faculty inside FonLogo or swap FonLogo */}
+                  {}
                   <div className="shrink-0">
                     <FonLogo />
                   </div>
@@ -385,7 +385,7 @@ export function RegisterPage({ onNavigateToLogin, onRegisterComplete }: Register
 
               </div>
 
-              {/* Embedded login routing footer link in a single line across the bottom spanning 12 cols */}
+              {}
               <div className="lg:col-span-12 mt-4 pt-4 border-t border-slate-300/40 text-left select-none">
                 <span className="text-gray-500 text-[14.5px] font-medium whitespace-nowrap">
                   Već imate studentski nalog?{" "}

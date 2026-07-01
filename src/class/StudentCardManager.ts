@@ -1,32 +1,19 @@
-/**
- * Interface representing the capabilities of the Student Card Manager.
- */
+
 export interface IStudentCardManager {
-  /**
-   * Parses the student's birth date from their JMBG.
-   * JMBG format: DDMMYYYRRRRRR (13 digits)
-   */
+
   parseBirthdateFromJmbg(jmbg: string): string;
 
-  /**
-   * Generates a realistic unique ISIC card number based on the student's index and JMBG.
-   */
+
   generateCardNumber(index: string, jmbg: string): string;
 
-  /**
-   * Calculates the issuance and validity dates based on the enrollment year from the index.
-   */
+
   calculateDates(index: string): { issued: string; validUntil: string };
 
-  /**
-   * Formats the raw card number into the ISIC spaced pattern: S XXX XXX XXX XXX
-   */
+
   formatIsicNumber(cardNumber: string): string;
 }
 
-/**
- * Implementation of the Student Card Manager.
- */
+
 export class StudentCardManager implements IStudentCardManager {
   public parseBirthdateFromJmbg(jmbg: string): string {
     if (!jmbg || jmbg.length < 7) {
@@ -39,12 +26,12 @@ export class StudentCardManager implements IStudentCardManager {
 
     let year = parseInt(yearPart, 10);
     if (year >= 900) {
-      year += 1000; // e.g. 995 -> 1995
+      year += 1000; 
     } else {
-      year += 2000; // e.g. 003 -> 2003
+      year += 2000; 
     }
 
-    // Basic validity check
+    
     const d = parseInt(day, 10);
     const m = parseInt(month, 10);
     if (
@@ -63,7 +50,7 @@ export class StudentCardManager implements IStudentCardManager {
   }
 
   public generateCardNumber(index: string, jmbg: string): string {
-    // Generate a semi-stable card number using indices and JMBG
+    
     const cleanIndex = index.replace(/[^0-9]/g, "");
     const cleanJmbg = jmbg.replace(/[^0-9]/g, "");
 
@@ -72,13 +59,13 @@ export class StudentCardManager implements IStudentCardManager {
   }
 
   public calculateDates(index: string): { issued: string; validUntil: string } {
-    // Extract year of entry from index, e.g. "2023/3858" -> 2023
+    
     const match = index.match(/^(\d{4})/);
     const entryYear = match ? parseInt(match[1], 10) : 2023;
 
-    // Virtual cards are typically issued at start of academic year
+    
     const issuedDate = `01/10/${entryYear}`;
-    // Valid for 4 years or current academic year. Let's make it valid until next year of current active academic season or a fixed range
+    
     const validUntilDate = `31/10/${entryYear + 1}`;
 
     return {
@@ -88,7 +75,7 @@ export class StudentCardManager implements IStudentCardManager {
   }
 
   public formatIsicNumber(cardNumber: string): string {
-    // Expected raw input of digits, we format it as S XXX XXX XXX XXX
+    
     const digits = cardNumber.replace(/[^0-9]/g, "");
     const padded = digits.padEnd(12, "0");
 

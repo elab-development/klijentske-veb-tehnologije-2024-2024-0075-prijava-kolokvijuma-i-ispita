@@ -43,7 +43,7 @@ function AppContent() {
     navigate("/login");
   };
 
-  // Safe navigation guard logic based on login state
+  
   useEffect(() => {
     if (isLoggedIn) {
       if (location.pathname === "/" || location.pathname === "/login" || location.pathname === "/register") {

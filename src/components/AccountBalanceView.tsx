@@ -49,7 +49,7 @@ export function AccountBalanceView({
       return;
     }
 
-    // Determine clean presentation for amount (truncate decimal if it is simple ,00)
+   
     let displayAmount = amountValue;
     if (displayAmount.includes(",")) {
       displayAmount = displayAmount.split(",")[0];
@@ -72,13 +72,13 @@ export function AccountBalanceView({
     setAccountBalance(prev => prev + parsedNum);
     setSuccessMessage(`Uplata od ${amountValue} RSD je proknjižena! Sredstva su odmah legla na Vaš račun.`);
 
-    // Auto clear alert
+    
     setTimeout(() => {
       setSuccessMessage(null);
     }, 5000);
   };
   
-  // Custom states for interactive slip
+ 
   const [payerName, setPayerName] = useState(studentName);
   const [payerAddress, setPayerAddress] = useState("Jove Ilića 154, Beograd");
   const [purposeOfPayment, setPurposeOfPayment] = useState("Školarina");
@@ -88,7 +88,7 @@ export function AccountBalanceView({
   const [recipientAccount, setRecipientAccount] = useState("840-0000032902845-54");
   const [modelValue, setModelValue] = useState("97");
 
-  // Dynamic Poziv na broj calculation based on student info
+ 
   const cleanedIndex = studentIndex ? studentIndex.replace(/[^0-9]/g, "") : "20250001";
   const defaultReference = `7311${cleanedIndex}`;
   const [referenceValue, setReferenceValue] = useState(defaultReference);
@@ -97,13 +97,13 @@ export function AccountBalanceView({
     setPayerName(studentName);
     setPurposeOfPayment(payment.type);
     
-    // Convert e.g., "31.000" to "31.000,00"
+    
     const parsedAmount = payment.amount.includes(",") ? payment.amount : `${payment.amount},00`;
     setAmountValue(parsedAmount);
     
     setPaymentCode(payment.paymentCode || "189");
     
-    // Keep reference updated
+    
     if (payment.type === "Prijava ispita") {
       setPurposeOfPayment("Prijava ispita za ispitni rok");
       setReferenceValue(`7311${cleanedIndex}`);
@@ -114,7 +114,7 @@ export function AccountBalanceView({
   };
 
   const handlePrint = () => {
-    // Standard window print
+    
     window.print();
   };
 
@@ -124,7 +124,7 @@ export function AccountBalanceView({
   return (
     <div className="flex flex-col gap-6 w-full animate-fadeIn select-none">
 
-      {/* Dynamic Success Alert */}
+      {}
       {successMessage && (
         <div className={`border rounded-2xl p-4 text-xs font-semibold flex items-center gap-3 animate-fadeIn text-left print:hidden shadow-sm ${
           isDarkMode ? "bg-emerald-950/40 border-emerald-800 text-emerald-300" : "bg-emerald-50 border-emerald-300 text-emerald-800"
@@ -139,7 +139,7 @@ export function AccountBalanceView({
         </div>
       )}
       
-      {/* Informative Header card */}
+      {}
       <div className={`rounded-2xl shadow p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print:hidden border transition-all duration-300 ${
         isDarkMode 
           ? "bg-[#1E293B]/80 border-slate-700/60 text-white shadow-black/25" 
@@ -170,7 +170,7 @@ export function AccountBalanceView({
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        {/* Left column: Balance table mirroring user screenshot exactly */}
+        {}
         <div className={`rounded-2xl p-6 shadow border transition-all duration-300 lg:col-span-12 xl:col-span-7 print:shadow-none print:border-none print:p-0 ${
           isDarkMode ? "bg-[#1E293B]/80 border-slate-705/30 shadow-black/35" : "bg-white border-slate-200"
         }`}>
@@ -186,8 +186,8 @@ export function AccountBalanceView({
             </span>
           </div>
 
-          {/* Core Table styled identically to the design file */}
-          <div className="w-full overflow-x-auto select-none rounded-lg border border-black/40">
+          {}
+          <div className="hidden md:block w-full overflow-x-auto select-none rounded-lg border border-black/40">
             <table className={`w-full min-w-[650px] border-collapse text-xs ${
               isDarkMode ? "bg-[#141c2c] text-slate-100" : "bg-white text-slate-900"
             }`}>
@@ -226,7 +226,7 @@ export function AccountBalanceView({
                   </tr>
                 ))}
                 
-                {/* Stanje na racunu exact match background card footer */}
+                {}
                 <tr className={`border-t-2 font-extrabold text-sm ${
                   isDarkMode 
                     ? "bg-[#162135] border-slate-700 text-white" 
@@ -238,6 +238,68 @@ export function AccountBalanceView({
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          {}
+          <div className="block md:hidden space-y-3 print:hidden">
+            {payments.map((payment) => (
+              <div 
+                key={payment.id}
+                title="Klikni da popuniš nalog za uplatu"
+                onClick={() => handleRowSelect(payment)}
+                className={`rounded-xl border p-4 transition-all duration-300 shadow-sm cursor-pointer active:scale-[0.98] ${
+                  isDarkMode 
+                    ? "bg-[#141c2c]/75 border-slate-800 text-slate-100 hover:border-slate-700" 
+                    : "bg-slate-50/50 border-slate-200 text-slate-800 hover:border-[#1E4C9A]"
+                }`}
+              >
+                <div className="flex justify-between items-start gap-2">
+                  <div className="text-left">
+                    <h4 className="font-extrabold text-sm leading-snug">{payment.type}</h4>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono mt-1 block">Datum: {payment.date}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-sm font-extrabold font-mono ${
+                      payment.amount.startsWith("-") 
+                        ? "text-red-500" 
+                        : "text-emerald-500"
+                    }`}>
+                      {payment.amount}
+                    </div>
+                    <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 block mt-0.5">Iznos</span>
+                  </div>
+                </div>
+
+                <div className={`mt-3 pt-2.5 border-t grid grid-cols-3 text-xs gap-2 ${
+                  isDarkMode ? "border-slate-800/70 text-slate-400" : "border-slate-200 text-slate-500"
+                }`}>
+                  <div className="text-left">
+                    <span className="font-medium text-[10px] block text-slate-400">Rata:</span>
+                    <span className="font-bold text-slate-750 dark:text-slate-300 font-mono">{payment.installments}</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="font-medium text-[10px] block text-slate-400">Godina:</span>
+                    <span className="font-bold text-slate-750 dark:text-slate-300">{payment.yearOfStudy}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="font-medium text-[10px] block text-slate-400">Status:</span>
+                    <span className="font-bold text-slate-755 dark:text-slate-300">{payment.status}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {}
+            <div className={`rounded-xl p-4 border flex items-center justify-between shadow-sm select-none transition-all ${
+              isDarkMode 
+                ? "bg-[#162135] border-slate-800 text-white" 
+                : "bg-blue-50/55 border-[#1E4C9A]/20 text-[#1E4C9A]"
+            }`}>
+              <span className="font-extrabold text-xs uppercase tracking-wider">Trenutni saldo:</span>
+              <span className={`font-mono text-md font-extrabold ${isDarkMode ? "text-amber-400" : "text-[#1E4C9A]"}`}>
+                {formatSerbianCurrency(accountBalance)}
+              </span>
+            </div>
           </div>
 
           <div className={`mt-3 flex gap-2 items-start text-left text-[11px] p-3 rounded-lg border print:hidden select-none ${
@@ -252,10 +314,10 @@ export function AccountBalanceView({
           </div>
         </div>
 
-        {/* Right column: Slip generator and visual Nalog za uplatu */}
+        {}
         <div className="lg:col-span-12 xl:col-span-5 flex flex-col gap-5">
           
-          {/* Controls to manually change values for the student */}
+          {}
           <div className={`rounded-2xl p-5 shadow border text-left print:hidden transition-all duration-300 ${
             isDarkMode ? "bg-[#1E293B]/80 border-slate-705/30 text-white shadow-black/35" : "bg-white border-slate-200"
           }`}>
@@ -379,22 +441,22 @@ export function AccountBalanceView({
             </button>
           </div>
 
-          {/* Genuine Authentic Serbian "Nalog za Uplatu" paper visual representation */}
+          {}
           <div className={`p-4 sm:p-5 rounded-2xl shadow border select-none overflow-x-auto print:shadow-none print:border-none print:p-0 transition-all duration-300 ${
             isDarkMode ? "bg-[#1E293B]/80 border-slate-705/30 shadow-black/35" : "bg-white border-slate-200"
           }`}>
             <div className="uplatnica-print-target min-w-[480px] max-w-full text-left font-serif text-[#0b0c10] bg-[#FFFDEF] border-2 border-[#b45309] rounded p-4 relative overflow-hidden leading-snug">
               
-              {/* Slip Header watermark */}
+              {}
               <div className="flex justify-between items-center pb-2.5 border-b-2 border-[#b45309]">
                 <span className="text-[10px] tracking-widest font-bold font-sans opacity-95 text-[#b45309]">UPLATILAC</span>
                 <span className="text-sm font-black font-sans tracking-wider select-none text-[#b45309]">NALOG ZA UPLATU</span>
               </div>
 
-              {/* Main divided canvas slip representation */}
+              {}
               <div className="grid grid-cols-12 gap-x-4 mt-2.5 text-[9px] font-sans">
                 
-                {/* Left Columns: Textboxes for text info (uplatilac, svrha, primalac) */}
+                {}
                 <div className="col-span-7 flex flex-col gap-3">
                   <div>
                     <label className="block text-[8px] font-bold text-[#b45309] tracking-tight uppercase leading-none mb-1">Uplatilac</label>
@@ -421,10 +483,10 @@ export function AccountBalanceView({
                   </div>
                 </div>
 
-                {/* Right Columns: Numerical and System-Critical Codes */}
+                {}
                 <div className="col-span-5 flex flex-col gap-3 pl-1 border-l border-[#b45309]/30">
                   
-                  {/* Row Code/Valuta/Iznos block */}
+                  {}
                   <div className="grid grid-cols-12 gap-1 bg-transparent">
                     <div className="col-span-3">
                       <label className="block text-[7px] font-bold text-[#b45309] tracking-tighter leading-none text-center mb-1">šifra pl.</label>
@@ -446,7 +508,7 @@ export function AccountBalanceView({
                     </div>
                   </div>
 
-                  {/* Recipient Bank Account line */}
+                  {}
                   <div>
                     <label className="block text-[8px] font-bold text-[#b45309] tracking-tight leading-none mb-1">račun primaoca</label>
                     <div className="w-full h-[26px] bg-white border-2 border-[#b45309]/90 rounded flex items-center justify-center font-black tracking-widest text-[11px] text-black font-mono">
@@ -454,7 +516,7 @@ export function AccountBalanceView({
                     </div>
                   </div>
 
-                  {/* Model and Poziv na broj */}
+                  {}
                   <div className="grid grid-cols-12 gap-1 text-left">
                     <div className="col-span-3">
                       <label className="block text-[7px] font-bold text-[#b45309] tracking-tighter leading-none text-center mb-1">model</label>
@@ -471,7 +533,7 @@ export function AccountBalanceView({
                     </div>
                   </div>
 
-                  {/* Small stamp background representation */}
+                  {}
                   <div className="mt-2.5 flex justify-end items-end relative opacity-70">
                     <div className="absolute right-0 bottom-1 w-[42px] h-[42px] border border-blue-600/30 rounded-full flex flex-col justify-center items-center font-bold font-sans text-[5px] text-blue-600/40 pointer-events-none tracking-normal">
                       <span>IPS PLAĆANJE</span>
@@ -481,7 +543,7 @@ export function AccountBalanceView({
                 </div>
               </div>
 
-              {/* Bottom Footer signature / timestamp sections */}
+              {}
               <div className="mt-4 border-t border-black/25 pt-2.5 grid grid-cols-12 gap-2 text-[7px] text-gray-600 font-sans">
                 <div className="col-span-4 border-r border-black/10 pr-2">
                   <p className="font-bold text-[6px] text-[#b45309] uppercase leading-none">Pečat i potpis uplatioca</p>

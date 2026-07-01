@@ -20,7 +20,7 @@ export function LoginPage({ onNavigateToRegister, onLoginSuccess }: LoginPagePro
     e.preventDefault();
     setErrorMsg("");
 
-    // Simple robust student email validation
+    
     if (!email) {
       setErrorMsg("Molimo unesite email adresu.");
       return;
@@ -31,19 +31,19 @@ export function LoginPage({ onNavigateToRegister, onLoginSuccess }: LoginPagePro
       return;
     }
 
-    // Typical University student email check (optional warning, but keeps form fillable)
+    
     if (!email.includes("@")) {
       setErrorMsg("Unesite ispravnu email adresu.");
       return;
     }
 
-    // Set mock loading state for a highly satisfying feedback loop
+    
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
       setLoginSuccess(true);
       
-      // Extract initials or name if possible from email, otherwise use elegant mockup defaults
+      
       const prefix = email.split("@")[0];
       let resolvedName = "Ime Prezime";
       let resolvedIndex = "2025/0001";
@@ -52,14 +52,14 @@ export function LoginPage({ onNavigateToRegister, onLoginSuccess }: LoginPagePro
         resolvedName = "Jovan Pajčin";
         resolvedIndex = "2023/3858";
       } else if (prefix.length > 4) {
-        // e.g. "petarpetrovic" -> Petar Petrovic
+       
         const clean = prefix.replace(/[0-9]/g, "");
         if (clean.length > 5) {
           resolvedName = clean.charAt(0).toUpperCase() + clean.slice(1, 5) + " " + clean.charAt(5).toUpperCase() + clean.slice(6);
         }
       }
       
-      // Let the success animation display for a brief 750ms before routing to the portal
+      
       setTimeout(() => {
         onLoginSuccess(resolvedName, resolvedIndex);
       }, 750);
@@ -68,12 +68,12 @@ export function LoginPage({ onNavigateToRegister, onLoginSuccess }: LoginPagePro
 
   return (
     <div className="w-full max-w-[440px] px-4 md:px-0">
-      {/* "Prijavite se" Header above the card */}
+      {}
       <h1 className="text-white text-[32px] font-medium tracking-wide text-left mb-5 select-none pl-1">
         Prijavite se
       </h1>
 
-      {/* Main Login Card */}
+      {}
       <div className="bg-[#EDF2FA] rounded-[16px] shadow-2xl p-8 pb-7 w-full border border-white/20 relative">
         <AnimatePresence mode="wait">
           {!loginSuccess ? (
@@ -86,7 +86,7 @@ export function LoginPage({ onNavigateToRegister, onLoginSuccess }: LoginPagePro
               onSubmit={handleSubmit}
               className="flex flex-col gap-5"
             >
-              {/* Email block */}
+              {}
               <div className="flex flex-col gap-1.5 text-left">
                 <label className="text-gray-600 text-[14.5px] font-medium select-none pl-1">
                   Email
@@ -100,7 +100,7 @@ export function LoginPage({ onNavigateToRegister, onLoginSuccess }: LoginPagePro
                 />
               </div>
 
-              {/* Password block */}
+              {}
               <div className="flex flex-col gap-1.5 text-left relative">
                 <label className="text-gray-600 text-[14.5px] font-medium select-none pl-1">
                   Lozinka
@@ -122,7 +122,7 @@ export function LoginPage({ onNavigateToRegister, onLoginSuccess }: LoginPagePro
                 </div>
               </div>
 
-              {/* Error warning rendering */}
+              {}
               {errorMsg && (
                 <motion.div
                   initial={{ opacity: 0, y: -5 }}
@@ -133,7 +133,7 @@ export function LoginPage({ onNavigateToRegister, onLoginSuccess }: LoginPagePro
                 </motion.div>
               )}
 
-              {/* Log In Button - "Prijavi se" */}
+              {}
               <button
                 type="submit"
                 disabled={isLoading}
@@ -146,12 +146,12 @@ export function LoginPage({ onNavigateToRegister, onLoginSuccess }: LoginPagePro
                 )}
               </button>
 
-              {/* FON Logo offset on the right side */}
+              {}
               <div className="flex justify-end mt-4">
                 <FonLogo />
               </div>
 
-              {/* Bottom footer text inside the card - left-aligned in a single line, below the logo */}
+              {}
               <div className="mt-3 pt-3.5 border-t border-slate-200/45 text-left select-none">
                 <span className="text-gray-500 text-[14px] font-medium whitespace-nowrap">
                   Nemate studentski nalog?{" "}

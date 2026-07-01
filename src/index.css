@@ -6,7 +6,7 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Effects */
+
 html, body, #root {
   margin: 0;
   padding: 0;
@@ -25,18 +25,18 @@ html, body, #root {
     padding: 0 !important;
   }
 
-  /* sakrij ceo layout tokom printa */
+ 
   body * {
     visibility: hidden !important;
   }
 
-  /* target */
+ 
   .uplatnica-print-target, 
   .uplatnica-print-target * {
     visibility: visible !important;
   }
 
-  /* uplatnica */
+  
   .uplatnica-print-target {
     position: absolute !important;
     left: 50% !important;
